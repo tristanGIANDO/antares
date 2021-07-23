@@ -301,6 +301,7 @@ class MainWindow(QWidget) :
     ## CONNECTIONS UI ##
     ####################
     
+    
     def createNewChara_UI(self):
         prod = self.prodName.text()
         assetName = self.assetName.text()
