@@ -13,6 +13,8 @@ class MainWindow(QWidget) :
         super(MainWindow,self).__init__()
         self.title = "ANTARES_v0.1.011"
         self.attr = "QPushButton {background-color: #18537d; color: white;}"
+        self.grpBgc = u"background-color: rgb(50, 50, 50); color : white;"
+        
         
         self.createWidget()
         self.createLayout()
@@ -164,7 +166,7 @@ class MainWindow(QWidget) :
         base = QGridLayout()
         #Create character frame
         groupChara = QGroupBox("CHARACTERS")
-        #groupChara.setStyleSheet(u"background-color: rgb(50, 50, 50); color : white;")
+        
         base.addWidget(groupChara)
         #Create PROPS frame
         groupProp = QGroupBox("PROPS")
@@ -178,7 +180,6 @@ class MainWindow(QWidget) :
         #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
         layoutChar = FlowLayout()
         groupChara.setLayout(layoutChar)
-        # layoutChar.setRowStretch(1,1)
         #Variable
         characterPath = os.path.join(env.SERVER, prod, env.ASSET_DIR, env.TYPE_CHAR)
         assetcharacter = os.listdir( characterPath )
@@ -188,8 +189,9 @@ class MainWindow(QWidget) :
             
             if name == '':
                 continue
+            
             button = ImagePushButton(name, path = r"C:\Users\stage\Desktop\suchomimus\11_library\Images\Character\\" + name + ".png")
-            button.setFixedSize(100, 100)
+            button.setFixedSize(100, 120)
             path = os.path.join(env.SERVER, prod)
             #button.setStyleSheet("QPushButton{border-image: url(" + path + "/11_library/Images/character/" + name + ".png);}")
             layoutChar.addWidget(button)
@@ -223,7 +225,10 @@ class MainWindow(QWidget) :
                 E_DIRs = items.addMenu("All Edits")
                 allE_DIRs = os.listdir(os.path.join( env.SERVER , prod , env.TYPE_CHAR_PATH , name , env.E_DIR , dep ))
                 for i in allE_DIRs:
-                    E_DIRs.addAction(i + " (" + date + ") (To Do)")       
+                    E_DIRs.addAction(i + " (" + date + ") (To Do)")  
+                #reference
+                refPublish = items.addAction("Reference Publish")
+                refPublish.triggered.connect(partial(self.refPublish_UI, name, dep))     
             a = menu.addAction("Rename Asset (To Do)")
             a.triggered.connect(self.showRenameWindow)
             menu.addAction("Duplicate Asset (To Do)")
@@ -240,6 +245,7 @@ class MainWindow(QWidget) :
         mayaTab.setLayout(base)
 
         return mayaTab
+
     def showRenameWindow(self):
         renameUI = RenameWindow(self)
         renameUI.show()
@@ -325,30 +331,61 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         fn.deleteAsset_FN(name, prod = prod)
 
+    def refPublish_UI(self, name, dep):
+        prod = self.prodName.text()
+        project = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name , env.P_DIR , dep , name + "_P_" + dep + ".ma")
+        
+        here = os.path.realpath(os.path.dirname(__file__))
+        script_path = here + '/refPublish.py'
+        mayapy_path = "C:/Program Files/Autodesk/Maya2020/bin/mayapy.exe"
+        PYTHON_EXE=sys.executable
+        cmd=["C:/Program Files/Autodesk/Maya2020/bin/maya.exe", "-c", "python(cmds.join())"]
+        print (cmd)
+           
+        subprocess.Popen(
+                        cmd
+                        # env={'PYTHONPATH':""}
+                        #creationflags=subprocess.CREATE_NEW_CONSOLE,
+                        )
+            
 
 class RenameWindow(QWidget) :
 
     def __init__(self, parent) :
+        
 
-        self.title = "Rename Asset"
+        self.title = "ASSET_RENAMER"
         super(RenameWindow, self).__init__(parent)
+        self.resize(300, 60)
+        self.move(100, 100)
         self.setWindowFlags(self.windowFlags() | Qt.Window) 
         self.createWidget()
         self.createLayout()
 
     def createWidget(self):
-        self.prodTitle = QLabel ( "PROD NAME")
+        self.newName = QLineEdit()
+        self.newNameLabel = QLabel ( "New Name")
+        self.renameButton = QPushButton("OK")
+        self.renameButton.clicked.connect(self.renameAsset_UI)
+        self.cancelButton = QPushButton("Cancel")
 
     def createLayout(self):
         #window
-        self.resize(300, 200)
-        self.move(100, 100)
+        
         self.setWindowTitle(self.title)
         # Layout principal
-        outerLayout = QGridLayout()
-        outerLayout.setColumnStretch(1,1)
-        outerLayout.addWidget(self.prodTitle)
-        self.setLayout(outerLayout)
+        mainLayout = QVBoxLayout(self)
+        layoutUp = QGridLayout()
+        layoutUp.addWidget(self.newNameLabel, 0,0)
+        layoutUp.addWidget(self.newName, 0,1)
+        layoutDwn = QHBoxLayout()
+        layoutDwn.addWidget(self.renameButton)
+        layoutDwn.addWidget(self.cancelButton)
+        mainLayout.addLayout(layoutUp)
+        mainLayout.addLayout(layoutDwn)
+
+    def renameAsset_UI(self, name, dep):
+        print ("To Do")
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):
@@ -465,7 +502,7 @@ class ImagePushButton(QPushButton):
     def paintEvent(self, event):
         super(ImagePushButton, self).paintEvent(event)
         painter = QPainter(self)
-        painter.drawPixmap(self.rect(), self.pixmap)        
+        painter.drawPixmap(QRect(QPoint(0,0),QSize(100,100)), self.pixmap)        
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)
