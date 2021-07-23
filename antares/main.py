@@ -1,19 +1,18 @@
 import sys, os, shutil, time, datetime
-from PyQt5.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
-from PyQt5.QtCore import *
-from PyQt5.QtGui import * #QPixmap
-from PyQt5 import QtGui
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMenu
+import Qt
+from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
+from Qt.QtCore import *
+from Qt.QtGui import * #QPixmap
 from functools import partial
 import fn, env
 
 class MainWindow(QWidget) :
 
     def __init__(self) :
-
+        #super().__init__()
         self.title = "ANTARES_v0.1.011"
         self.attr = "QPushButton {background-color: #18537d; color: white;}"
-        super().__init__()
+        
         self.createWidget()
         self.createLayout()
 
