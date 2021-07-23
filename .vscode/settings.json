@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        "**/*__pycache__": true,
+        "**/*.pyc": true
+    },
+    "python.pythonPath": "p:\\tbm_tools\\packages\\softwares\\python\\2.7.18\\platform-windows\\arch-amd64\\os-windows-10\\python.exe"
+}

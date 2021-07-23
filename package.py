@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
-name = 'Shark'
+name = 'antares'
 
 version = '0.1'
 
-description = 'Shark'
+description = 'Asset Manager'
 
 tools = ['launch']
 
 requires = [
-    "PySide",
-    "maya",
-    "VSCode",
+
 
 
 ]
@@ -22,5 +20,5 @@ authors=["Tristan GIANDORIGGIO"]
 
 def commands():
     global env
-    env.PATH.append('{this.root}/dist')
+    # env.PATH.append('{this.root}/dist')
     env.PYTHONPATH.append('{this.root}')

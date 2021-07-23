@@ -1,15 +1,16 @@
 import sys, os, shutil, time, datetime
+
 import Qt
 from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from Qt.QtCore import *
 from Qt.QtGui import * #QPixmap
 from functools import partial
-import fn, env
+import fn, env, subprocess
 
 class MainWindow(QWidget) :
 
     def __init__(self) :
-        #super().__init__()
+        super(MainWindow,self).__init__()
         self.title = "ANTARES_v0.1.011"
         self.attr = "QPushButton {background-color: #18537d; color: white;}"
         
@@ -175,9 +176,9 @@ class MainWindow(QWidget) :
         base.addWidget(groupSet)
 
         #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
-        layoutChar = QGridLayout()
+        layoutChar = FlowLayout()
         groupChara.setLayout(layoutChar)
-        layoutChar.setRowStretch(1,1)
+        # layoutChar.setRowStretch(1,1)
         #Variable
         characterPath = os.path.join(env.SERVER, prod, env.ASSET_DIR, env.TYPE_CHAR)
         assetcharacter = os.listdir( characterPath )
@@ -187,15 +188,17 @@ class MainWindow(QWidget) :
             
             if name == '':
                 continue
-            button = QPushButton(name)
+            button = ImagePushButton(name, path = r"C:\Users\stage\Desktop\suchomimus\11_library\Images\Character\\" + name + ".png")
             button.setFixedSize(100, 100)
-            button.setStyleSheet("QPushButton{border-image: url(C:/Users/Windows/Desktop/suchomimus/11_library/Images/character/" + name + ".png);}")
-            layoutChar.addWidget(button, *position)
+            path = os.path.join(env.SERVER, prod)
+            #button.setStyleSheet("QPushButton{border-image: url(" + path + "/11_library/Images/character/" + name + ".png);}")
+            layoutChar.addWidget(button)
 
             # CREER LISTE DE TOUS LES DEPARTEMENTS
             departmentList = os.listdir( os.path.join(characterPath , name , env.E_DIR))
             #CREER MENU
-            menu = QMenu()
+            menu = QMenu(parent = self)
+            
             for dep in departmentList:
                 #VARIABLES
                 path = os.path.join(characterPath , name , env.E_DIR , dep)
@@ -222,7 +225,7 @@ class MainWindow(QWidget) :
                 for i in allE_DIRs:
                     E_DIRs.addAction(i + " (" + date + ") (To Do)")       
             a = menu.addAction("Rename Asset (To Do)")
-            a.triggered.connect(renameWindow)
+            a.triggered.connect(self.showRenameWindow)
             menu.addAction("Duplicate Asset (To Do)")
             delete = menu.addAction("Delete Asset")
             delete.triggered.connect(partial(self.deleteAsset_UI, name))
@@ -232,67 +235,14 @@ class MainWindow(QWidget) :
         self.newCharBTN.setFixedSize(100, 100)
         layoutChar.addWidget(self.newCharBTN)
 
-        #SET PROPS GROUP --------------------------------------------------------------------------------------------------------------------------------------------------------
-        layoutProp = QGridLayout()
-        groupProp.setLayout(layoutProp)
-        layoutProp.setRowStretch(1,1)
-        #Variable
-        propPath = os.path.join(env.SERVER, prod, env.ASSET_DIR, env.TYPE_PROP)
-        assetProp = os.listdir( propPath )
-        #Create Button characters 
-        positions = [(i, j) for i in range(50) for j in range(5)]
-        for position, name in zip(positions, assetProp):
-            
-            if name == '':
-                continue
-            button = QPushButton(name)
-            button.setFixedSize(100, 100)
-            button.setStyleSheet("QPushButton{border-image: url(C:/Users/Windows/Desktop/suchomimus/11_library/Images/character/" + name + ".png);}")
-            layoutProp.addWidget(button, *position)
-
-            # CREER LISTE DE TOUS LES DEPARTEMENTS
-            departmentList = os.listdir( os.path.join(propPath , name , env.E_DIR))
-            #CREER MENU
-            menu = QMenu()
-            for dep in departmentList:
-                #VARIABLES
-                path = os.path.join(propPath , name , env.E_DIR , dep)
-                editProject = os.listdir( os.path.join(path , "data" ))
-                editImage = os.path.join(path , "data", editProject[-1])
-                publishImage = os.path.join(propPath , name , env.P_DIR , dep , name , "_P_" , dep , ".png")
-                destination = os.listdir( os.path.join(env.SERVER , prod , env.TYPE_PROP_PATH , name , env.E_DIR , dep ))
-                file = os.path.join(env.SERVER , prod , env.TYPE_PROP_PATH , name , env.E_DIR ,dep , destination[-1])
-                modified = os.path.getmtime(file)
-                year,month,day,hour,minute,second=time.localtime(modified)[:-3]
-                date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
-                #SubMenu
-                items = menu.addMenu(dep)
-                #lastEdit
-                lastEdit = items.addAction(QIcon(editImage), "Open Last Edit (" + date + ")" )
-                lastEdit.triggered.connect(partial(self.openLastEdit_UI, name, dep))
-                #publish
-                openPublish = items.addAction(QIcon(publishImage),"Open Publish (" + date + ")")
-                openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))
-                items.addAction("Open In Folder (To Do)")
-                #Recuperer tous les E_DIRs
-                edits = items.addMenu("All Edits")
-                allEdits = os.listdir(os.path.join( env.SERVER , prod , env.TYPE_PROP_PATH , name , env.E_DIR , dep ))
-                for i in allEdits:
-                    edits.addAction(i + " (" + date + ") (To Do)")       
-            a = menu.addAction("Rename Asset (To Do)")
-            a.triggered.connect(renameWindow)
-            menu.addAction("Duplicate Asset (To Do)")
-            delete = menu.addAction("Delete Asset")
-            delete.triggered.connect(partial(self.deleteAsset_UI, name))
-            menu.addAction("Create New Task (To Do)")
-
-            button.setMenu(menu)
-        self.newPropBTN.setFixedSize(100, 100)
-        layoutProp.addWidget(self.newPropBTN)
+       
 
         mayaTab.setLayout(base)
 
         return mayaTab
+    def showRenameWindow(self):
+        renameUI = RenameWindow(self)
+        renameUI.show()
 
     def houdiniTabUI(self):
         houdiniTab = QWidget()
@@ -375,13 +325,14 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         fn.deleteAsset_FN(name, prod = prod)
 
-# GROS WIP --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-class renameWindow(QWidget) :
 
-    def __init__(self) :
+class RenameWindow(QWidget) :
+
+    def __init__(self, parent) :
 
         self.title = "Rename Asset"
-        super().__init__()
+        super(RenameWindow, self).__init__(parent)
+        self.setWindowFlags(self.windowFlags() | Qt.Window) 
         self.createWidget()
         self.createLayout()
 
@@ -398,7 +349,123 @@ class renameWindow(QWidget) :
         outerLayout.setColumnStretch(1,1)
         outerLayout.addWidget(self.prodTitle)
         self.setLayout(outerLayout)
-        self.show()
+
+class FlowLayout(QLayout):
+    def __init__(self, parent=None, margin=-1, spacing=-1):
+        super(FlowLayout, self).__init__(parent)
+        self._margin = margin
+
+
+        if parent is not None:
+            self.setMargin(margin)
+
+        self.setSpacing(spacing)
+
+        self.itemList=[]
+
+    def margin(self):
+        return self._margin
+
+    def __del__(self):
+        item=self.takeAt(0)
+        while item:
+            item=self.takeAt(0)
+
+    def addItem(self, item):
+        self.itemList.append(item)
+
+    def count(self):
+        return len(self.itemList)
+
+    def itemAt(self, index):
+        if index >= 0 and index < len(self.itemList):
+            return self.itemList[index]
+
+        return None
+
+    def takeAt(self, index):
+        if index >= 0 and index < len(self.itemList):
+            return self.itemList.pop(index)
+
+        return None
+
+    def expandingDirections(self):
+        return Qt.Orientations(Qt.Orientation(0))
+
+    def hasHeightForWidth(self):
+        return True
+
+    def heightForWidth(self, width):
+        height=self._doLayout(QRect(0, 0, width, 0), True)
+        return height
+
+    def setGeometry(self, rect):
+        super(FlowLayout, self).setGeometry(rect)
+        self._doLayout(rect, False)
+
+    def sizeHint(self):
+        return self.minimumSize()
+
+    def minimumSize(self):
+        size=QSize()
+
+        for item in self.itemList:
+            size=size.expandedTo(item.minimumSize())
+
+        size += QSize(2 * self.margin(), 2 * self.margin())
+        return size
+
+    def _doLayout(self, rect, testOnly):
+        x=rect.x()
+        y=rect.y()
+        lineHeight=0
+
+        for item in self.itemList:
+            wid=item.widget()
+            spaceX=self.spacing() 
+
+            spaceY=self.spacing() 
+
+            nextX=x + item.sizeHint().width() + spaceX
+            if nextX - spaceX > rect.right() and lineHeight > 0:
+                x=rect.x()
+                y=y + lineHeight + spaceY
+                nextX=x + item.sizeHint().width() + spaceX
+                lineHeight=0
+
+            if not testOnly:
+                item.setGeometry(
+                    QRect(QPoint(x, y), item.sizeHint()))
+
+            x=nextX
+            lineHeight=max(lineHeight, item.sizeHint().height())
+
+        return y + lineHeight - rect.y()
+
+class ImagePushButton(QPushButton):
+
+    def __init__(self, *args, **kwargs):
+        path = kwargs.pop("path")
+        super(ImagePushButton, self).__init__(*args, **kwargs)
+        self.set_image(path)
+
+    def set_image(self, path):
+        icon = QImage(path)
+        icon = icon.scaled(
+            self.width(), 
+            self.height(),  
+            Qt.IgnoreAspectRatio, 
+            Qt.SmoothTransformation
+        )
+        self.pixmap = QPixmap()
+        self.pixmap.convertFromImage(icon)
+
+        self.update()
+
+    def paintEvent(self, event):
+        super(ImagePushButton, self).paintEvent(event)
+        painter = QPainter(self)
+        painter.drawPixmap(self.rect(), self.pixmap)        
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)

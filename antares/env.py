@@ -2,8 +2,8 @@ import  os
 
 
 #Global Path
-SERVER = os.path.join("C:\\", "Users", "Windows", "Desktop")
-#SERVER = os.path.join("C:\\", "Users", "stage", "Desktop")
+#SERVER = os.path.join("C:\\", "Users", "Windows", "Desktop")
+SERVER = os.path.join("C:\\", "Users", "stage", "Desktop")
 CURRENT_PROD = "suchomimus"
 #Set Templates
 TMP_ASSET = "_template_workspace_asset"
