@@ -1,9 +1,9 @@
 import sys, os, shutil, time, datetime
 
 import Qt
-from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
-from Qt.QtCore import *
-from Qt.QtGui import * #QPixmap
+from PyQt5.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
+from PyQt5.QtCore import *
+from PyQt5.QtGui import * #QPixmap
 from functools import partial
 import fn, env, subprocess
 
@@ -168,7 +168,7 @@ class MainWindow(QWidget) :
             imageDir = os.path.join(env.SERVER, prod, "11_library","Images", "Character", name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
-            button.setStyleSheet("text-align:bottom;")
+            button.setStyleSheet("QPushButton{text-align : bottom;}")
             path = os.path.join(env.SERVER, prod)
             #button.setStyleSheet("QPushButton{border-image: url(" + path + "/11_library/Images/character/" + name + ".png);}")
             layoutChar.addWidget(button)
@@ -205,7 +205,7 @@ class MainWindow(QWidget) :
                 #reference
                 refPublish = items.addAction("Reference Publish")
                 refPublish.triggered.connect(partial(self.refPublish_UI, name, dep))     
-            a = menu.addAction("Rename Asset (To Do)")
+            a = menu.addAction("Rename Asset (BUG)")
             a.triggered.connect(partial(self.showRenameWindow, name, prod))
             menu.addAction("Duplicate Asset (To Do)")
             delete = menu.addAction("Delete Asset")
@@ -311,12 +311,11 @@ class MainWindow(QWidget) :
     def refPublish_UI(self, name, dep):
         prod = self.prodName.text()
         project = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name , env.P_DIR , dep , name + "_P_" + dep + ".ma")
-        
         here = os.path.realpath(os.path.dirname(__file__))
-        script_path = here + '/refPublish.py'
-        mayapy_path = "C:/Program Files/Autodesk/Maya2020/bin/mayapy.exe"
+        script_path = os.path.join(here , 'refPublish.py').replace("\\", "/")
         PYTHON_EXE=sys.executable
-        cmd=["C:/Program Files/Autodesk/Maya2020/bin/maya.exe", "-c", "python(cmds.join())"]
+
+        cmd=["C:/Program Files/Autodesk/Maya2020/bin/maya.exe", "-c", 'python("execfile(\'%s\')")' %script_path]
         print (cmd)
            
         subprocess.Popen(
