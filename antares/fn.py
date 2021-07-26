@@ -95,6 +95,19 @@ def openLastEdit_FN(name, dep, prod):
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
 
-def deleteAsset_FN ( name, prod ):
+def deleteAsset_FN ( name, assetcharacter, prod ):
     shutil.rmtree(os.path.join(env.SERVER  , prod, env.TYPE_CHAR_PATH , name))
-    print ( name + " deleted.")
+    os.remove(os.path.join(env.SERVER, prod, "11_library","Images", "Character", name + ".png"))
+    print ("before", assetcharacter)
+    assetcharacter = []
+    print ("after", assetcharacter)
+    characterPath = os.path.join(env.SERVER, prod, env.ASSET_DIR, env.TYPE_CHAR)
+    assetcharacter = os.listdir( characterPath )
+    print ("now", assetcharacter)
+    #print ( name + " deleted.")
+    
+def renameAsset_FN(name, newName, dep, prod):
+    oldGlobal = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name)
+    newGlobal = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , newName)
+    print ( oldGlobal )
+    print ( newGlobal )    
