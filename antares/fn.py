@@ -106,7 +106,7 @@ def deleteAsset_FN ( name, assetcharacter, prod ):
     print ("now", assetcharacter)
     #print ( name + " deleted.")
     
-def renameAsset_FN(name, newName, dep, prod):
+def renameAsset_FN(name, prod, newName):
     oldGlobal = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name)
     newGlobal = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , newName)
     print ( oldGlobal )
