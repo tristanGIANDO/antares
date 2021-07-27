@@ -106,8 +106,39 @@ def deleteAsset_FN ( name, assetcharacter, prod ):
     print ("now", assetcharacter)
     #print ( name + " deleted.")
     
-def renameAsset_FN(name, prod, newName):
-    oldGlobal = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name)
-    newGlobal = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , newName)
-    print ( oldGlobal )
-    print ( newGlobal )    
+def renameAsset_FN(prod, oldName, newName):
+    oldPath = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , oldName)
+    newPath = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , newName)
+    libPath = os.path.join(env.SERVER , prod, env.LIB_IMG, env.TYPE_CHAR)
+      
+    os.rename(oldPath, newPath)
+
+    departmentList = os.listdir( os.path.join(newPath , env.E_DIR))
+    for dpt in departmentList:
+        editPath = os.path.join(newPath , env.E_DIR , dpt )
+        publishPath = os.path.join(newPath , env.P_DIR , dpt)
+
+        editToRename = os.path.join(editPath , oldName + "_E_" + dpt + "_001.ma")
+        editRenamed = os.path.join(editPath , newName + "_E_" + dpt + "_001.ma")
+        publishToRename = os.path.join(publishPath , oldName + "_P_" + dpt + ".ma")
+        publishRenamed = os.path.join(publishPath, newName + "_P_" + dpt + ".ma")
+        os.rename(editToRename, editRenamed )
+        os.rename(publishToRename, publishRenamed)
+    
+    for n in [".jpg", ".png", ".txt"]:
+        for dpt in departmentList:
+            editPath = os.path.join(newPath , env.E_DIR , dpt, "data" )
+            publishPath = os.path.join(newPath , env.P_DIR , dpt)
+
+            editToRename = os.path.join(editPath , oldName + "_E_" + dpt + "_001" + n)
+            editRenamed = os.path.join(editPath , newName + "_E_" + dpt + "_001" + n)
+            publishToRename = os.path.join(publishPath, oldName + "_P_" + dpt + n)
+            publishRenamed = os.path.join(publishPath, newName + "_P_" + dpt + n)
+            os.rename(editToRename, editRenamed)
+            os.rename(publishToRename, publishRenamed)
+
+    picDst = os.path.join(libPath, oldName + ".png")
+    picRenamed = os.path.join(libPath, newName + ".png")
+    os.rename(picDst, picRenamed)
+    
+    print ( "'", oldName , "' renamed '", newName, "' with success")

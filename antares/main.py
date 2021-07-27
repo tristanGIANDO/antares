@@ -1,18 +1,19 @@
-import sys, os, time, fn, env, subprocess, Qt, checker, psutil
+import sys, os, time, fn, env, subprocess, Qt, psutil
 from PyQt5.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from PyQt5.QtCore import *
 from PyQt5.QtGui import * #QPixmap
 from functools import partial
-from subprocess import check_output
 
 class MainWindow(QWidget) :
 
     def __init__(self) :
         super(MainWindow,self).__init__()
-        self.title = "ANTARES_v0.1.011"
+        self.title = "ANTARES_v0.2.002"
         self.attr = "QPushButton {background-color: #18537d; color: white;}"
-        self.grpBgc = u"background-color: rgb(50, 50, 50); color : white;"
-        
+        self.grpBgc = u"background-color: rgb(10, 40, 50);"
+        self.resize(858, 540)
+        self.move(100, 100)
+        self.setWindowTitle(self.title)
         
         self.createWidget()
         self.createLayout()
@@ -22,89 +23,70 @@ class MainWindow(QWidget) :
     ####################
 
     def createWidget(self):
-        self.prodTitle = QLabel ( "PROD NAME")
+        self.prodTitle = QLabel ( env.CURRENT_PROD)
         #Set production
-        self.serverName = QLineEdit(os.path.join("C:\\", "Users", "Windows", "Desktop"))
-        self.prodName = QLineEdit("suchomimus")
+        self.serverName = QLineEdit(env.SERVER)
+        self.prodName = QLineEdit(env.CURRENT_PROD)
+        self.assetDirName = QLineEdit(env.ASSET_DIR)
+        self.shotDirName = QLineEdit(env.SHOT_DIR)
         self.prodLabel = QLabel ( "Enter Server and Production Name")
-        #self.prodLabel.setStyleSheet("color: white")
         self.setProd = QPushButton("Set Production")
-        #Create new ASSET_DIR
-        #MAYA
-        self.assetNameLabel = QLabel ( "Enter Asset Name")
-        self.assetName = QLineEdit("Antares")
+        #NEW ASSETS
         self.newCharBTN = QPushButton("NEW CHARACTER")
-        self.newCharBTN.clicked.connect(self.createNewChara_UI)
         self.newPropBTN = QPushButton("NEW PROP (to do)")
-        self.newPropBTN.clicked.connect(self.createNewProp_UI)
         self.item = QPushButton("NEW ITEM (to do)")
         self.lib = QPushButton("NEW LIBRARY (to do)")
-        #HOUDINI
-        self.assetHouLabel = QLabel ( "Enter Asset Name")
-        self.assetHou = QLineEdit()
         self.newHip = QPushButton("NEW HIP (to do)")
-        self.newHip.setFixedWidth(200)
+        self.incrementSave = QPushButton("INCREMENT AND SAVE")
         #RENAME ASSET
+        self.oldName = QLineEdit("Antares")
         self.newName = QLineEdit("NewName")
         self.newNameLabel = QLabel ( "New Name")
+        self.oldNameLabel = QLabel ( "Old Name")
         self.renameButton = QPushButton("Rename Asset")
-        self.renameButton.clicked.connect(self.renameAsset_BTN_UI)
-
-        self.incrementSave = QPushButton("INCREMENT AND SAVE")
+        #CONNECTIONS
+        self.newCharBTN.clicked.connect(self.createNewChara_UI)
+        self.newPropBTN.clicked.connect(self.createNewProp_UI)
+        self.renameButton.clicked.connect(self.renameAsset_UI)
         
 
     def createLayout(self):
-        #window
-        self.resize(858, 540)
-        self.move(100, 100)
-        self.setWindowTitle(self.title)
-        #self.setStyleSheet(u"background-color: rgb(10, 40, 50);")
-        # Layout principal
+        # LAYOUT HIERARCHY
         outerLayout = QGridLayout()
-        outerLayout.setColumnStretch(1,1)
-        #Layout du haut pour titres etc
         topLayout = QFormLayout()
+        Layout_L = QVBoxLayout()
+        tabsLayout_L = QTabWidget()
+        tab01_Lay_L = QWidget()
+        up_tab01_Layout_L = QVBoxLayout()
+        mid_tab01_Layout_L = QGridLayout()
+        dwn_tab01_Layout_L = QHBoxLayout()
+        Layout_R = QVBoxLayout()
+        tabs_Lay_R = QTabWidget()
+        #ADD WIDGETS
         topLayout.addWidget(self.prodTitle)
-        #CREATE LEFT MENU
-        leftLayout = QVBoxLayout()
-        sideTabs = QTabWidget()
-        sideTabs.setTabPosition(sideTabs.West)
-        sideTabs.setMovable(True)
-        #HOME LAYOUT a l interieur du left layout
-        layout = QWidget()
-        n = QVBoxLayout()
-        n.setSpacing(5)
-        n.addWidget(self.prodLabel)
-        n.addWidget(self.serverName)
-        n.addWidget(self.prodName)
-        n.addWidget(self.setProd)
-        #RENAMER
-        layoutUp = QGridLayout()
-        layoutUp.addWidget(self.newNameLabel, 0,0)
-        layoutUp.addWidget(self.newName, 0,1)
-        layoutDwn = QHBoxLayout()
-        layoutDwn.addWidget(self.renameButton)
-        n.addLayout(layoutUp)
-        n.addLayout(layoutDwn)
-        layout.setLayout(n)
-        n.addStretch(1)
-        #Ajouter les layouts dans des tabs 
-        sideTabs.addTab(layout, "HOME")
-        leftLayout.addWidget(sideTabs)
-        #Gros content browser layout a droite
-        rightLayout = QVBoxLayout()
-        tabs = QTabWidget()
-        tabs.addTab(self.assetTabUI(), "ASSETS")
-        tabs.addTab(self.shotTabUI(), "SHOTS")
-        rightLayout.addWidget(tabs)
-        #ajout des layouts au layout global
+        for widget in [self.prodLabel, self.serverName, self.prodName, self.setProd]:
+            up_tab01_Layout_L.addWidget(widget)
+        for widget in [self.oldNameLabel, self.oldName, self.newNameLabel, self.newName]:
+            mid_tab01_Layout_L.addWidget( widget )
+        dwn_tab01_Layout_L.addWidget(self.renameButton)
+        Layout_L.addWidget(tabsLayout_L)
+        Layout_R.addWidget(tabs_Lay_R)
+        tabsLayout_L.addTab(tab01_Lay_L, "HOME")
+        tabs_Lay_R.addTab(self.assetTabUI(), "ASSETS")
+        tabs_Lay_R.addTab(self.shotTabUI(), "SHOTS")
+        #ADD LAYOUTS
+        up_tab01_Layout_L.addLayout(mid_tab01_Layout_L)
+        up_tab01_Layout_L.addLayout(dwn_tab01_Layout_L)
         outerLayout.addLayout(topLayout, 1, 0, 1, 2)
-        outerLayout.addLayout(leftLayout, 2, 0)
-        outerLayout.addLayout(rightLayout, 2, 1)
-        #Hide Rename buttons
-        self.newName.hide()
-        self.newNameLabel.hide()
-        self.renameButton.hide()
+        outerLayout.addLayout(Layout_L, 2, 0)
+        outerLayout.addLayout(Layout_R, 2, 1)
+        tab01_Lay_L.setLayout(up_tab01_Layout_L)
+        #SET CUSTOM
+        outerLayout.setColumnStretch(1,1)
+        up_tab01_Layout_L.addStretch(1)
+        up_tab01_Layout_L.setSpacing(5)
+        tabsLayout_L.setTabPosition(tabsLayout_L.West)
+        tabsLayout_L.setMovable(True)
 
         self.setLayout(outerLayout)
         self.show()
@@ -127,6 +109,14 @@ class MainWindow(QWidget) :
         return layout
 
     def mayaTabUI(self):
+        #CHECK PID
+        PROCNAME = "maya.exe"
+        for pid in psutil.process_iter(['pid', 'name', 'username']):
+            if pid.name() == PROCNAME:
+                result = str(pid.info)
+                print ( result )
+
+
         prod = self.prodName.text()
         print ("Current production = " + prod)
         mayaTab = QWidget() 
@@ -149,7 +139,7 @@ class MainWindow(QWidget) :
         assetcharacter = os.listdir( characterPath )
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
-        
+
         for position, name in zip(positions, assetcharacter):
             if name == '':
                 continue
@@ -158,7 +148,6 @@ class MainWindow(QWidget) :
             button.setFixedSize(100, 100)
             button.setStyleSheet("QPushButton{text-align : bottom;}")
             path = os.path.join(env.SERVER, prod)
-            #button.setStyleSheet("QPushButton{border-image: url(" + path + "/11_library/Images/character/" + name + ".png);}")
             layoutChar.addWidget(button)
 
             # CREER LISTE DE TOUS LES DEPARTEMENTS
@@ -180,17 +169,21 @@ class MainWindow(QWidget) :
 
                 #SubMenu
                 items = menu.addMenu(dep)
-                lastEdit = items.addAction(QIcon(E_DIRImage), "Open Last Edit (" + date + ")" )
-                openPublish = items.addAction(QIcon(publishImage),"Open Publish (" + date + ")")
+                lastEdit = items.addMenu(QIcon(E_DIRImage), "Open Last Edit (" + date + ")" )
+                openPublish = items.addMenu(QIcon(publishImage),"Open Publish (" + date + ")")
                 items.addAction("Open In Folder (To Do)")
                 E_DIRs = items.addMenu("All Edits")
                 for i in allE_DIRs:
                     E_DIRs.addAction(i + " (" + date + ") (To Do)")  
-                refPublish = items.addAction("Reference Publish")
+                refPublish = items.addMenu("Reference Publish")
+                for pid in ["Reference Publish"]:
+                    refPublish.addAction(result)
+                    refPublish.addAction("NEW MAYA")
                 #CONNECTIONS
                 lastEdit.triggered.connect(partial(self.openLastEdit_UI, name, dep)) 
                 openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
                 refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
+
 
             #MENU ITEMS GLOBAL
             a = menu.addAction("Rename Asset")
@@ -206,10 +199,7 @@ class MainWindow(QWidget) :
         self.newCharBTN.setFixedSize(100, 100)
         layoutChar.addWidget(self.newCharBTN)
 
-       
-
         mayaTab.setLayout(base)
-
         return mayaTab
 
     def houdiniTabUI(self):
@@ -299,10 +289,7 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         here = os.path.realpath(os.path.dirname(__file__))
         script_path = os.path.join(here , 'refPublish.py').replace("\\", "/")
-        PROCNAME = "maya.exe"
-        for pid in psutil.process_iter(['pid']):
-            if pid.name() == PROCNAME:
-                print ( pid.info )
+        
 
         # print ( checker.main())
         
@@ -318,17 +305,12 @@ class MainWindow(QWidget) :
                         #creationflags=subprocess.CREATE_NEW_CONSOLE,
                         )
     '''
-    def renameAsset_UI(self, name):
+    def renameAsset_UI(self):
         prod = self.prodName.text()
-        self.newName.show()
-        self.newNameLabel.show()
-        self.renameButton.show()
-    
-    def renameAsset_BTN_UI(self, name):
-        prod = self.prodName.text()
+        oldName = self.oldName.text()
         newName = self.newName.text()
         print ( newName )
-        fn.renameAsset_FN (name, prod = prod, newName = newName)
+        fn.renameAsset_FN (prod = prod, oldName = oldName, newName = newName)
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):
@@ -439,7 +421,6 @@ class ImagePushButton(QPushButton):
         )
         self.pixmap = QPixmap()
         self.pixmap.convertFromImage(icon)
-
         self.update()
 
     def paintEvent(self, event):
