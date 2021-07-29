@@ -18,10 +18,6 @@ class MainWindow(QWidget) :
         self.createWidget()
         self.createLayout()
 
-    ####################
-    ## USER INTERFACE ##
-    ####################
-
     def createWidget(self):
         self.prodTitle = QLabel ( env.CURRENT_PROD)
         #Set production
@@ -39,6 +35,7 @@ class MainWindow(QWidget) :
         self.newHip = QPushButton("NEW HIP (to do)")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
         #RENAME ASSET
+        self.assetName = QLineEdit("Antares")
         self.oldName = QLineEdit("Antares")
         self.newName = QLineEdit("NewName")
         self.newNameLabel = QLabel ( "New Name")
@@ -48,7 +45,6 @@ class MainWindow(QWidget) :
         self.newCharBTN.clicked.connect(self.createNewChara_UI)
         self.newPropBTN.clicked.connect(self.createNewProp_UI)
         self.renameButton.clicked.connect(self.renameAsset_UI)
-        
 
     def createLayout(self):
         # LAYOUT HIERARCHY
@@ -64,7 +60,7 @@ class MainWindow(QWidget) :
         tabs_Lay_R = QTabWidget()
         #ADD WIDGETS
         topLayout.addWidget(self.prodTitle)
-        for widget in [self.prodLabel, self.serverName, self.prodName, self.setProd]:
+        for widget in [self.prodLabel, self.serverName, self.prodName, self.setProd, self.assetName]:
             up_tab01_Layout_L.addWidget(widget)
         for widget in [self.oldNameLabel, self.oldName, self.newNameLabel, self.newName]:
             mid_tab01_Layout_L.addWidget( widget )
@@ -92,40 +88,30 @@ class MainWindow(QWidget) :
         self.show()
     
     #############
-    ## LAYOUTS ##
-    #############
 
     # ASSETS ------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def assetTabUI(self):
-        layout = QWidget()
-        n = QVBoxLayout()
+        outLayout = QWidget()
+        globalLayout = QVBoxLayout()
         tabs = QTabWidget()
-        tabs.addTab(self.mayaTabUI(), "MAYA")
-        tabs.addTab(self.houdiniTabUI(), "HOUDINI")
-        tabs.addTab(self.sculptTabUI(), "SCULPT")
-        tabs.addTab(self.paintTabUI(), "PAINT 3D")
-        n.addWidget(tabs)
-        layout.setLayout(n)
-        return layout
+        tabs.addTab(self.mayaTab_UI(), "MAYA")
+        globalLayout.addWidget(tabs)
+        outLayout.setLayout(globalLayout)
+        return outLayout
 
-    def mayaTabUI(self):
+    def mayaTab_UI(self):
+        prod = self.prodName.text()
         #CHECK PID
         PROCNAME = "maya.exe"
         for pid in psutil.process_iter(['pid', 'name', 'username']):
             if pid.name() == PROCNAME:
                 result = str(pid.info)
-                print ( result )
 
-
-        prod = self.prodName.text()
-        print ("Current production = " + prod)
         mayaTab = QWidget() 
         base = QGridLayout()
-        #Create Frames
         groupChara = QGroupBox("CHARACTERS")
         groupProp = QGroupBox("PROPS")
         groupSet = QGroupBox("SETS")
-        #Add Frames to layout
         base.addWidget(self.incrementSave)
         base.addWidget(groupChara)
         base.addWidget(groupProp)
@@ -146,7 +132,7 @@ class MainWindow(QWidget) :
             imageDir = os.path.join(env.SERVER, prod, "11_library","Images", "Character", name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
-            button.setStyleSheet("QPushButton{text-align : bottom;}")
+            
             path = os.path.join(env.SERVER, prod)
             layoutChar.addWidget(button)
 
@@ -169,29 +155,26 @@ class MainWindow(QWidget) :
 
                 #SubMenu
                 items = menu.addMenu(dep)
-                lastEdit = items.addMenu(QIcon(E_DIRImage), "Open Last Edit (" + date + ")" )
-                openPublish = items.addMenu(QIcon(publishImage),"Open Publish (" + date + ")")
+                lastEdit = items.addAction(QIcon(E_DIRImage), "Open Last Edit (" + date + ")" )
+                openPublish = items.addAction(QIcon(publishImage),"Open Publish (" + date + ")")
                 items.addAction("Open In Folder (To Do)")
                 E_DIRs = items.addMenu("All Edits")
                 for i in allE_DIRs:
                     E_DIRs.addAction(i + " (" + date + ") (To Do)")  
                 refPublish = items.addMenu("Reference Publish")
                 for pid in ["Reference Publish"]:
-                    refPublish.addAction(result)
+                    # refPublish.addAction(result)
                     refPublish.addAction("NEW MAYA")
                 #CONNECTIONS
                 lastEdit.triggered.connect(partial(self.openLastEdit_UI, name, dep)) 
                 openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
                 refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
 
-
             #MENU ITEMS GLOBAL
-            a = menu.addAction("Rename Asset")
             menu.addAction("Duplicate Asset (To Do)")
             delete = menu.addAction("Delete Asset")
             menu.addAction("Create New Task (To Do)")
             #Connections
-            a.triggered.connect(partial(self.renameAsset_UI, name))
             delete.triggered.connect(partial(self.deleteAsset_UI, name, assetcharacter))
 
             button.setMenu(menu)
@@ -201,29 +184,6 @@ class MainWindow(QWidget) :
 
         mayaTab.setLayout(base)
         return mayaTab
-
-    def houdiniTabUI(self):
-        houdiniTab = QWidget()
-        layout = QVBoxLayout()
-        layout.addWidget(QPushButton("character"))
-        layout.addWidget(QPushButton("FX"))
-        houdiniTab.setLayout(layout)
-        return houdiniTab
-
-    def sculptTabUI(self):
-        mayaTab = QWidget()
-        layout = QVBoxLayout()
-        layout.addWidget(QPushButton("character"))
-        mayaTab.setLayout(layout)
-        return mayaTab
-
-    def paintTabUI(self):
-        mayaTab = QWidget()
-        layout = QVBoxLayout()
-        layout.addWidget(QPushButton("character"))
-        mayaTab.setLayout(layout)
-        return mayaTab
-
 
     # SHOTS -------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def shotTabUI(self):
@@ -245,16 +205,12 @@ class MainWindow(QWidget) :
         self.cb = QComboBox()
         self.cb.addItem("Tractor On")
         self.cb.addItem("Tractor Off")
-        
         layout.addWidget(self.cb)
         houdiniTab.setLayout(layout)
         return houdiniTab
 
-    ####################
     ## CONNECTIONS UI ##
-    ####################
 
-    
     def createNewChara_UI(self):
         prod = self.prodName.text()
         assetName = self.assetName.text()
@@ -289,11 +245,6 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         here = os.path.realpath(os.path.dirname(__file__))
         script_path = os.path.join(here , 'refPublish.py').replace("\\", "/")
-        
-
-        # print ( checker.main())
-        
-
         '''
         # cmd=["C:/Program Files/Autodesk/Maya2020/bin/maya.exe", "-c", 'python("execfile(\'%s\')")' %script_path]
         cmd=["-c", 'python("execfile(\'%s\')")' %script_path]
@@ -304,7 +255,8 @@ class MainWindow(QWidget) :
                         # env={'PYTHONPATH':""}
                         #creationflags=subprocess.CREATE_NEW_CONSOLE,
                         )
-    '''
+        '''
+
     def renameAsset_UI(self):
         prod = self.prodName.text()
         oldName = self.oldName.text()
@@ -316,13 +268,9 @@ class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):
         super(FlowLayout, self).__init__(parent)
         self._margin = margin
-
-
         if parent is not None:
             self.setMargin(margin)
-
         self.setSpacing(spacing)
-
         self.itemList=[]
 
     def margin(self):
@@ -342,13 +290,11 @@ class FlowLayout(QLayout):
     def itemAt(self, index):
         if index >= 0 and index < len(self.itemList):
             return self.itemList[index]
-
         return None
 
     def takeAt(self, index):
         if index >= 0 and index < len(self.itemList):
             return self.itemList.pop(index)
-
         return None
 
     def expandingDirections(self):
@@ -370,10 +316,8 @@ class FlowLayout(QLayout):
 
     def minimumSize(self):
         size=QSize()
-
         for item in self.itemList:
             size=size.expandedTo(item.minimumSize())
-
         size += QSize(2 * self.margin(), 2 * self.margin())
         return size
 
@@ -381,27 +325,21 @@ class FlowLayout(QLayout):
         x=rect.x()
         y=rect.y()
         lineHeight=0
-
         for item in self.itemList:
             wid=item.widget()
             spaceX=self.spacing() 
-
             spaceY=self.spacing() 
-
             nextX=x + item.sizeHint().width() + spaceX
             if nextX - spaceX > rect.right() and lineHeight > 0:
                 x=rect.x()
                 y=y + lineHeight + spaceY
                 nextX=x + item.sizeHint().width() + spaceX
                 lineHeight=0
-
             if not testOnly:
                 item.setGeometry(
                     QRect(QPoint(x, y), item.sizeHint()))
-
             x=nextX
             lineHeight=max(lineHeight, item.sizeHint().height())
-
         return y + lineHeight - rect.y()
 
 class ImagePushButton(QPushButton):
@@ -430,8 +368,11 @@ class ImagePushButton(QPushButton):
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)
+
+    application.setStyle('Fusion')
+
     window = MainWindow()
-    
+
     sys.exit(application.exec_())
 else:
     window = None
