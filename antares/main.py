@@ -2,6 +2,7 @@ import sys, os, time, fn, env, subprocess, Qt, psutil
 from PyQt5.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from PyQt5.QtCore import *
 from PyQt5.QtGui import * #QPixmap
+from PyQt5 import QtCore, QtGui, QtWidgets
 from functools import partial
 
 class MainWindow(QWidget) :
@@ -17,6 +18,7 @@ class MainWindow(QWidget) :
         
         self.createWidget()
         self.createLayout()
+
 
     def createWidget(self):
         self.prodTitle = QLabel ( env.CURRENT_PROD)
@@ -69,8 +71,10 @@ class MainWindow(QWidget) :
         topLayout.addWidget(self.prodTitle)
         for widget in [self.prodLabel, self.serverName, self.prodName, self.setProd, self.assetName]:
             up_tab01_Layout_L.addWidget(widget)
-        for widget in [self.oldNameLabel, self.oldName, self.newNameLabel, self.newName]:
-            mid_tab01_Layout_L.addWidget( widget )
+        mid_tab01_Layout_L.addWidget( self.oldNameLabel, 0,0 )
+        mid_tab01_Layout_L.addWidget( self.oldName, 0, 1 )
+        mid_tab01_Layout_L.addWidget( self.newNameLabel , 1,0)
+        mid_tab01_Layout_L.addWidget( self.newName , 1,1)
         mid_tab01_Layout_L.addWidget(self.renameButton)
         dwn_tab01_Layout_L.addWidget(self.plugIn_Label)
         dwn_tab01_Layout_L.addWidget(self.checkBoxAbc)
@@ -88,12 +92,14 @@ class MainWindow(QWidget) :
         outerLayout.addLayout(Layout_L, 2, 0)
         outerLayout.addLayout(Layout_R, 2, 1)
         tab01_Lay_L.setLayout(up_tab01_Layout_L)
+        
         #SET CUSTOM
         outerLayout.setColumnStretch(1,1)
         up_tab01_Layout_L.addStretch(1)
         up_tab01_Layout_L.setSpacing(5)
         tabsLayout_L.setTabPosition(tabsLayout_L.West)
         tabsLayout_L.setMovable(True)
+        # tabsLayout_L.tabBarClicked(self.openTab)
 
         self.setLayout(outerLayout)
         self.show()
@@ -123,10 +129,10 @@ class MainWindow(QWidget) :
         groupChara = QGroupBox("CHARACTERS")
         groupProp = QGroupBox("PROPS")
         groupSet = QGroupBox("SETS")
-        base.addWidget(self.incrementSave)
         base.addWidget(groupChara)
         base.addWidget(groupProp)
         base.addWidget(groupSet)
+        base.addWidget(self.incrementSave)
 
         #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
         layoutChar = FlowLayout()
@@ -266,7 +272,13 @@ class MainWindow(QWidget) :
                         # env={'PYTHONPATH':""}
                         #creationflags=subprocess.CREATE_NEW_CONSOLE,
                         )
-        '''      
+        '''    
+        if __name__=='__main__':
+            here=os.path.realpath(os.path.dirname(__file__))
+            script_path=here+'/refPublish.py'
+            mayapy_path="C:/Program Files/Autodesk/Maya2020/bin/mayapy.exe"
+            cmd=[mayapy_path, '-i', script_path]
+            process=subprocess.Popen(cmd, creationflags=subprocess.CREATE_NEW_CONSOLE)  
 
     def renameAsset_UI(self):
         prod = self.prodName.text()
@@ -275,6 +287,29 @@ class MainWindow(QWidget) :
         print ( newName )
         fn.renameAsset_FN (prod = prod, oldName = oldName, newName = newName)
 
+
+    ## UI CUSTOMIZE ##
+
+    def openTab(self, tab01_Lay_L, up_tab01_Layout_L):
+        tab01_Lay_L.setLayout(up_tab01_Layout_L)
+'''
+def setupData(self):
+    self.lineEdit1 = QtWidgets.QLineEdit(self.prodName)
+    self.lineEdit1.setObjectName("lineEdit1")
+    self.lineEdit1.returnPressed.connect(self.return_pressed)
+    self.autocomplete_list = ["suchomimus", "beast"]
+    self.completer = QtWidgets.QCompleter(self.autocomplete_list)
+    self.lineEdit1.setCompleter(self.completer)
+
+
+def return_pressed(self):
+    user_input = self.lineEdit1.text()
+    updated_list = [x for x in self.autocomplete_list if x not in user_input]
+    print(updated_list)
+    self.completer = QtWidgets.QCompleter(updated_list)
+    self.lineEdit1.setCompleter(self.completer)
+    print('Gets to here')
+'''
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):
         super(FlowLayout, self).__init__(parent)
@@ -380,9 +415,14 @@ class ImagePushButton(QPushButton):
 if __name__ == "__main__":
     application = QApplication(sys.argv)
 
-    application.setStyle('Fusion')
+    # application.setStyle('Fusion')
+    file = QFile("./darkTheme.qss")
+    file.open(QFile.ReadOnly | QFile.Text)
+    stream = QTextStream(file)
+    application.setStyleSheet(stream.readAll())
 
     window = MainWindow()
+    # window.setupData()
 
     sys.exit(application.exec_())
 else:
