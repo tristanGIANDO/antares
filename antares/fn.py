@@ -26,8 +26,8 @@ def newCharFN(prod, assetName):
         #Rename E_DIR data
         for n in [".jpg", ".png", ".txt"]:
             for dpt in departments:
-                editToRename = os.path.join(path , env.E_DIR , dpt , "data" , env.TMP_SCN_E + n)
-                editRenamed = os.path.join(path , env.E_DIR , dpt , "data" , assetName + "_E_" + dpt + "_001" + n)
+                editToRename = os.path.join(path , env.E_DIR , dpt , "_data" , env.TMP_SCN_E + n)
+                editRenamed = os.path.join(path , env.E_DIR , dpt , "_data" , assetName + "_E_" + dpt + "_001" + n)
                 publishToRename = os.path.join(path , env.P_DIR , dpt , env.TMP_SCN_P + n)
                 publishRenamed = os.path.join(path , env.P_DIR , dpt , assetName + "_P_" + dpt + n)
                 os.rename(editToRename, editRenamed)
@@ -87,7 +87,8 @@ def openPublish_FN(name, dep, prod):
 def openLastEdit_FN(name, dep, prod):
     path = os.path.join(env.SERVER  , prod, env.TYPE_CHAR_PATH , name , env.E_DIR , dep)
     destination = os.listdir( path )
-    project = os.path.join(path,  destination[-1])
+    project = os.path.join(path,  destination[-2])
+    print ( destination )
     print (project)
     print ("Edit Path")
     os.startfile(project)
@@ -127,7 +128,7 @@ def renameAsset_FN(prod, oldName, newName):
     
     for n in [".jpg", ".png", ".txt"]:
         for dpt in departmentList:
-            editPath = os.path.join(newPath , env.E_DIR , dpt, "data" )
+            editPath = os.path.join(newPath , env.E_DIR , dpt, "_data" )
             publishPath = os.path.join(newPath , env.P_DIR , dpt)
 
             editToRename = os.path.join(editPath , oldName + "_E_" + dpt + "_001" + n)

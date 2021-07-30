@@ -41,6 +41,13 @@ class MainWindow(QWidget) :
         self.newNameLabel = QLabel ( "New Name")
         self.oldNameLabel = QLabel ( "Old Name")
         self.renameButton = QPushButton("Rename Asset")
+        #PLUG-INS
+        self.plugIn_Label = QLabel ( "Load Plug-ins")
+        self.checkBoxAbc = QCheckBox("Abc Import/Export")
+        self.checkBoxMash = QCheckBox("MASH")
+        self.checkBoxRenderMan = QCheckBox("Pixar RenderMan")
+        for check in [self.checkBoxAbc, self.checkBoxMash, self.checkBoxRenderMan]:
+            check.setChecked(True)
         #CONNECTIONS
         self.newCharBTN.clicked.connect(self.createNewChara_UI)
         self.newPropBTN.clicked.connect(self.createNewProp_UI)
@@ -55,7 +62,7 @@ class MainWindow(QWidget) :
         tab01_Lay_L = QWidget()
         up_tab01_Layout_L = QVBoxLayout()
         mid_tab01_Layout_L = QGridLayout()
-        dwn_tab01_Layout_L = QHBoxLayout()
+        dwn_tab01_Layout_L = QVBoxLayout()
         Layout_R = QVBoxLayout()
         tabs_Lay_R = QTabWidget()
         #ADD WIDGETS
@@ -64,7 +71,11 @@ class MainWindow(QWidget) :
             up_tab01_Layout_L.addWidget(widget)
         for widget in [self.oldNameLabel, self.oldName, self.newNameLabel, self.newName]:
             mid_tab01_Layout_L.addWidget( widget )
-        dwn_tab01_Layout_L.addWidget(self.renameButton)
+        mid_tab01_Layout_L.addWidget(self.renameButton)
+        dwn_tab01_Layout_L.addWidget(self.plugIn_Label)
+        dwn_tab01_Layout_L.addWidget(self.checkBoxAbc)
+        dwn_tab01_Layout_L.addWidget(self.checkBoxMash)
+        dwn_tab01_Layout_L.addWidget(self.checkBoxRenderMan)
         Layout_L.addWidget(tabsLayout_L)
         Layout_R.addWidget(tabs_Lay_R)
         tabsLayout_L.addTab(tab01_Lay_L, "HOME")
@@ -143,8 +154,8 @@ class MainWindow(QWidget) :
             for dep in departmentList:
                 #VARIABLES
                 path = os.path.join(characterPath , name , env.E_DIR , dep)
-                E_DIRProject = os.listdir( os.path.join(path , "data" ))
-                E_DIRImage = os.path.join(path , "data", E_DIRProject[-1])
+                E_DIRProject = os.listdir( os.path.join(path , "_data" ))
+                E_DIRImage = os.path.join(path , "_data", E_DIRProject[-1])
                 publishImage = os.path.join(characterPath , name , env.P_DIR , dep , name , "_P_" , dep , ".png")
                 destination = os.listdir( os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name , env.E_DIR , dep ))
                 file = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name , env.E_DIR ,dep , destination[-1])
@@ -161,10 +172,10 @@ class MainWindow(QWidget) :
                 E_DIRs = items.addMenu("All Edits")
                 for i in allE_DIRs:
                     E_DIRs.addAction(i + " (" + date + ") (To Do)")  
-                refPublish = items.addMenu("Reference Publish")
-                for pid in ["Reference Publish"]:
+                refPublish = items.addAction("Reference Publish")
+                # for pid in ["Reference Publish"]:
                     # refPublish.addAction(result)
-                    refPublish.addAction("NEW MAYA")
+                    # refPublish.addAction("NEW MAYA")
                 #CONNECTIONS
                 lastEdit.triggered.connect(partial(self.openLastEdit_UI, name, dep)) 
                 openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
@@ -249,13 +260,13 @@ class MainWindow(QWidget) :
         # cmd=["C:/Program Files/Autodesk/Maya2020/bin/maya.exe", "-c", 'python("execfile(\'%s\')")' %script_path]
         cmd=["-c", 'python("execfile(\'%s\')")' %script_path]
         print (cmd)
-           
+          
         subprocess.Popen(
                         cmd
                         # env={'PYTHONPATH':""}
                         #creationflags=subprocess.CREATE_NEW_CONSOLE,
                         )
-        '''
+        '''      
 
     def renameAsset_UI(self):
         prod = self.prodName.text()
