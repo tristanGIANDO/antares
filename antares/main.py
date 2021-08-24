@@ -1,8 +1,8 @@
-import sys, os, time, fn, env, subprocess, Qt, psutil
-from PyQt5.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
-from PyQt5.QtCore import *
-from PyQt5.QtGui import * #QPixmap
-from PyQt5 import QtCore, QtGui, QtWidgets
+import sys, os, time, fn, env, subprocess #psutil
+from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
+from Qt.QtCore import *
+from Qt.QtGui import * #QPixmap
+from Qt import QtCore, QtGui, QtWidgets
 from functools import partial
 
 class MainWindow(QWidget) :
@@ -22,6 +22,7 @@ class MainWindow(QWidget) :
 
     def createWidget(self):
         self.prodTitle = QLabel ( env.CURRENT_PROD)
+        self.userLabel = QLabel ( "Welcome " + env.USER)
         #Set production
         self.serverName = QLineEdit(env.SERVER)
         self.prodName = QLineEdit(env.CURRENT_PROD)
@@ -58,7 +59,7 @@ class MainWindow(QWidget) :
     def createLayout(self):
         # LAYOUT HIERARCHY
         outerLayout = QGridLayout()
-        topLayout = QFormLayout()
+        topLayout = QHBoxLayout()
         Layout_L = QVBoxLayout()
         tabsLayout_L = QTabWidget()
         tab01_Lay_L = QWidget()
@@ -68,6 +69,7 @@ class MainWindow(QWidget) :
         Layout_R = QVBoxLayout()
         tabs_Lay_R = QTabWidget()
         #ADD WIDGETS
+        topLayout.addWidget(self.userLabel)
         topLayout.addWidget(self.prodTitle)
         for widget in [self.prodLabel, self.serverName, self.prodName, self.setProd, self.assetName]:
             up_tab01_Layout_L.addWidget(widget)
@@ -85,6 +87,7 @@ class MainWindow(QWidget) :
         tabsLayout_L.addTab(tab01_Lay_L, "HOME")
         tabs_Lay_R.addTab(self.assetTabUI(), "ASSETS")
         tabs_Lay_R.addTab(self.shotTabUI(), "SHOTS")
+        tabs_Lay_R.addTab(self.setTabUI(), "SETS")
         #ADD LAYOUTS
         up_tab01_Layout_L.addLayout(mid_tab01_Layout_L)
         up_tab01_Layout_L.addLayout(dwn_tab01_Layout_L)
@@ -120,9 +123,11 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         #CHECK PID
         PROCNAME = "maya.exe"
+        '''
         for pid in psutil.process_iter(['pid', 'name', 'username']):
             if pid.name() == PROCNAME:
                 result = str(pid.info)
+        '''        
 
         mayaTab = QWidget() 
         base = QGridLayout()
@@ -142,11 +147,10 @@ class MainWindow(QWidget) :
         assetcharacter = os.listdir( characterPath )
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
-
         for position, name in zip(positions, assetcharacter):
             if name == '':
                 continue
-            imageDir = os.path.join(env.SERVER, prod, "11_library","Images", "Character", name + ".png")
+            imageDir = os.path.join(env.SERVER, env.LIB, "character", name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
@@ -199,6 +203,13 @@ class MainWindow(QWidget) :
         self.newCharBTN.setFixedSize(100, 100)
         layoutChar.addWidget(self.newCharBTN)
 
+        #SET PROP GROUP
+        layoutProp = FlowLayout()
+        groupProp.setLayout(layoutProp)
+        #New Chara Button
+        self.newPropBTN.setFixedSize(100, 100)
+        layoutProp.addWidget(self.newPropBTN)
+
         mayaTab.setLayout(base)
         return mayaTab
 
@@ -226,6 +237,60 @@ class MainWindow(QWidget) :
         houdiniTab.setLayout(layout)
         return houdiniTab
 
+    # SETS -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    def setTabUI(self):
+        prod = self.prodName.text()
+        layout = QWidget()
+        n = QVBoxLayout()
+        tabs = QTabWidget()
+        setDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_DIR))
+        for setName in setDIR :
+            tabs.addTab(self.moduleTabUI(setName), setName)
+        tabs.addTab(self.buttonTab(), "NEW SET")
+        n.addWidget(tabs)
+        layout.setLayout(n)
+        return layout
+    
+    def moduleTabUI(self, setName):
+        prod = self.prodName.text()
+        layout = QWidget()
+        n = QVBoxLayout()
+        tabs = QTabWidget()
+        moduleDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_DIR, setName))
+        for modName in moduleDIR :
+            tabs.addTab(self.itemTabUI(setName, modName), modName)
+        n.addWidget(tabs)
+        layout.setLayout(n)
+        return layout
+
+    def itemTabUI(self, setName, modName):
+        prod = self.prodName.text()
+        layout = QWidget()
+        n = QVBoxLayout()
+        item = QPushButton()
+        itemDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_DIR, setName, modName))
+
+        #Create Button characters 
+        positions = [(i, j) for i in range(50) for j in range(5)]
+        for position, name in zip(positions, itemDIR):
+            if name == '':
+                continue
+            imageDir = os.path.join(env.SERVER, env.LIB, "character", name + ".png")
+            button = ImagePushButton(name, path = imageDir)
+            button.setFixedSize(100, 100)
+            
+            path = os.path.join(env.SERVER, prod)
+            n.addWidget(button)
+
+        layout.setLayout(n)
+        return layout
+
+    def buttonTab(self):
+        prod = self.prodName.text()
+        layout = QWidget()
+        n = QVBoxLayout()
+        layout.setLayout(n)
+        return layout
     ## CONNECTIONS UI ##
 
     def createNewChara_UI(self):
