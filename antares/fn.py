@@ -33,9 +33,10 @@ def newCharFN(prod, assetName):
                 os.rename(editToRename, editRenamed)
                 os.rename(publishToRename, publishRenamed)
         # PROFILE PICTURE
-        picSrc = os.path.join(env.SERVER , prod, env.LIB_IMG, "template.png")
-        picDst = os.path.join(env.SERVER , prod, env.LIB_IMG, env.TYPE_CHAR,"template.png")
-        picRenamed = os.path.join(env.SERVER, prod, env.LIB_IMG, env.TYPE_CHAR , assetName + ".png")
+        # S:\packages\antares\dev\antares\resources\icons\_library\Images\character
+        picSrc = os.path.join(env.SERVER , env.LIB, "template.png")
+        picDst = os.path.join(env.SERVER , env.LIB, env.TYPE_CHAR,"template.png")
+        picRenamed = os.path.join(env.SERVER, env.LIB, env.TYPE_CHAR , assetName + ".png")
         shutil.copyfile( picSrc, picDst)
         os.rename(picDst, picRenamed)
         print ("New Character created with success")
@@ -71,9 +72,9 @@ def newPropFN(prod, assetName):
                 os.rename(editToRename, editRenamed)
                 os.rename(publishToRename, publishRenamed)
         # PROFILE PICTURE
-        picSrc = os.path.join(env.SERVER , prod, env.LIB_IMG, "template.png")
-        picDst = os.path.join(env.SERVER , prod, env.LIB_IMG, env.TYPE_PROP,"template.png")
-        picRenamed = os.path.join(env.SERVER, prod, env.LIB_IMG, env.TYPE_PROP , assetName + ".png")
+        picSrc = os.path.join(env.SERVER , prod, env.LIB, "template.png")
+        picDst = os.path.join(env.SERVER , prod, env.LIB, env.TYPE_PROP,"template.png")
+        picRenamed = os.path.join(env.SERVER, prod, env.LIB, env.TYPE_PROP , assetName + ".png")
         shutil.copyfile( picSrc, picDst)
         os.rename(picDst, picRenamed)
         print ("New Prop created with success")

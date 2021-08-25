@@ -1,9 +1,17 @@
 import sys, os, time, fn, env, subprocess #psutil
+'''
 from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from Qt.QtCore import *
 from Qt.QtGui import * #QPixmap
 from Qt import QtCore, QtGui, QtWidgets
+'''
+from PyQt5.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
+from PyQt5.QtCore import *
+from PyQt5.QtGui import * #QPixmap
+from PyQt5 import QtCore, QtGui, QtWidgets
+
 from functools import partial
+
 
 class MainWindow(QWidget) :
 
@@ -12,7 +20,7 @@ class MainWindow(QWidget) :
         self.title = "ANTARES_v0.2.002"
         self.attr = "QPushButton {background-color: #18537d; color: white;}"
         self.grpBgc = u"background-color: rgb(10, 40, 50);"
-        self.resize(858, 540)
+        self.resize(850, 500)
         self.move(100, 100)
         self.setWindowTitle(self.title)
         
@@ -23,6 +31,7 @@ class MainWindow(QWidget) :
     def createWidget(self):
         self.prodTitle = QLabel ( env.CURRENT_PROD)
         self.userLabel = QLabel ( "Welcome " + env.USER)
+        self.reloadBTN = QPushButton("RELOAD")
         #Set production
         self.serverName = QLineEdit(env.SERVER)
         self.prodName = QLineEdit(env.CURRENT_PROD)
@@ -33,8 +42,9 @@ class MainWindow(QWidget) :
         #NEW ASSETS
         self.newCharBTN = QPushButton("NEW CHARACTER")
         self.newPropBTN = QPushButton("NEW PROP (to do)")
-        self.item = QPushButton("NEW ITEM (to do)")
-        self.lib = QPushButton("NEW LIBRARY (to do)")
+        self.itemBTN = QPushButton("NEW ITEM (to do)")
+        self.libBTN = QPushButton("NEW LIBRARY (to do)")
+        self.setBTN = QPushButton("NEW SET (to do)")
         self.newHip = QPushButton("NEW HIP (to do)")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
         #RENAME ASSET
@@ -71,6 +81,7 @@ class MainWindow(QWidget) :
         #ADD WIDGETS
         topLayout.addWidget(self.userLabel)
         topLayout.addWidget(self.prodTitle)
+        topLayout.addWidget(self.reloadBTN)
         for widget in [self.prodLabel, self.serverName, self.prodName, self.setProd, self.assetName]:
             up_tab01_Layout_L.addWidget(widget)
         mid_tab01_Layout_L.addWidget( self.oldNameLabel, 0,0 )
@@ -246,8 +257,10 @@ class MainWindow(QWidget) :
         setDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_DIR))
         for setName in setDIR :
             tabs.addTab(self.moduleTabUI(setName), setName)
-        tabs.addTab(self.buttonTab(), "NEW SET")
         n.addWidget(tabs)
+        n.addWidget(self.setBTN)
+        n.addWidget(self.libBTN)
+        n.addWidget(self.itemBTN)
         layout.setLayout(n)
         return layout
     
@@ -259,7 +272,9 @@ class MainWindow(QWidget) :
         moduleDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_DIR, setName))
         for modName in moduleDIR :
             tabs.addTab(self.itemTabUI(setName, modName), modName)
+        
         n.addWidget(tabs)
+        
         layout.setLayout(n)
         return layout
 
@@ -281,16 +296,12 @@ class MainWindow(QWidget) :
             
             path = os.path.join(env.SERVER, prod)
             n.addWidget(button)
+            
 
         layout.setLayout(n)
+
         return layout
 
-    def buttonTab(self):
-        prod = self.prodName.text()
-        layout = QWidget()
-        n = QVBoxLayout()
-        layout.setLayout(n)
-        return layout
     ## CONNECTIONS UI ##
 
     def createNewChara_UI(self):
