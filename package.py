@@ -4,7 +4,7 @@ name = 'antares'
 
 version = '0.1'
 
-description = 'Asset Manager'
+description = 'Pipeline Manager'
 
 tools = ['launch']
 

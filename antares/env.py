@@ -5,7 +5,7 @@ import  os
 # SERVER = os.path.join("C:\\", "Users", "Windows", "Desktop")
 # SERVER = os.path.join("C:\\", "Users", "stage", "Desktop")
 # SERVER = os.path.join("C:\\", "Users", "Manon", "Documents", "antares-main", "antares", "resources")
-SERVER = os.path.join("S:\\", "packages", "antares", "antares", "resources")
+SERVER = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
 
 CURRENT_PROD = "template_pipeline_film"
 #Set Templates
