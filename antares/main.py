@@ -31,13 +31,14 @@ class MainWindow(QWidget) :
     def createWidget(self):
         self.prodTitle = QLabel ( env.CURRENT_PROD)
         self.userLabel = QLabel ( "Welcome " + env.USER)
-        self.reloadBTN = QPushButton("RELOAD")
+        self.reloadBTN = QPushButton("TEST")
         #Set production
         self.serverName = QLineEdit(env.SERVER)
         self.prodName = QLineEdit(env.CURRENT_PROD)
         self.assetDirName = QLineEdit(env.ASSET_DIR)
         self.shotDirName = QLineEdit(env.SHOT_DIR)
         self.prodLabel = QLabel ( "Enter Server and Production Name")
+        self.createProd = QPushButton("Create Production")
         self.setProd = QPushButton("Set Production")
         #NEW ASSETS
         self.newCharBTN = QPushButton("NEW CHARACTER")
@@ -65,6 +66,7 @@ class MainWindow(QWidget) :
         self.newCharBTN.clicked.connect(self.createNewChara_UI)
         self.newPropBTN.clicked.connect(self.createNewProp_UI)
         self.renameButton.clicked.connect(self.renameAsset_UI)
+        self.reloadBTN.clicked.connect(self.test_UI)
 
     def createLayout(self):
         # LAYOUT HIERARCHY
@@ -82,7 +84,7 @@ class MainWindow(QWidget) :
         topLayout.addWidget(self.userLabel)
         topLayout.addWidget(self.prodTitle)
         topLayout.addWidget(self.reloadBTN)
-        for widget in [self.prodLabel, self.serverName, self.prodName, self.setProd, self.assetName]:
+        for widget in [self.prodLabel, self.serverName, self.prodName, self.assetDirName, self.shotDirName, self.createProd, self.setProd, self.assetName]:
             up_tab01_Layout_L.addWidget(widget)
         mid_tab01_Layout_L.addWidget( self.oldNameLabel, 0,0 )
         mid_tab01_Layout_L.addWidget( self.oldName, 0, 1 )
@@ -279,6 +281,8 @@ class MainWindow(QWidget) :
         return layout
 
     def itemTabUI(self, setName, modName):
+        a = os.getpid()
+        print ( a )
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
@@ -363,6 +367,8 @@ class MainWindow(QWidget) :
         print ( newName )
         fn.renameAsset_FN (prod = prod, oldName = oldName, newName = newName)
 
+    def test_UI(self):
+        fn.testFN()
 
     ## UI CUSTOMIZE ##
 

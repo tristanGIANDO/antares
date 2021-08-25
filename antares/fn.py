@@ -1,6 +1,7 @@
-import os, shutil
+import os, shutil, socket, time, six
 import env
-
+# import maya.standalone
+# import maya.cmds as cmds
 
 def newCharFN(prod, assetName):
     check = os.listdir(os.path.join(env.SERVER , prod, env.TYPE_CHAR_PATH))
@@ -144,3 +145,23 @@ def renameAsset_FN(prod, oldName, newName):
     os.rename(picDst, picRenamed)
     
     print ( "'", oldName , "' renamed '", newName, "' with success")
+
+def testFN():
+    socketToMaya = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    socketToMaya.connect(('localhost', 1789)) #same port as in Maya
+    myCommand = 'cmds.joint()'
+    socketToMaya .send(bytes(myCommand, 'utf-8'))
+    # time.sleep(0.5)
+    socketToMaya.recv(2048)
+    socketToMaya .close()
+    print ( "done")
+
+    
+    '''
+    # Write this in Maya
+
+    import maya.cmds as cmds
+    # Open new ports
+    cmds.commandPort(name=":1789", sourceType="python", echoOutput=True)
+    print('Antares connected to maya')
+    '''
