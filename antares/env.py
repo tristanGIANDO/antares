@@ -6,31 +6,35 @@ import  os
 # SERVER = os.path.join("C:\\", "Users", "stage", "Desktop")
 # SERVER = os.path.join("C:\\", "Users", "Manon", "Documents", "antares-main", "antares", "resources")
 SERVER = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
+RESOURCES = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
 
-CURRENT_PROD = "template_pipeline_film"
+
 #Set Templates
+
 userComplete = str(os.listdir(os.path.join(SERVER, "icons", "_user")))
 userSplitText = userComplete.replace('.png', '')
 userSplitCroc01 = userSplitText.replace("['", "")
 userSplit = userSplitCroc01.replace("']", "")
 USER = userSplit
+TMP_PROD = "template_pipeline_film"
 TMP_ASSET = "_template_workspace_asset"
-TMP_SCN_E = "template_E_modeling_001"
-TMP_SCN_P = "template_P_assetLayout"
+TMP_SCN_TYPE_E = "template_E_modeling_001"
+TMP_SCN_TYPE_P = "template_P_assetLayout"
+TMP_IMAGE = "template.png"
 # Set Directories"
-ASSET_DIR = "04_asset"
-SHOT_DIR = "05_shot"
-SET_DIR = os.path.join(ASSET_DIR, "set")
-TYPE_CHAR = "character"
-TYPE_PROP = "prop"
-CURRENT_SOFT= "maya"
-SCN = "scenes"
-E_DIR = "edit"
-P_DIR = "publish"
-LIB_IMG = os.path.join("11_library","Images")
-LIB = os.path.join("icons", "_library", "Images")
-SRC = os.path.join(ASSET_DIR,TMP_ASSET)
-E_DIR = os.path.join(CURRENT_SOFT, SCN, E_DIR)
-P_DIR = os.path.join(CURRENT_SOFT, SCN, P_DIR)
-TYPE_CHAR_PATH = os.path.join(ASSET_DIR, TYPE_CHAR )
-TYPE_PROP_PATH = os.path.join(ASSET_DIR, TYPE_PROP )
+ASSET_TYPE = "04_asset"
+SHOT_TYPE = "05_shot"
+CHAR_TYPE = "character"
+PROP_TYPE = "prop"
+MAYA_TYPE= "maya"
+SCN_TYPE = "scenes"
+EDIT_TYPE = "edit"
+PUBLISH_TYPE = "publish"
+# Path
+IMAGES_PATH = os.path.join("icons", "_library", "Images")
+TMP_ASSET_PATH = os.path.join(ASSET_TYPE,TMP_ASSET)
+SET_PATH = os.path.join(ASSET_TYPE, "set")
+E_PATH = os.path.join(MAYA_TYPE, SCN_TYPE, EDIT_TYPE)
+P_PATH = os.path.join(MAYA_TYPE, SCN_TYPE, PUBLISH_TYPE)
+CHAR_PATH = os.path.join(ASSET_TYPE, CHAR_TYPE )
+PROP_PATH = os.path.join(ASSET_TYPE, PROP_TYPE )
