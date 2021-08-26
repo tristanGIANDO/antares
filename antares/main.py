@@ -338,28 +338,6 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         fn.deleteAsset_FN(name, assetcharacter, prod = prod)
 
-    def refPublish_UI(self, name, dep):
-        prod = self.prodName.text()
-        here = os.path.realpath(os.path.dirname(__file__))
-        script_path = os.path.join(here , 'refPublish.py').replace("\\", "/")
-        '''
-        # cmd=["C:/Program Files/Autodesk/Maya2020/bin/maya.exe", "-c", 'python("execfile(\'%s\')")' %script_path]
-        cmd=["-c", 'python("execfile(\'%s\')")' %script_path]
-        print (cmd)
-          
-        subprocess.Popen(
-                        cmd
-                        # env={'PYTHONPATH':""}
-                        #creationflags=subprocess.CREATE_NEW_CONSOLE,
-                        )
-        '''    
-        if __name__=='__main__':
-            here=os.path.realpath(os.path.dirname(__file__))
-            script_path=here+'/refPublish.py'
-            mayapy_path="C:/Program Files/Autodesk/Maya2020/bin/mayapy.exe"
-            cmd=[mayapy_path, '-i', script_path]
-            process=subprocess.Popen(cmd, creationflags=subprocess.CREATE_NEW_CONSOLE)  
-
     def renameAsset_UI(self):
         prod = self.prodName.text()
         oldName = self.oldName.text()
@@ -369,6 +347,10 @@ class MainWindow(QWidget) :
 
     def test_UI(self):
         fn.testFN()
+
+    def refPublish_UI(self, name, dep):
+        prod = self.prodName.text()
+        fn.refPublishFN(name, dep, prod = prod)
 
     ## UI CUSTOMIZE ##
 

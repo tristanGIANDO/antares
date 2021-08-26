@@ -1,4 +1,4 @@
-import os, shutil, socket, time, six
+import os, shutil, socket, time, six, sys
 import env
 # import maya.standalone
 # import maya.cmds as cmds
@@ -146,15 +146,41 @@ def renameAsset_FN(prod, oldName, newName):
     
     print ( "'", oldName , "' renamed '", newName, "' with success")
 
+def refPublishFN(name, dep, prod):
+    print ( name, dep, prod )
+    ref = os.path.join(env.SERVER,
+                        prod,
+                        env.TYPE_CHAR_PATH,
+                        name,
+                        env.P_DIR,
+                        dep,
+                        name + "_P_" + dep + ".ma")
+    
+    if not os.path.isfile(ref):
+        raise RuntimeError("where is %s")%ref
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect(('localhost', 1791)) #same port as in Maya
+        # myCommand = 'print("avant reference")\ncmds.file( %s, r=True, namespace = "CHAR_1")\nprint("reference ok")'%ref
+        # myCommand = 'print(%s)'%ref
+        
+        myCommand = 'import sys'
+        myCommand += '\ncmds.joint()'
+        myCommand += '\ncmds.polyCube()'
+        myCommand += '\nsys.stdout.write("avant")'
+        myCommand += '\nresult = cmds.file( r"%s", r=True, namespace = "CHAR_1")'%ref
+        myCommand += '\nsys.stdout.write(result)'
+        s.send(bytes(myCommand, 'utf-8'))
+        s.recv(2048)
+        print ( "done")
+
 def testFN():
-    socketToMaya = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socketToMaya.connect(('localhost', 1789)) #same port as in Maya
-    myCommand = 'cmds.joint()'
-    socketToMaya .send(bytes(myCommand, 'utf-8'))
-    # time.sleep(0.5)
-    socketToMaya.recv(2048)
-    socketToMaya .close()
-    print ( "done")
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect(('localhost', 1791)) #same port as in Maya
+        myCommand = 'cmds.joint()\ncmds.polyCube()'
+        s.send(bytes(myCommand, 'utf-8'))
+        s.recv(2048)
+        print ( "done")
 
     
     '''
@@ -164,4 +190,8 @@ def testFN():
     # Open new ports
     cmds.commandPort(name=":1789", sourceType="python", echoOutput=True)
     print('Antares connected to maya')
+
+    # je stocke des trucs
+    project = osDir  + "04_asset/character/" + perso + pDir + department + "/" + perso + "_P_" + department + ".ma"
+        cmds.file( project, r=True, namespace = "CHAR_1")
     '''
