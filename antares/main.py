@@ -142,6 +142,7 @@ class MainWindow(QWidget) :
                 result = str(pid.info)
         '''        
 
+
         mayaTab = QWidget() 
         base = QGridLayout()
         groupChara = QGroupBox("CHARACTERS")
