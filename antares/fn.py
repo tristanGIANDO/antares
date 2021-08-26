@@ -11,42 +11,65 @@ def newCharFN(prod, assetName):
     else:
         departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
 
-        path = os.path.join(env.SERVER , prod, env.CHAR_PATH , assetName)
+        
         source = os.path.join(env.SERVER, prod , env.TMP_ASSET_PATH)
         destination = os.path.join(env.SERVER , prod , env.CHAR_PATH, env.TMP_ASSET)
+        path = os.path.join(env.SERVER , prod, env.CHAR_PATH , assetName)
         #   Copy template
-        if not os.path.isfile(destination):
+        try:
+            shutil.rmtree(destination)
+            print ("_Template_asset was already there")
             shutil.copytree(source, destination)
-        else:
-            pass
+            print ( " ... But I kicked him off and created a new one")
+            
+        except:
+            shutil.copytree(source, destination)
+            print ( " Template copied, it's all good for now")
+            
         try:
             os.rename(destination, path)
+            print (" Template renamed, it works well")
         except:
-            pass
+            print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
         #Rename Scenes
         for dpt in departments:
-            editToRename = os.path.join(path , env.EDIT_TYPE , dpt , env.TMP_SCN_TYPE_TYPE_TYPE_E + ".ma")
-            publishToRename = os.path.join(path , env.PUBLISH_TYPE , dpt , env.TMP_SCN_TYPE_TYPE_TYPE_P + ".ma")
+            editToRename = os.path.join(path , env.EDIT_TYPE , dpt , env.TMP_SCN_TYPE_E + ".ma")
+            publishToRename = os.path.join(path , env.PUBLISH_TYPE , dpt , env.TMP_SCN_TYPE_P + ".ma")
             editRenamed = os.path.join(path , env.EDIT_TYPE , dpt , assetName + "_E_" + dpt + "_001.ma")
             publishRenamed = os.path.join(path , env.PUBLISH_TYPE , dpt , assetName + "_P_" + dpt + ".ma")
-            os.rename(editToRename, editRenamed )
-            os.rename(publishToRename, publishRenamed)
+            
+            try:
+                os.rename(editToRename, editRenamed )
+                os.rename(publishToRename, publishRenamed)
+                print ( dpt + " renamed correctly (scenes)")
+            except:
+                print ( dpt + " isn't renamed correctly (scenes)... ...")
         #Rename EDIT_TYPE data
         for n in [".jpg", ".png", ".txt"]:
             for dpt in departments:
-                editToRename = os.path.join(path , env.EDIT_TYPE , dpt , "_data" , env.TMP_SCN_TYPE_TYPE_TYPE_E + n)
+                editToRename = os.path.join(path , env.EDIT_TYPE , dpt , "_data" , env.TMP_SCN_TYPE_E + n)
                 editRenamed = os.path.join(path , env.EDIT_TYPE , dpt , "_data" , assetName + "_E_" + dpt + "_001" + n)
-                publishToRename = os.path.join(path , env.PUBLISH_TYPE , dpt , env.TMP_SCN_TYPE_TYPE_TYPE_P + n)
+                publishToRename = os.path.join(path , env.PUBLISH_TYPE , dpt , env.TMP_SCN_TYPE_P + n)
                 publishRenamed = os.path.join(path , env.PUBLISH_TYPE , dpt , assetName + "_P_" + dpt + n)
-                os.rename(editToRename, editRenamed)
-                os.rename(publishToRename, publishRenamed)
+                try :
+                    os.rename(editToRename, editRenamed)
+                    os.rename(publishToRename, publishRenamed)
+                    print ( dpt + " renamed correctly (data)")
+                except:
+                    print ( dpt + " isn't renamed correctly (data)... ...")
+
         # PROFILE PICTURE
         picTMP_ASSET_PATH = os.path.join(env.RESOURCES , env.IMAGES_PATH, env.TMP_IMAGE)
         picDst = os.path.join(env.RESOURCES, env.IMAGES_PATH, env.CHAR_TYPE, env.TMP_IMAGE)
         picRenamed = os.path.join(env.SERVER, env.IMAGES_PATH, env.CHAR_TYPE , assetName + ".png")
-        shutil.copyfile( picTMP_ASSET_PATH, picDst)
-        os.rename(picDst, picRenamed)
-        print ("New Character created with success")
+        try:
+            shutil.copyfile( picTMP_ASSET_PATH, picDst)
+            os.rename(picDst, picRenamed)
+            print ( "Image renamed correctly")
+            print ("New Character created with success")
+        except:
+            print ( "There is no profile picture, sorry... ...")
+            print ( "Try again, it will work better")
 
 def newPropFN(prod, assetName):
     check = os.listdir(os.path.join(env.SERVER , prod, env.PROP_PATH))
@@ -110,7 +133,7 @@ def deleteAsset_FN ( name, assetcharacter, prod ):
     characterPath = os.path.join(env.SERVER, prod, env.ASSET_TYPE, env.CHAR_TYPE)
     assetcharacter = os.listdir( characterPath )
     print ("now", assetcharacter)
-    print ( name + " deleted.")
+    print ( name + " deleted with big success.")
     
 def renameAsset_FN(prod, oldName, newName):
     oldPath = os.path.join(env.SERVER , prod , env.CHAR_PATH , oldName)
@@ -169,11 +192,11 @@ def refPublishFN(name, dep, prod):
         myCommand = 'result = cmds.file( r"%s", r=True, namespace = "CHAR_1")'%ref
         s.send(bytes(myCommand, 'utf-8'))
         s.recv(2048)
-        print ( "done")
+        print ( "File referenced with success")
 
 def importPublish_Char_FN(name, dep, prod):
     print ( name, dep, prod )
-    ref = os.path.join(env.SERVER,
+    importFile = os.path.join(env.SERVER,
                         prod,
                         env.CHAR_PATH,
                         name,
@@ -181,15 +204,15 @@ def importPublish_Char_FN(name, dep, prod):
                         dep,
                         name + "_P_" + dep + ".ma")
     
-    if not os.path.isfile(ref):
-        raise RuntimeError("where is %s")%ref
+    if not os.path.isfile(importFile):
+        raise RuntimeError("where is %s")%importFile
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect(('localhost', 1789)) #same port as in Maya
-        myCommand = 'cmds.file( r"%s", i=True, typ="mayaAscii")'%ref
+        myCommand = 'cmds.file( r"%s", i=True, typ="mayaAscii")'%importFile
         s.send(bytes(myCommand, 'utf-8'))
         s.recv(2048)
-        print ( "done")
+        print ( "File imported with success")
 
 def testFN():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
