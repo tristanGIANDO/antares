@@ -146,13 +146,15 @@ def renameAsset_FN(prod, oldName, newName):
     
     print ( "'", oldName , "' renamed '", newName, "' with success")
 
+# FONCTIONS SOCKETS
+
 def refPublishFN(name, dep, prod):
     print ( name, dep, prod )
     ref = os.path.join(env.SERVER,
                         prod,
                         env.TYPE_CHAR_PATH,
                         name,
-                        env.P_DIR,
+                        env.P_PATH,
                         dep,
                         name + "_P_" + dep + ".ma")
     
@@ -160,23 +162,35 @@ def refPublishFN(name, dep, prod):
         raise RuntimeError("where is %s")%ref
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect(('localhost', 1791)) #same port as in Maya
-        # myCommand = 'print("avant reference")\ncmds.file( %s, r=True, namespace = "CHAR_1")\nprint("reference ok")'%ref
-        # myCommand = 'print(%s)'%ref
-        
-        myCommand = 'import sys'
-        myCommand += '\ncmds.joint()'
-        myCommand += '\ncmds.polyCube()'
-        myCommand += '\nsys.stdout.write("avant")'
-        myCommand += '\nresult = cmds.file( r"%s", r=True, namespace = "CHAR_1")'%ref
-        myCommand += '\nsys.stdout.write(result)'
+        s.connect(('localhost', 1789)) #same port as in Maya
+        myCommand = 'result = cmds.file( r"%s", r=True, namespace = "CHAR_1")'%ref
+        s.send(bytes(myCommand, 'utf-8'))
+        s.recv(2048)
+        print ( "done")
+
+def importPublish_Char_FN(name, dep, prod):
+    print ( name, dep, prod )
+    ref = os.path.join(env.SERVER,
+                        prod,
+                        env.TYPE_CHAR_PATH,
+                        name,
+                        env.P_PATH,
+                        dep,
+                        name + "_P_" + dep + ".ma")
+    
+    if not os.path.isfile(ref):
+        raise RuntimeError("where is %s")%ref
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect(('localhost', 1789)) #same port as in Maya
+        myCommand = 'cmds.file( r"%s", i=True, typ="mayaAscii")'%ref
         s.send(bytes(myCommand, 'utf-8'))
         s.recv(2048)
         print ( "done")
 
 def testFN():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect(('localhost', 1791)) #same port as in Maya
+        s.connect(('localhost', 1789)) #same port as in Maya
         myCommand = 'cmds.joint()\ncmds.polyCube()'
         s.send(bytes(myCommand, 'utf-8'))
         s.recv(2048)
