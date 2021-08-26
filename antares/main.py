@@ -29,14 +29,14 @@ class MainWindow(QWidget) :
 
 
     def createWidget(self):
-        self.prodTitle = QLabel ( env.CURRENT_PROD)
+        self.prodTitle = QLabel ( env.TMP_PROD)
         self.userLabel = QLabel ( "Welcome " + env.USER)
         self.reloadBTN = QPushButton("TEST")
         #Set production
         self.serverName = QLineEdit(env.SERVER)
-        self.prodName = QLineEdit(env.CURRENT_PROD)
-        self.assetDirName = QLineEdit(env.ASSET_DIR)
-        self.shotDirName = QLineEdit(env.SHOT_DIR)
+        self.prodName = QLineEdit(env.TMP_PROD)
+        self.assetDirName = QLineEdit(env.ASSET_TYPE)
+        self.shotDirName = QLineEdit(env.SHOT_TYPE)
         self.prodLabel = QLabel ( "Enter Server and Production Name")
         self.createProd = QPushButton("Create Production")
         self.setProd = QPushButton("Set Production")
@@ -44,7 +44,7 @@ class MainWindow(QWidget) :
         self.newCharBTN = QPushButton("NEW CHARACTER")
         self.newPropBTN = QPushButton("NEW PROP (to do)")
         self.itemBTN = QPushButton("NEW ITEM (to do)")
-        self.libBTN = QPushButton("NEW LIBRARY (to do)")
+        self.IMAGES_PATHBTN = QPushButton("NEW IMAGES_PATHRARY (to do)")
         self.setBTN = QPushButton("NEW SET (to do)")
         self.newHip = QPushButton("NEW HIP (to do)")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
@@ -156,14 +156,14 @@ class MainWindow(QWidget) :
         layoutChar = FlowLayout()
         groupChara.setLayout(layoutChar)
         #Variable
-        characterPath = os.path.join(env.SERVER, prod, env.ASSET_DIR, env.TYPE_CHAR)
+        characterPath = os.path.join(env.SERVER, prod, env.ASSET_TYPE, env.CHAR_TYPE)
         assetcharacter = os.listdir( characterPath )
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, assetcharacter):
             if name == '':
                 continue
-            imageDir = os.path.join(env.SERVER, env.LIB, "character", name + ".png")
+            imageDir = os.path.join(env.SERVER, env.IMAGES_PATH, "character", name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
@@ -177,24 +177,24 @@ class MainWindow(QWidget) :
             for dep in departmentList:
                 #VARIABLES
                 path = os.path.join(characterPath , name , env.E_PATH , dep)
-                E_DIRProject = os.listdir( os.path.join(path , "_data" ))
-                E_DIRImage = os.path.join(path , "_data", E_DIRProject[-1])
-                publishImage = os.path.join(characterPath , name , env.P_DIR , dep , name , "_P_" , dep , ".png")
-                destination = os.listdir( os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name , env.E_PATH , dep ))
-                file = os.path.join(env.SERVER , prod , env.TYPE_CHAR_PATH , name , env.E_PATH ,dep , destination[-1])
+                EDIT_TYPEProject = os.listdir( os.path.join(path , "_data" ))
+                EDIT_TYPEImage = os.path.join(path , "_data", EDIT_TYPEProject[-1])
+                publishImage = os.path.join(characterPath , name , env.PUBLISH_TYPE , dep , name , "_P_" , dep , ".png")
+                destination = os.listdir( os.path.join(env.SERVER , prod , env.CHAR_PATH , name , env.E_PATH , dep ))
+                file = os.path.join(env.SERVER , prod , env.CHAR_PATH , name , env.E_PATH ,dep , destination[-1])
                 modified = os.path.getmtime(file)
                 year,month,day,hour,minute,second=time.localtime(modified)[:-3]
                 date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
-                allE_DIRs = os.listdir(os.path.join( env.SERVER , prod , env.TYPE_CHAR_PATH , name , env.E_PATH , dep ))
+                allEDIT_TYPEs = os.listdir(os.path.join( env.SERVER , prod , env.CHAR_PATH , name , env.E_PATH , dep ))
 
                 #SubMenu
                 items = menu.addMenu(dep)
-                lastEdit = items.addAction(QIcon(E_DIRImage), "Open Last Edit (" + date + ")" )
+                lastEdit = items.addAction(QIcon(EDIT_TYPEImage), "Open Last Edit (" + date + ")" )
                 openPublish = items.addAction(QIcon(publishImage),"Open Publish (" + date + ")")
                 items.addAction("Open In Folder (To Do)")
-                E_DIRs = items.addMenu("All Edits")
-                for i in allE_DIRs:
-                    E_DIRs.addAction(i + " (" + date + ") (To Do)")  
+                EDIT_TYPEs = items.addMenu("All Edits")
+                for i in allEDIT_TYPEs:
+                    EDIT_TYPEs.addAction(i + " (" + date + ") (To Do)")  
                 refPublish = items.addAction("Reference Publish")
                 importPublish = items.addAction("Import Publish")
                 #CONNECTIONS
@@ -231,7 +231,7 @@ class MainWindow(QWidget) :
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        seqDIR = os.listdir(os.path.join(env.SERVER, prod, env.SHOT_DIR))
+        seqDIR = os.listdir(os.path.join(env.SERVER, prod, env.SHOT_TYPE))
         for seq in seqDIR :
             tabs.addTab(self.insideShotTabUI(), seq)
         n.addWidget(tabs)
@@ -255,12 +255,12 @@ class MainWindow(QWidget) :
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        setDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_DIR))
+        setDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_PATH))
         for setName in setDIR :
             tabs.addTab(self.moduleTabUI(setName), setName)
         n.addWidget(tabs)
         n.addWidget(self.setBTN)
-        n.addWidget(self.libBTN)
+        n.addWidget(self.IMAGES_PATHBTN)
         n.addWidget(self.itemBTN)
         layout.setLayout(n)
         return layout
@@ -270,7 +270,7 @@ class MainWindow(QWidget) :
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        moduleDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_DIR, setName))
+        moduleDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_PATH, setName))
         for modName in moduleDIR :
             tabs.addTab(self.itemTabUI(setName, modName), modName)
         
@@ -286,14 +286,14 @@ class MainWindow(QWidget) :
         layout = QWidget()
         n = QVBoxLayout()
         item = QPushButton()
-        itemDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_DIR, setName, modName))
+        itemDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_PATH, setName, modName))
 
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, itemDIR):
             if name == '':
                 continue
-            imageDir = os.path.join(env.SERVER, env.LIB, "character", name + ".png")
+            imageDir = os.path.join(env.SERVER, env.IMAGES_PATH, "character", name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
