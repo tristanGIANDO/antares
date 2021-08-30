@@ -127,12 +127,13 @@ def openLastEdit_FN(name, dep, prod):
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
 
-def deleteAsset_FN ( name, assetcharacter, prod ):
+def deleteAsset_FN ( name, prod ):
     shutil.rmtree(os.path.join(env.SERVER  , prod, env.CHAR_PATH , name))
-    os.remove(os.path.join(env.RESOURCES, env.IMAGES_PATH, env.CHAR_TYPE, name + ".png"))
-    characterPath = os.path.join(env.SERVER, prod, env.ASSET_TYPE, env.CHAR_TYPE)
-    assetcharacter = os.listdir( characterPath )
-    print ("now", assetcharacter)
+    try:
+        os.remove(os.path.join(env.RESOURCES, env.IMAGES_PATH, env.CHAR_TYPE, name + ".png"))
+    except:
+        print ("You already removed the asset picture.")
+    
     print ( name + " deleted with big success.")
     
 def renameAsset_FN(prod, oldName, newName):
@@ -188,7 +189,7 @@ def refPublishFN(name, dep, prod):
         raise RuntimeError("where is %s")%ref
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect(('localhost', 1789)) #same port as in Maya
+        s.connect(('localhost', env.PORT)) #same port as in Maya
         myCommand = 'result = cmds.file( r"%s", r=True, namespace = "CHAR_1")'%ref
         s.send(bytes(myCommand, 'utf-8'))
         s.recv(2048)
@@ -208,7 +209,7 @@ def importPublish_Char_FN(name, dep, prod):
         raise RuntimeError("where is %s")%importFile
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect(('localhost', 1789)) #same port as in Maya
+        s.connect(('localhost', env.PORT)) #same port as in Maya
         myCommand = 'cmds.file( r"%s", i=True, typ="mayaAscii")'%importFile
         s.send(bytes(myCommand, 'utf-8'))
         s.recv(2048)

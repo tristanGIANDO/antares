@@ -20,9 +20,11 @@ class MainWindow(QWidget) :
         self.title = "ANTARES_v0.2.0"
         self.attr = "QPushButton {background-color: #18537d; color: white;}"
         self.grpBgc = u"background-color: rgb(10, 40, 50);"
+        self.icon = os.path.join(env.RESOURCES, "icons", "_UI", "logo.png")
         self.resize(850, 500)
         self.move(100, 100)
         self.setWindowTitle(self.title)
+        self.setWindowIcon(QtGui.QIcon(self.icon))
         
         self.createWidget()
         self.createLayout()
@@ -31,7 +33,7 @@ class MainWindow(QWidget) :
     def createWidget(self):
         self.prodTitle = QLabel ( env.TMP_PROD)
         self.userLabel = QLabel ( "Welcome " + env.USER)
-        self.reloadBTN = QPushButton("TEST")
+        self.reloadBTN = QPushButton("MANON LE DINDON")
         #Set production
         self.serverName = QLineEdit(env.SERVER)
         self.prodName = QLineEdit(env.TMP_PROD)
@@ -147,10 +149,10 @@ class MainWindow(QWidget) :
         base = QGridLayout()
         groupChara = QGroupBox("CHARACTERS")
         groupProp = QGroupBox("PROPS")
-        groupSet = QGroupBox("SETS")
+        # groupSet = QGroupBox("SETS")
         base.addWidget(groupChara)
         base.addWidget(groupProp)
-        base.addWidget(groupSet)
+        # base.addWidget(groupSet)
         base.addWidget(self.incrementSave)
 
         #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -209,7 +211,7 @@ class MainWindow(QWidget) :
             delete = menu.addAction("Delete Asset")
             menu.addAction("Create New Task (To Do)")
             #Connections
-            delete.triggered.connect(partial(self.deleteAsset_UI, name, assetcharacter))
+            delete.triggered.connect(partial(self.deleteAsset_UI, name))
 
             button.setMenu(menu)
         #New Chara Button
@@ -281,8 +283,6 @@ class MainWindow(QWidget) :
         return layout
 
     def itemTabUI(self, setName, modName):
-        a = os.getpid()
-        print ( a )
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
@@ -334,9 +334,9 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         fn.openPublish_FN (name, dep, prod = prod)
 
-    def deleteAsset_UI(self, name, assetcharacter):
+    def deleteAsset_UI(self, name):
         prod = self.prodName.text()
-        fn.deleteAsset_FN(name, assetcharacter, prod = prod)
+        fn.deleteAsset_FN(name, prod = prod)
 
     def renameAsset_UI(self):
         prod = self.prodName.text()
