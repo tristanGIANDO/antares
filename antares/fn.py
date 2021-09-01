@@ -127,6 +127,11 @@ def newCharFN(prod, assetName):
             print ( "There is no profile picture, sorry... ...")
             print ( "Try again, it will work better")
 
+def openInFolder_Char_FN(name, dep, prod):
+    print (name, dep, prod)
+    path = env.SERVER
+    os.system('explorer.exe path')
+    
 def newPropFN(prod, assetName):
     check = os.listdir(os.path.join(env.SERVER , prod, env.PROP_PATH))
     if assetName in check :

@@ -1,4 +1,7 @@
-import sys, os, time, fn, env, subprocess #psutil
+import sys
+sys.path.append("..") # A bien faire avant l'import suivant
+import package
+import os, time, fn, env, subprocess #psutil
 '''
 from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from Qt.QtCore import *
@@ -17,7 +20,7 @@ class MainWindow(QWidget) :
 
     def __init__(self) :
         super(MainWindow,self).__init__()
-        self.title = "ANTARES_v0.2.0"
+        self.title = f"ANTARES_v{package.version}"
         self.attr = "QPushButton {background-color: #18537d; color: white;}"
         self.grpBgc = u"background-color: rgb(10, 40, 50);"
         self.icon = os.path.join(env.RESOURCES, "icons", "_UI", "logo.png")
@@ -64,11 +67,24 @@ class MainWindow(QWidget) :
         self.checkBoxRenderMan = QCheckBox("Pixar RenderMan")
         for check in [self.checkBoxAbc, self.checkBoxMash, self.checkBoxRenderMan]:
             check.setChecked(True)
+
+        #IN MENU
+        self.last_edit_LBL = "Open Last Edit "
+        self.open_publish_LBL = "Open Publish"
+        self.ref_publish_LBL = "Reference Publish"
+        self.import_publish_LBL = "Import Publish"
+        self.open_in_folder_LBL = "Open In Folder"
+        self.duplicate_asset_LBL = "Duplicate Asset"
+        self.delete_asset_LBL = "Delete Asset"
+        self.create_new_task_LBL = "Create New Task"
+
         #CONNECTIONS
         self.newCharBTN.clicked.connect(self.createNewChara_UI)
         self.newPropBTN.clicked.connect(self.createNewProp_UI)
         self.renameButton.clicked.connect(self.renameAsset_UI)
         self.reloadBTN.clicked.connect(self.test_UI)
+
+
 
     def createLayout(self):
         # LAYOUT HIERARCHY
@@ -138,13 +154,7 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         #CHECK PID
         PROCNAME = "maya.exe"
-        '''
-        for pid in psutil.process_iter(['pid', 'name', 'username']):
-            if pid.name() == PROCNAME:
-                result = str(pid.info)
-        '''        
-
-
+           
         mayaTab = QWidget() 
         base = QGridLayout()
         groupChara = QGroupBox("CHARACTERS")
@@ -159,57 +169,102 @@ class MainWindow(QWidget) :
         layoutChar = FlowLayout()
         groupChara.setLayout(layoutChar)
         #Variable
-        characterPath = os.path.join(env.SERVER, prod, env.ASSET_TYPE, env.CHAR_TYPE)
+        characterPath = os.path.join(env.SERVER,
+                                    prod,
+                                    env.CHAR_PATH)
         assetcharacter = os.listdir( characterPath )
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, assetcharacter):
             if name == '':
                 continue
-            imageDir = os.path.join(env.SERVER, env.IMAGES_PATH, "character", name + ".png")
+            imageDir = os.path.join(env.SERVER,
+                                    env.IMAGES_PATH,
+                                    env.CHAR_TYPE,
+                                    name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
-            path = os.path.join(env.SERVER, prod)
+            path = os.path.join(env.SERVER,
+                                prod)
             layoutChar.addWidget(button)
 
             # CREER LISTE DE TOUS LES DEPARTEMENTS
-            departmentList = os.listdir( os.path.join(characterPath , name , env.E_PATH))
+            departmentList = os.listdir( os.path.join(characterPath ,
+                                                        name ,
+                                                        env.E_PATH))
             #CREER MENU
             menu = QMenu(parent = self)
+            menu.addAction( "Name = " + name )
+            menu.addSeparator()
             for dep in departmentList:
                 #VARIABLES
-                path = os.path.join(characterPath , name , env.E_PATH , dep)
-                EDIT_TYPEProject = os.listdir( os.path.join(path , "_data" ))
-                EDIT_TYPEImage = os.path.join(path , "_data", EDIT_TYPEProject[-1])
-                publishImage = os.path.join(characterPath , name , env.PUBLISH_TYPE , dep , name , "_P_" , dep , ".png")
-                destination = os.listdir( os.path.join(env.SERVER , prod , env.CHAR_PATH , name , env.E_PATH , dep ))
-                file = os.path.join(env.SERVER , prod , env.CHAR_PATH , name , env.E_PATH ,dep , destination[-1])
+                path = os.path.join(characterPath ,
+                                    name ,
+                                    env.E_PATH ,
+                                    dep)
+                editProject = os.listdir( os.path.join(path ,
+                                                    "_data" ))
+
+                editImage = os.path.join(path ,
+                                    "_data",
+                                    editProject[-2])
+
+                publishImage = os.path.join(characterPath ,
+                                    name ,
+                                    env.P_PATH ,
+                                    dep ,
+                                    name + "_P_" + dep + ".png")
+
+                destination = os.listdir( os.path.join(env.SERVER ,
+                                    prod ,
+                                    env.CHAR_PATH ,
+                                    name ,
+                                    env.E_PATH ,
+                                    dep ))
+
+                file = os.path.join(env.SERVER ,
+                                    prod ,
+                                    env.CHAR_PATH ,
+                                    name ,
+                                    env.E_PATH ,
+                                    dep ,
+                                    destination[-1])
+
                 modified = os.path.getmtime(file)
                 year,month,day,hour,minute,second=time.localtime(modified)[:-3]
                 date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
-                allEDIT_TYPEs = os.listdir(os.path.join( env.SERVER , prod , env.CHAR_PATH , name , env.E_PATH , dep ))
+                allEDIT_TYPEs = os.listdir(os.path.join( env.SERVER ,
+                                    prod ,
+                                    env.CHAR_PATH ,
+                                    name ,
+                                    env.E_PATH ,
+                                    dep ))
 
                 #SubMenu
                 items = menu.addMenu(dep)
-                lastEdit = items.addAction(QIcon(EDIT_TYPEImage), "Open Last Edit (" + date + ")" )
-                openPublish = items.addAction(QIcon(publishImage),"Open Publish (" + date + ")")
-                items.addAction("Open In Folder (To Do)")
+                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
+                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
+                openInFolder = items.addAction(self.open_in_folder_LBL)
                 EDIT_TYPEs = items.addMenu("All Edits")
                 for i in allEDIT_TYPEs:
                     EDIT_TYPEs.addAction(i + " (" + date + ") (To Do)")  
-                refPublish = items.addAction("Reference Publish")
-                importPublish = items.addAction("Import Publish")
+                refPublish = items.addAction(self.ref_publish_LBL)
+                importPublish = items.addAction(self.import_publish_LBL)
                 #CONNECTIONS
                 lastEdit.triggered.connect(partial(self.openLastEdit_UI, name, dep)) 
                 openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
                 refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
                 importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
+                openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name, dep)) 
+
+
 
             #MENU ITEMS GLOBAL
-            menu.addAction("Duplicate Asset (To Do)")
-            delete = menu.addAction("Delete Asset")
-            menu.addAction("Create New Task (To Do)")
+            menu.addSeparator()
+            menu.addAction(self.duplicate_asset_LBL)
+            delete = menu.addAction(self.delete_asset_LBL)
+            menu.addAction(self.create_new_task_LBL)
             #Connections
             delete.triggered.connect(partial(self.deleteAsset_UI, name))
 
@@ -218,12 +273,12 @@ class MainWindow(QWidget) :
         self.newCharBTN.setFixedSize(100, 100)
         layoutChar.addWidget(self.newCharBTN)
 
-        #SET PROP GROUP
-        layoutProp = FlowLayout()
-        groupProp.setLayout(layoutProp)
-        #New Chara Button
-        self.newPropBTN.setFixedSize(100, 100)
-        layoutProp.addWidget(self.newPropBTN)
+        # #SET PROP GROUP
+        # layoutProp = FlowLayout()
+        # groupProp.setLayout(layoutProp)
+        # #New Chara Button
+        # self.newPropBTN.setFixedSize(100, 100)
+        # layoutProp.addWidget(self.newPropBTN)
 
         mayaTab.setLayout(base)
         return mayaTab
@@ -294,7 +349,7 @@ class MainWindow(QWidget) :
         for position, name in zip(positions, itemDIR):
             if name == '':
                 continue
-            imageDir = os.path.join(env.SERVER, env.IMAGES_PATH, "character", name + ".png")
+            imageDir = os.path.join(env.SERVER, env.IMAGES_PATH, "items", name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
@@ -356,6 +411,9 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         fn.importPublish_Char_FN(name, dep, prod = prod)
 
+    def openInFolder_Char_UI(self, name, dep):
+        prod = self.prodName.text()
+        fn.openInFolder_Char_FN(name, dep, prod = prod)
     ## UI CUSTOMIZE ##
 
     def openTab(self, tab01_Lay_L, up_tab01_Layout_L):
@@ -478,7 +536,7 @@ class ImagePushButton(QPushButton):
     def paintEvent(self, event):
         super(ImagePushButton, self).paintEvent(event)
         painter = QPainter(self)
-        painter.drawPixmap(QRect(QPoint(0,0),QSize(100,80)), self.pixmap)        
+        painter.drawPixmap(QRect(QPoint(2,2),QSize(88,88)), self.pixmap)        
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)
