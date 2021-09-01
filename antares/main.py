@@ -33,7 +33,7 @@ class MainWindow(QWidget) :
     def createWidget(self):
         self.prodTitle = QLabel ( env.TMP_PROD)
         self.userLabel = QLabel ( "Welcome " + env.USER)
-        self.reloadBTN = QPushButton("MANON LE DINDON")
+        self.reloadBTN = QPushButton("RELOAD")
         #Set production
         self.serverName = QLineEdit(env.SERVER)
         self.prodName = QLineEdit(env.TMP_PROD)
@@ -46,7 +46,7 @@ class MainWindow(QWidget) :
         self.newCharBTN = QPushButton("NEW CHARACTER")
         self.newPropBTN = QPushButton("NEW PROP (to do)")
         self.itemBTN = QPushButton("NEW ITEM (to do)")
-        self.IMAGES_PATHBTN = QPushButton("NEW IMAGES_PATHRARY (to do)")
+        self.libraryBTN = QPushButton("NEW IMAGES_PATHRARY (to do)")
         self.setBTN = QPushButton("NEW SET (to do)")
         self.newHip = QPushButton("NEW HIP (to do)")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
@@ -263,7 +263,7 @@ class MainWindow(QWidget) :
             tabs.addTab(self.moduleTabUI(setName), setName)
         n.addWidget(tabs)
         n.addWidget(self.setBTN)
-        n.addWidget(self.IMAGES_PATHBTN)
+        n.addWidget(self.libraryBTN)
         n.addWidget(self.itemBTN)
         layout.setLayout(n)
         return layout

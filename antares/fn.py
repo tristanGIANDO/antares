@@ -12,31 +12,59 @@ def newCharFN(prod, assetName):
         departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
 
         
-        source = os.path.join(env.SERVER, prod , env.TMP_ASSET_PATH)
-        destination = os.path.join(env.SERVER , prod , env.CHAR_PATH, env.TMP_ASSET)
-        path = os.path.join(env.SERVER , prod, env.CHAR_PATH , assetName)
+        source = os.path.join(env.SERVER,
+                            prod ,
+                            env.TMP_ASSET_PATH)
+
+        destination = os.path.join(env.SERVER ,
+                            prod ,
+                            env.CHAR_PATH,
+                            env.TMP_ASSET)
+
+        path = os.path.join(env.SERVER ,
+                            prod,
+                            env.CHAR_PATH ,
+                            assetName)
+
+        print ( destination )
+        print ( path )
+
         #   Copy template
-        try:
-            shutil.rmtree(destination)
-            print ("_Template_asset was already there")
-            shutil.copytree(source, destination)
-            print ( " ... But I kicked him off and created a new one")
+        if os.path.isdir(destination):
+            print ("_Template_asset is already there")
             
-        except:
+        else:
             shutil.copytree(source, destination)
-            print ( " Template copied, it's all good for now")
+            print ( "Template copied")
             
         try:
             os.rename(destination, path)
             print (" Template renamed, it works well")
         except:
             print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
+
         #Rename Scenes
         for dpt in departments:
-            editToRename = os.path.join(path , env.EDIT_TYPE , dpt , env.TMP_SCN_TYPE_E + ".ma")
-            publishToRename = os.path.join(path , env.PUBLISH_TYPE , dpt , env.TMP_SCN_TYPE_P + ".ma")
-            editRenamed = os.path.join(path , env.EDIT_TYPE , dpt , assetName + "_E_" + dpt + "_001.ma")
-            publishRenamed = os.path.join(path , env.PUBLISH_TYPE , dpt , assetName + "_P_" + dpt + ".ma")
+            editToRename = os.path.join(path ,
+                                        env.E_PATH ,
+                                        dpt ,
+                                        env.TMP_SCN_TYPE_E + ".ma")
+
+            publishToRename = os.path.join(path ,
+                                        env.P_PATH ,
+                                        dpt ,
+                                        env.TMP_SCN_TYPE_P + ".ma")
+
+            editRenamed = os.path.join(path ,
+                                        env.E_PATH ,
+                                        dpt ,
+                                        assetName + "_E_" + dpt + "_001.ma")
+
+            publishRenamed = os.path.join(path ,
+                                        env.P_PATH ,
+                                        dpt ,
+                                        assetName + "_P_" + dpt + ".ma")
+
             
             try:
                 os.rename(editToRename, editRenamed )
@@ -44,13 +72,31 @@ def newCharFN(prod, assetName):
                 print ( dpt + " renamed correctly (scenes)")
             except:
                 print ( dpt + " isn't renamed correctly (scenes)... ...")
+
         #Rename EDIT_TYPE data
         for n in [".jpg", ".png", ".txt"]:
             for dpt in departments:
-                editToRename = os.path.join(path , env.EDIT_TYPE , dpt , "_data" , env.TMP_SCN_TYPE_E + n)
-                editRenamed = os.path.join(path , env.EDIT_TYPE , dpt , "_data" , assetName + "_E_" + dpt + "_001" + n)
-                publishToRename = os.path.join(path , env.PUBLISH_TYPE , dpt , env.TMP_SCN_TYPE_P + n)
-                publishRenamed = os.path.join(path , env.PUBLISH_TYPE , dpt , assetName + "_P_" + dpt + n)
+                editToRename = os.path.join(path ,
+                                        env.E_PATH ,
+                                        dpt ,
+                                        "_data" , env.TMP_SCN_TYPE_E + n)
+
+                editRenamed = os.path.join(path ,
+                                        env.E_PATH ,
+                                        dpt ,
+                                        "_data" ,
+                                        assetName + "_E_" + dpt + "_001" + n)
+
+                publishToRename = os.path.join(path ,
+                                        env.P_PATH ,
+                                        dpt ,
+                                        env.TMP_SCN_TYPE_P + n)
+
+                publishRenamed = os.path.join(path ,
+                                        env.P_PATH ,
+                                        dpt ,
+                                        assetName + "_P_" + dpt + n)
+
                 try :
                     os.rename(editToRename, editRenamed)
                     os.rename(publishToRename, publishRenamed)
@@ -59,9 +105,19 @@ def newCharFN(prod, assetName):
                     print ( dpt + " isn't renamed correctly (data)... ...")
 
         # PROFILE PICTURE
-        picTMP_ASSET_PATH = os.path.join(env.RESOURCES , env.IMAGES_PATH, env.TMP_IMAGE)
-        picDst = os.path.join(env.RESOURCES, env.IMAGES_PATH, env.CHAR_TYPE, env.TMP_IMAGE)
-        picRenamed = os.path.join(env.SERVER, env.IMAGES_PATH, env.CHAR_TYPE , assetName + ".png")
+        picTMP_ASSET_PATH = os.path.join(env.RESOURCES ,
+                                        env.IMAGES_PATH,
+                                        env.TMP_IMAGE)
+
+        picDst = os.path.join(env.RESOURCES,
+                                        env.IMAGES_PATH,
+                                        env.CHAR_TYPE,
+                                        env.TMP_IMAGE)
+
+        picRenamed = os.path.join(env.SERVER,
+                                        env.IMAGES_PATH,
+                                        env.CHAR_TYPE ,
+                                        assetName + ".png")
         try:
             shutil.copyfile( picTMP_ASSET_PATH, picDst)
             os.rename(picDst, picRenamed)
@@ -128,13 +184,16 @@ def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
 
 def deleteAsset_FN ( name, prod ):
-    shutil.rmtree(os.path.join(env.SERVER  , prod, env.CHAR_PATH , name))
+    try :
+        shutil.rmtree(os.path.join(env.SERVER  , prod, env.CHAR_PATH , name))
+    except:
+        print ("You already removed the folder.")
     try:
         os.remove(os.path.join(env.RESOURCES, env.IMAGES_PATH, env.CHAR_TYPE, name + ".png"))
     except:
         print ("You already removed the asset picture.")
     
-    print ( name + " deleted with big success.")
+    print ( name + " deleted with success.")
     
 def renameAsset_FN(prod, oldName, newName):
     oldPath = os.path.join(env.SERVER , prod , env.CHAR_PATH , oldName)
