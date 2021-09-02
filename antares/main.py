@@ -1,5 +1,5 @@
 import sys
-sys.path.append("..") # A bien faire avant l'import suivant
+sys.path.append("..")
 import package
 import os, time, fn, env, subprocess #psutil
 '''
@@ -11,7 +11,7 @@ from Qt import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from PyQt5.QtCore import *
 from PyQt5.QtGui import * #QPixmap
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtGui
 
 from functools import partial
 
@@ -102,17 +102,25 @@ class MainWindow(QWidget) :
         topLayout.addWidget(self.userLabel)
         topLayout.addWidget(self.prodTitle)
         topLayout.addWidget(self.reloadBTN)
-        for widget in [self.prodLabel, self.serverName, self.prodName, self.assetDirName, self.shotDirName, self.createProd, self.setProd, self.assetName]:
+        for widget in [self.prodLabel,
+                        self.serverName,
+                        self.prodName,
+                        self.assetDirName,
+                        self.shotDirName,
+                        self.createProd,
+                        self.setProd,
+                        self.assetName]:
             up_tab01_Layout_L.addWidget(widget)
         mid_tab01_Layout_L.addWidget( self.oldNameLabel, 0,0 )
         mid_tab01_Layout_L.addWidget( self.oldName, 0, 1 )
         mid_tab01_Layout_L.addWidget( self.newNameLabel , 1,0)
         mid_tab01_Layout_L.addWidget( self.newName , 1,1)
         mid_tab01_Layout_L.addWidget(self.renameButton)
-        dwn_tab01_Layout_L.addWidget(self.plugIn_Label)
-        dwn_tab01_Layout_L.addWidget(self.checkBoxAbc)
-        dwn_tab01_Layout_L.addWidget(self.checkBoxMash)
-        dwn_tab01_Layout_L.addWidget(self.checkBoxRenderMan)
+        for widget in [self.plugIn_Label,
+                        self.checkBoxAbc,
+                        self.checkBoxMash,
+                        self.checkBoxRenderMan]:
+            dwn_tab01_Layout_L.addWidget(widget)
         Layout_L.addWidget(tabsLayout_L)
         Layout_R.addWidget(tabs_Lay_R)
         tabsLayout_L.addTab(tab01_Lay_L, "HOME")
@@ -245,7 +253,7 @@ class MainWindow(QWidget) :
                 items = menu.addMenu(dep)
                 lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
                 openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
-                openInFolder = items.addAction(self.open_in_folder_LBL)
+                
                 EDIT_TYPEs = items.addMenu("All Edits")
                 for i in allEDIT_TYPEs:
                     EDIT_TYPEs.addAction(i + " (" + date + ") (To Do)")  
@@ -256,17 +264,19 @@ class MainWindow(QWidget) :
                 openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
                 refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
                 importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
-                openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name, dep)) 
+                
 
 
 
             #MENU ITEMS GLOBAL
             menu.addSeparator()
+            openInFolder = menu.addAction(self.open_in_folder_LBL)
             menu.addAction(self.duplicate_asset_LBL)
             delete = menu.addAction(self.delete_asset_LBL)
             menu.addAction(self.create_new_task_LBL)
             #Connections
             delete.triggered.connect(partial(self.deleteAsset_UI, name))
+            openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
 
             button.setMenu(menu)
         #New Chara Button
@@ -413,7 +423,7 @@ class MainWindow(QWidget) :
 
     def openInFolder_Char_UI(self, name, dep):
         prod = self.prodName.text()
-        fn.openInFolder_Char_FN(name, dep, prod = prod)
+        fn.openInFolder_Char_FN(name, prod = prod)
     ## UI CUSTOMIZE ##
 
     def openTab(self, tab01_Lay_L, up_tab01_Layout_L):

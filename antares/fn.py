@@ -6,12 +6,11 @@ import env
 def newCharFN(prod, assetName):
     check = os.listdir(os.path.join(env.SERVER , prod, env.CHAR_PATH))
     if assetName in check :
-        raise RuntimeError("Sorry, can't do this ! " + assetName + " already exists !")
+        # raise RuntimeError("Sorry, can't do this ! " + assetName + " already exists !")
+        print ("Sorry, can't do this ! " + assetName + " already exists !")
 	    
     else:
         departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
-
-        
         source = os.path.join(env.SERVER,
                             prod ,
                             env.TMP_ASSET_PATH)
@@ -26,13 +25,9 @@ def newCharFN(prod, assetName):
                             env.CHAR_PATH ,
                             assetName)
 
-        print ( destination )
-        print ( path )
-
         #   Copy template
         if os.path.isdir(destination):
             print ("_Template_asset is already there")
-            
         else:
             shutil.copytree(source, destination)
             print ( "Template copied")
@@ -65,7 +60,6 @@ def newCharFN(prod, assetName):
                                         dpt ,
                                         assetName + "_P_" + dpt + ".ma")
 
-            
             try:
                 os.rename(editToRename, editRenamed )
                 os.rename(publishToRename, publishRenamed)
@@ -127,11 +121,15 @@ def newCharFN(prod, assetName):
             print ( "There is no profile picture, sorry... ...")
             print ( "Try again, it will work better")
 
-def openInFolder_Char_FN(name, dep, prod):
-    print (name, dep, prod)
-    path = env.SERVER
-    os.system('explorer.exe path')
-    
+def openInFolder_Char_FN(name, prod):
+    path = os.path.join( env.SERVER,
+                        prod,
+                        env.CHAR_PATH,
+                        name,
+                        env.MAYA_TYPE,
+                        env.SCN_TYPE )
+    os.system('explorer.exe %s'%path)
+
 def newPropFN(prod, assetName):
     check = os.listdir(os.path.join(env.SERVER , prod, env.PROP_PATH))
     if assetName in check :
@@ -171,17 +169,26 @@ def newPropFN(prod, assetName):
         print ("New Prop created with success")
 
 def openPublish_FN(name, dep, prod):
-     project = os.path.join(env.SERVER , prod , env.CHAR_PATH , name , env.PUBLISH_TYPE , dep , name + "_P_" + dep + ".ma")
+     project = os.path.join(env.SERVER ,
+                            prod ,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.P_PATH ,
+                            dep ,
+                            name + "_P_" + dep + ".ma")
      print ( project )
      print ("Publish Path")
      os.startfile(project)
 
 def openLastEdit_FN(name, dep, prod):
-    path = os.path.join(env.SERVER  , prod, env.CHAR_PATH , name , env.EDIT_TYPE , dep)
+    path = os.path.join(env.SERVER  ,
+                            prod,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.E_PATH ,
+                            dep)
     destination = os.listdir( path )
     project = os.path.join(path,  destination[-2])
-    print ( destination )
-    print (project)
     print ("Edit Path")
     os.startfile(project)
 
@@ -190,11 +197,17 @@ def openAllEdits_FN(name, dep, prod):
 
 def deleteAsset_FN ( name, prod ):
     try :
-        shutil.rmtree(os.path.join(env.SERVER  , prod, env.CHAR_PATH , name))
+        shutil.rmtree(os.path.join(env.SERVER  ,
+                                    prod,
+                                    env.CHAR_PATH ,
+                                    name))
     except:
         print ("You already removed the folder.")
     try:
-        os.remove(os.path.join(env.RESOURCES, env.IMAGES_PATH, env.CHAR_TYPE, name + ".png"))
+        os.remove(os.path.join(env.RESOURCES,
+                                    env.IMAGES_PATH,
+                                    env.CHAR_TYPE,
+                                    name + ".png"))
     except:
         print ("You already removed the asset picture.")
     
