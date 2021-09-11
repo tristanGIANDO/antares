@@ -195,6 +195,18 @@ def openLastEdit_FN(name, dep, prod):
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
 
+def openLastSculpt_FN(name, soft, prod):
+    path = os.path.join(env.SERVER  ,
+                            prod,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.SCULPT_TYPE,
+                            soft)
+    destination = os.listdir( path )
+    project = os.path.join(path,  destination[-1])
+    print ( project )
+    os.startfile(project)
+
 def deleteAsset_FN ( name, prod ):
     try :
         shutil.rmtree(os.path.join(env.SERVER  ,

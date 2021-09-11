@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import env
 
 name = 'antares'
 
-version = '0.2'
+version = '0.3'
 
 description = 'Pipeline Manager'
 
