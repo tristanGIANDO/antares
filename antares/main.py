@@ -2,6 +2,7 @@ import sys
 sys.path.append("..")
 # import package
 import os, time, fn, env, subprocess #psutil
+import 
 '''
 from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from Qt.QtCore import *
@@ -51,7 +52,7 @@ class MainWindow(QWidget) :
         self.itemBTN = QPushButton("NEW ITEM (to do)")
         self.libraryBTN = QPushButton("NEW IMAGES_PATHRARY (to do)")
         self.setBTN = QPushButton("NEW SET (to do)")
-        self.newHip = QPushButton("NEW HIP (to do)")
+        self.newFX_BTN = QPushButton("NEW HIP")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
         #RENAME ASSET
         self.assetName = QLineEdit("Antares")
@@ -81,6 +82,7 @@ class MainWindow(QWidget) :
         #CONNECTIONS
         self.newCharBTN.clicked.connect(self.createNewChara_UI)
         self.newPropBTN.clicked.connect(self.createNewProp_UI)
+        self.newFX_BTN.clicked.connect(self.create_new_FX_UI)
         self.renameButton.clicked.connect(self.renameAsset_UI)
         self.reloadBTN.clicked.connect(self.reload)
 
@@ -294,16 +296,13 @@ class MainWindow(QWidget) :
             
 
             button.setMenu(menu)
-
-
         #New Chara Button
         self.newCharBTN.setFixedSize(100, 100)
         layoutChar.addWidget(self.newCharBTN)
-
         #SET PROP GROUP
         layoutProp = FlowLayout()
         groupProp.setLayout(layoutProp)
-        #New Chara Button
+        #New Chara Buttons
         self.newPropBTN.setFixedSize(100, 100)
         layoutProp.addWidget(self.newPropBTN)
 
@@ -312,21 +311,17 @@ class MainWindow(QWidget) :
 
     def houdiniTab_UI(self):
         prod = self.prodName.text()
-        #CHECK PID
-        PROCNAME = "maya.exe"
-           
-        mayaTab = QWidget() 
+        houdini_Tab = QWidget()
         base = QGridLayout()
-        groupChara = QGroupBox("CHARACTERS")
-        groupProp = QGroupBox("PROPS")
-        base.addWidget(groupChara)
-        base.addWidget(groupProp)
-        # base.addWidget(self.incrementSave)
-
+        group_01 = QGroupBox("FX")
+        base.addWidget(group_01)
+        flowLayout = FlowLayout()
+        group_01.setLayout(flowLayout)
+        self.newFX_BTN.setFixedSize(100, 100)
+        flowLayout.addWidget(self.newFX_BTN)
         
-
-        mayaTab.setLayout(base)
-        return mayaTab
+        houdini_Tab.setLayout(base)
+        return houdini_Tab
 
     # SHOTS -------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def shotTabUI(self):
@@ -425,6 +420,15 @@ class MainWindow(QWidget) :
         if not assetName:
             return
         fn.newPropFN(prod = prod, assetName = assetName)
+
+    def create_new_FX_UI(self):
+        prod = self.prodName.text()
+        assetName = self.assetName.text()
+        if not prod:
+            return
+        if not assetName:
+            return
+        fx.newFX_FN(prod = prod, assetName = assetName)
 
     def openLastEdit_UI(self, name, dep):
         prod = self.prodName.text()
