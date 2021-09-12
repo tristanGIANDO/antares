@@ -316,8 +316,7 @@ class MainWindow(QWidget) :
         base.addWidget(group_01)
         flowLayout = FlowLayout()
         group_01.setLayout(flowLayout)
-        self.newFX_BTN.setFixedSize(100, 100)
-        flowLayout.addWidget(self.newFX_BTN)
+        
 
         #Variable
         fx_Path = os.path.join(env.SERVER,
@@ -353,10 +352,10 @@ class MainWindow(QWidget) :
             for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]:
 
                 editProject = os.listdir( os.path.join(path ,
-                                                    "data" ))
+                                                    "_data" ))
 
                 editImage = os.path.join(path ,
-                                    "data",
+                                    "_data",
                                     editProject[-1])
                 #SubMenu
                 items = menu.addAction(dep)
@@ -376,6 +375,8 @@ class MainWindow(QWidget) :
 
             button.setMenu(menu)
 
+        self.newFX_BTN.setFixedSize(100, 100)
+        flowLayout.addWidget(self.newFX_BTN)
         
         houdini_Tab.setLayout(base)
         return houdini_Tab

@@ -43,13 +43,15 @@ def newFX_FN(prod, assetName):
                             prod,
                             env.FX_PATH ,
                             assetName,
+                            "scenes",
                             env.TMP_SCN_FX)
 
         newScn = os.path.join(env.SERVER ,
                             prod,
                             env.FX_PATH ,
                             assetName,
-                            assetName + ".hipnc")
+                            "scenes",
+                            assetName + "_001.hipnc")
 
         print ( oldScn )
         print ( newScn )
@@ -57,7 +59,27 @@ def newFX_FN(prod, assetName):
         try:
             os.rename(oldScn, newScn)
         except:
-            print ( "Try again")
+            print ( "Try again to rename the scene")
+
+        #DATA
+        old_data = os.path.join(env.SERVER ,
+                            prod,
+                            env.FX_PATH ,
+                            assetName,
+                            "_data",
+                            "template_001.png")
+
+        new_data = os.path.join(env.SERVER ,
+                            prod,
+                            env.FX_PATH ,
+                            assetName,
+                            "_data",
+                            assetName + "_001.png")
+
+        try:
+            os.rename(old_data, new_data)
+        except:
+            print ( "Try again to rename data")
 
         # PROFILE PICTURE
         picTMP_ASSET_PATH = os.path.join(env.RESOURCES ,
@@ -87,14 +109,9 @@ def open_last_FX_FN(name, prod):
     path = os.path.join(env.SERVER  ,
                             prod,
                             env.FX_PATH ,
-                            name)
+                            name,
+                            "scenes")
     destination = os.listdir( path )
-    project = os.path.join(path,  destination[0])
+    project = os.path.join(path,  destination[-1])
     print ( project )
-    the_list = [ name + "_*"]
-    print ( the_list )
-
-    if project.startswith(name):
-        os.startfile(project)
-    else:
-        print ( "Try again")
+    os.startfile(project)
