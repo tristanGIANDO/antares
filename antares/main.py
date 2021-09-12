@@ -42,6 +42,27 @@ class MainWindow(QWidget) :
         self.prodName = QLineEdit(env.TMP_PROD)
         self.assetDirName = QLineEdit(env.ASSET_TYPE)
         self.shotDirName = QLineEdit(env.SHOT_TYPE)
+        self.char_type_name = QLineEdit(env.CHAR_TYPE)
+        self.prop_type_name = QLineEdit(env.PROP_TYPE)
+        self.fx_type_name = QLineEdit(env.FX_TYPE)
+        self.maya_type_name = QLineEdit(env.MAYA_TYPE)
+        self.sculpt_type_name = QLineEdit(env.SCULPT_TYPE)
+        self.scn_type_name = QLineEdit(env.SCN_TYPE)
+        self.edit_type_name = QLineEdit(env.EDIT_TYPE)
+        self.publish_type_name = QLineEdit(env.PUBLISH_TYPE)
+        self.server_LBL = QLabel ( "SERVER" )
+        self.prod_LBL = QLabel ( "CURRENT PROD" )
+        self.assetDir_LBL = QLabel ( "CURRENT ASSET DIR" ) 
+        self.shotDir_LBL = QLabel ( "CURRENT SHOT DIR" )
+        self.char_type_LBL = QLabel ( "ASSET TYPE CHARACTER" )
+        self.prop_type_LBL = QLabel ( "ASSET_TYPE PROP" )
+        self.fx_type_LBL = QLabel ( "ASSET TYPE FX " )
+        self.maya_type_LBL = QLabel ( "SOFT MAYA" )
+        self.sculpt_type_LBL = QLabel ( "SOFT SCULPT" )
+        self.scn_type_LBL = QLabel ( "SCENES DIR" )
+        self.edit_type_LBL = QLabel ( "WORK DIR" )
+        self.publish_type_LBL = QLabel ( "PUBLISH DIR" )                
+
         self.prodLabel = QLabel ( "Enter Server and Production Name")
         self.createProd = QPushButton("Create Production")
         self.setProd = QPushButton("Set Production")
@@ -54,6 +75,7 @@ class MainWindow(QWidget) :
         self.newFX_BTN = QPushButton("NEW HIP")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
         #RENAME ASSET
+        self.assetName_LBL = QLabel ( "Please Enter New Asset Name")
         self.assetName = QLineEdit("Antares")
         self.oldName = QLineEdit("Antares")
         self.newName = QLineEdit("NewName")
@@ -104,19 +126,42 @@ class MainWindow(QWidget) :
         topLayout.addWidget(self.prodTitle)
         topLayout.addWidget(self.reloadBTN)
         for widget in [self.prodLabel,
-                        self.serverName,
-                        self.prodName,
-                        self.assetDirName,
-                        self.shotDirName,
                         self.createProd,
-                        self.setProd,
-                        self.assetName]:
+                        self.setProd]:
             up_tab01_Layout_L.addWidget(widget)
-        mid_tab01_Layout_L.addWidget( self.oldNameLabel, 0,0 )
-        mid_tab01_Layout_L.addWidget( self.oldName, 0, 1 )
-        mid_tab01_Layout_L.addWidget( self.newNameLabel , 1,0)
-        mid_tab01_Layout_L.addWidget( self.newName , 1,1)
-        mid_tab01_Layout_L.addWidget(self.renameButton)
+
+        mid_tab01_Layout_L.addWidget(self.serverName, 0,1)
+        mid_tab01_Layout_L.addWidget(self.prodName, 1,1)
+        mid_tab01_Layout_L.addWidget(self.assetDirName, 2,1)
+        mid_tab01_Layout_L.addWidget(self.shotDirName, 3,1)
+        mid_tab01_Layout_L.addWidget(self.char_type_name, 4,1)
+        mid_tab01_Layout_L.addWidget(self.prop_type_name, 5,1)
+        mid_tab01_Layout_L.addWidget(self.fx_type_name, 6,1)
+        mid_tab01_Layout_L.addWidget(self.maya_type_name, 7,1)
+        mid_tab01_Layout_L.addWidget(self.sculpt_type_name, 8,1)
+        mid_tab01_Layout_L.addWidget(self.scn_type_name, 9,1)
+        mid_tab01_Layout_L.addWidget(self.edit_type_name, 10,1)
+        mid_tab01_Layout_L.addWidget(self.publish_type_name, 11,1)
+        
+        mid_tab01_Layout_L.addWidget(self.server_LBL, 0,0)
+        mid_tab01_Layout_L.addWidget(self.prod_LBL, 1,0)
+        mid_tab01_Layout_L.addWidget(self.assetDir_LBL, 2,0)
+        mid_tab01_Layout_L.addWidget(self.shotDir_LBL, 3,0)
+        mid_tab01_Layout_L.addWidget(self.char_type_LBL, 4,0)
+        mid_tab01_Layout_L.addWidget(self.prop_type_LBL, 5,0)
+        mid_tab01_Layout_L.addWidget(self.fx_type_LBL, 6,0)
+        mid_tab01_Layout_L.addWidget(self.maya_type_LBL, 7,0)
+        mid_tab01_Layout_L.addWidget(self.sculpt_type_LBL, 8,0)
+        mid_tab01_Layout_L.addWidget(self.scn_type_LBL, 9,0)
+        mid_tab01_Layout_L.addWidget(self.edit_type_LBL, 10,0)
+        mid_tab01_Layout_L.addWidget(self.publish_type_LBL, 11,0)
+
+        mid_tab01_Layout_L.addWidget( self.oldNameLabel, 12,0 )
+        mid_tab01_Layout_L.addWidget( self.oldName, 12, 1 )
+        mid_tab01_Layout_L.addWidget( self.newNameLabel , 13,0)
+        mid_tab01_Layout_L.addWidget( self.newName , 13,1)
+        mid_tab01_Layout_L.addWidget(self.renameButton, 14,0)
+
         for widget in [self.plugIn_Label,
                         self.checkBoxAbc,
                         self.checkBoxMash,
@@ -151,11 +196,18 @@ class MainWindow(QWidget) :
 
     # ASSETS ------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def assetTabUI(self):
+        Separador = QFrame()
+        Separador.setFrameShape(QFrame.HLine)
+        Separador.setLineWidth(1)
+
         outLayout = QWidget()
         globalLayout = QVBoxLayout()
         tabs = QTabWidget()
         tabs.addTab(self.mayaTab_UI(), "MAYA")
         tabs.addTab(self.houdiniTab_UI(), "HOUDINI")
+        globalLayout.addWidget(self.assetName_LBL)
+        globalLayout.addWidget(self.assetName)
+        globalLayout.addWidget(Separador)
         globalLayout.addWidget(tabs)
         outLayout.setLayout(globalLayout)
         return outLayout
@@ -377,7 +429,7 @@ class MainWindow(QWidget) :
 
         self.newFX_BTN.setFixedSize(100, 100)
         flowLayout.addWidget(self.newFX_BTN)
-        
+
         houdini_Tab.setLayout(base)
         return houdini_Tab
 
