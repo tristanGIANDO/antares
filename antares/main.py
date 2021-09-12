@@ -1,8 +1,7 @@
 import sys
 sys.path.append("..")
 # import package
-import os, time, fn, env, subprocess #psutil
-import 
+import os, time, fn, env, fx, subprocess #psutil
 '''
 from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from Qt.QtCore import *
