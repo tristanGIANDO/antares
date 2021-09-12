@@ -81,3 +81,20 @@ def newFX_FN(prod, assetName):
             print ("New Hip created with success")
         except:
             print ( "Try again")
+
+
+def open_last_FX_FN(name, prod):
+    path = os.path.join(env.SERVER  ,
+                            prod,
+                            env.FX_PATH ,
+                            name)
+    destination = os.listdir( path )
+    project = os.path.join(path,  destination[0])
+    print ( project )
+    the_list = [ name + "_*"]
+    print ( the_list )
+
+    if project.startswith(name):
+        os.startfile(project)
+    else:
+        print ( "Try again")

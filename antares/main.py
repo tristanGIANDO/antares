@@ -318,6 +318,64 @@ class MainWindow(QWidget) :
         group_01.setLayout(flowLayout)
         self.newFX_BTN.setFixedSize(100, 100)
         flowLayout.addWidget(self.newFX_BTN)
+
+        #Variable
+        fx_Path = os.path.join(env.SERVER,
+                                    prod,
+                                    env.FX_PATH)
+        assetcharacter = os.listdir( fx_Path )
+        #Create Button characters 
+        positions = [(i, j) for i in range(50) for j in range(5)]
+        for position, name in zip(positions, assetcharacter):
+            if name == '':
+                continue
+            imageDir = os.path.join(env.SERVER,
+                                    env.IMAGES_PATH,
+                                    env.FX_TYPE,
+                                    name + ".png")
+            button = ImagePushButton(name, path = imageDir)
+            button.setFixedSize(100, 100)
+            
+            path = os.path.join(env.SERVER,
+                                prod,
+                                env.FX_PATH,
+                                name)
+            flowLayout.addWidget(button)
+
+            # CREER LISTE DE TOUS LES DEPARTEMENTS
+            asset_list = os.listdir( os.path.join(fx_Path ,
+                                                    name ))
+            #CREER MENU
+            menu = QMenu(parent = self)
+            menu.addAction( "Name = " + name )
+            menu.addSeparator()
+
+            for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]:
+
+                editProject = os.listdir( os.path.join(path ,
+                                                    "data" ))
+
+                editImage = os.path.join(path ,
+                                    "data",
+                                    editProject[-1])
+                #SubMenu
+                items = menu.addAction(dep)
+                items.triggered.connect(partial(self.openInFolder_Char_UI, name))
+                
+
+            #MENU ITEMS GLOBAL
+
+            menu.addSeparator()
+            lastEdit = menu.addAction(QIcon(editImage), self.last_edit_LBL )
+            delete = menu.addAction(self.delete_asset_LBL)
+            #Connections
+            delete.triggered.connect(partial(self.deleteAsset_UI, name))
+            lastEdit.triggered.connect(partial(self.open_last_FX_UI, name)) 
+
+            
+
+            button.setMenu(menu)
+
         
         houdini_Tab.setLayout(base)
         return houdini_Tab
@@ -466,6 +524,10 @@ class MainWindow(QWidget) :
     def openLastSculpt_UI(self, name, soft):
         prod = self.prodName.text()
         fn.openLastSculpt_FN (name, soft, prod = prod)
+  
+    def open_last_FX_UI(self, name):
+        prod = self.prodName.text()
+        fx.open_last_FX_FN (name, prod = prod)
 
     ## UI CUSTOMIZE ##
 

@@ -188,7 +188,7 @@ def openLastEdit_FN(name, dep, prod):
                             env.E_PATH ,
                             dep)
     destination = os.listdir( path )
-    project = os.path.join(path,  destination[-2])
+    project = os.path.join(path,  destination[-1])
     print ("Edit Path")
     os.startfile(project)
 
