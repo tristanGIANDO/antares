@@ -43,7 +43,7 @@ class MainWindow(QWidget) :
         prefs = json.loads(prefs_json)
 
 
-        self.prodTitle = QLabel ( prefs['server'])
+        self.prodTitle = QLabel ( prefs['prod'])
         self.userLabel = QLabel ( "Welcome " + env.USER)
         self.reloadBTN = QPushButton("RELOAD")
         #Set production
