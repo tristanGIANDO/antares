@@ -188,9 +188,11 @@ def openLastEdit_FN(name, dep, prod):
                             env.E_PATH ,
                             dep)
     destination = os.listdir( path )
+    destination.remove("_data")
     project = os.path.join(path,  destination[-1])
-    print ("Edit Path")
+    print ("Edit Path is a file")
     os.startfile(project)
+
 
 
 def openAllEdits_FN(name, dep, prod):

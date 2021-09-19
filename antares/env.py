@@ -11,8 +11,8 @@ Ensuite il faut renseigner le nom du film ("Instinct", "Roald", etc...) dans PRO
 
 
 
-SERVER = "X:\\"
-PROD = "_PROD"
+SERVER = os.path.join("D:\\", "Mes_Projets")
+PROD = "Personal_Projects"
 
 #Set Templates
 
