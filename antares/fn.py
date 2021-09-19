@@ -192,6 +192,7 @@ def openLastEdit_FN(name, dep, prod):
     print ("Edit Path")
     os.startfile(project)
 
+
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
 

@@ -2,6 +2,8 @@ import sys
 sys.path.append("..")
 # import package
 import os, time, fn, env, fx, subprocess #psutil
+import os.path
+from os import PathLike, path
 '''
 from Qt.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from Qt.QtCore import *
@@ -20,10 +22,10 @@ class MainWindow(QWidget) :
 
     def __init__(self) :
         super(MainWindow,self).__init__()
-        self.title = f"ANTARES_v0.3"
-        self.attr = "QPushButton {background-color: #18537d; color: white;}"
-        self.grpBgc = u"background-color: rgb(10, 40, 50);"
-        self.icon = os.path.join(env.RESOURCES, "icons", "_UI", "logo.png")
+        self.title = f"ANTARES_v0.4"
+        self.icon = os.path.join(env.RESOURCES,
+                                "icons",
+                                "_UI", "logo.png")
         self.resize(850, 500)
         self.move(100, 100)
         self.setWindowTitle(self.title)
@@ -34,12 +36,12 @@ class MainWindow(QWidget) :
 
 
     def createWidget(self):
-        self.prodTitle = QLabel ( env.TMP_PROD)
+        self.prodTitle = QLabel ( env.PROD)
         self.userLabel = QLabel ( "Welcome " + env.USER)
         self.reloadBTN = QPushButton("RELOAD")
         #Set production
         self.serverName = QLineEdit(env.SERVER)
-        self.prodName = QLineEdit(env.TMP_PROD)
+        self.prodName = QLineEdit(env.PROD)
         self.assetDirName = QLineEdit(env.ASSET_TYPE)
         self.shotDirName = QLineEdit(env.SHOT_TYPE)
         self.char_type_name = QLineEdit(env.CHAR_TYPE)
@@ -213,7 +215,27 @@ class MainWindow(QWidget) :
         return outLayout
     
     def mayaTab_UI(self):
-        prod = self.prodName.text()
+        if os.path.exists(env.SERVER):
+            server = self.serverName.text()
+            print ( server )
+
+            if os.path.exists(os.path.join(server,
+                                        self.prodName.text())):
+                prod = self.prodName.text()
+                print ( prod )
+            else:
+                server = env.TMP_SERVER
+                print ( server )
+                prod = env.TMP_PROD
+                print ( prod )
+
+        else:
+            server = env.TMP_SERVER
+            print ( server )
+            prod = env.TMP_PROD
+            print ( prod )
+        
+
         mayaTab = QWidget() 
         base = QGridLayout()
         groupChara = QGroupBox("CHARACTERS")
@@ -228,7 +250,7 @@ class MainWindow(QWidget) :
         layoutChar = FlowLayout()
         groupChara.setLayout(layoutChar)
         #Variable
-        characterPath = os.path.join(env.SERVER,
+        characterPath = os.path.join(server,
                                     prod,
                                     env.CHAR_PATH)
         assetcharacter = os.listdir( characterPath )
@@ -237,14 +259,14 @@ class MainWindow(QWidget) :
         for position, name in zip(positions, assetcharacter):
             if name == '':
                 continue
-            imageDir = os.path.join(env.SERVER,
+            imageDir = os.path.join(server,
                                     env.IMAGES_PATH,
                                     env.CHAR_TYPE,
                                     name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
-            path = os.path.join(env.SERVER,
+            path = os.path.join(server,
                                 prod)
             layoutChar.addWidget(button)
 
@@ -275,14 +297,14 @@ class MainWindow(QWidget) :
                                     dep ,
                                     name + "_P_" + dep + ".png")
 
-                destination = os.listdir( os.path.join(env.SERVER ,
+                destination = os.listdir( os.path.join(server,
                                     prod ,
                                     env.CHAR_PATH ,
                                     name ,
                                     env.E_PATH ,
                                     dep ))
 
-                file = os.path.join(env.SERVER ,
+                file = os.path.join(server,
                                     prod ,
                                     env.CHAR_PATH ,
                                     name ,
@@ -293,7 +315,7 @@ class MainWindow(QWidget) :
                 modified = os.path.getmtime(file)
                 year,month,day,hour,minute,second=time.localtime(modified)[:-3]
                 date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
-                allEdits = os.listdir(os.path.join( env.SERVER ,
+                allEdits = os.listdir(os.path.join( server ,
                                     prod ,
                                     env.CHAR_PATH ,
                                     name ,
@@ -322,7 +344,7 @@ class MainWindow(QWidget) :
 
             #MENU ITEMS GLOBAL
             sculpt = menu.addMenu("sculpt")
-            sculpt_path = os.listdir(os.path.join(env.SERVER,
+            sculpt_path = os.listdir(os.path.join(server,
                                         prod,
                                         env.CHAR_PATH,
                                         name,
@@ -361,7 +383,27 @@ class MainWindow(QWidget) :
         return mayaTab
 
     def houdiniTab_UI(self):
-        prod = self.prodName.text()
+
+        if os.path.exists(env.SERVER):
+            server = self.serverName.text()
+            print ( server )
+
+            if os.path.exists(os.path.join(server,
+                                        self.prodName.text())):
+                prod = self.prodName.text()
+                print ( prod )
+            else:
+                server = env.TMP_SERVER
+                print ( server )
+                prod = env.TMP_PROD
+                print ( prod )
+
+        else:
+            server = env.TMP_SERVER
+            print ( server )
+            prod = env.TMP_PROD
+            print ( prod )
+
         houdini_Tab = QWidget()
         base = QGridLayout()
         group_01 = QGroupBox("FX")
@@ -590,7 +632,10 @@ class MainWindow(QWidget) :
 
     
     def reload(self):
-        self.mayaTab_UI()
+        
+        self.close() 
+        MainWindow()
+        
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):
@@ -707,5 +752,8 @@ if __name__ == "__main__":
     # window.setupData()
 
     sys.exit(application.exec_())
+
+# CLOSE EXECUTE POUR RELOAD ?? IDEA
+
 else:
     window = None

@@ -1,22 +1,29 @@
 import  os
 
 
-#Global Path
-# SERVER = os.path.join("C:\\", "Users", "Windows", "Desktop")
-# SERVER = os.path.join("C:\\", "Users", "stage", "Desktop")
-# SERVER = os.path.join("C:\\", "Users", "Manon", "Documents", "antares-main", "antares", "resources")
-SERVER = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
-RESOURCES = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
+'''
+IMPORTANT A FAIRE
+SET PRODUCTION
+Pour set le projet, il suffit de changer l'adresse du serveur (exemple : "GANDALF\\" ou "MERLIN\\") dans SERVER >>>> ligne 14
+Ensuite il faut renseigner le nom du film ("Instinct", "Roald", etc...) dans PROD >>>> ligne 15
+'''
 
+
+
+
+SERVER = "X:\\"
+PROD = "_PROD"
 
 #Set Templates
 
-userComplete = str(os.listdir(os.path.join(SERVER, "icons", "_user")))
+TMP_SERVER = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
+RESOURCES = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
+TMP_PROD = "template_pipeline_film"
+userComplete = str(os.listdir(os.path.join(RESOURCES, "icons", "_user")))
 userSplitText = userComplete.replace('.png', '')
 userSplitCroc01 = userSplitText.replace("['", "")
 userSplit = userSplitCroc01.replace("']", "")
 USER = userSplit
-TMP_PROD = "template_pipeline_film"
 TMP_ASSET = "_template_workspace_asset"
 TMP_FX = "_template_workspace_houdini"
 TMP_SCN_FX = "template_001.hipnc"
