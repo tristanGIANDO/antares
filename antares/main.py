@@ -115,6 +115,7 @@ class MainWindow(QWidget) :
         self.newFX_BTN.clicked.connect(self.create_new_FX_UI)
         self.renameButton.clicked.connect(self.renameAsset_UI)
         self.reloadBTN.clicked.connect(self.reload)
+        self.setProd.clicked.connect(self.setProd_FN)
 
 
 
@@ -574,11 +575,14 @@ class MainWindow(QWidget) :
     def createNewChara_UI(self):
         prod = self.prodName.text()
         assetName = self.assetName.text()
+        server = self.serverName.text()
+        if not server:
+            return
         if not prod:
             return
         if not assetName:
             return
-        fn.newCharFN(prod = prod, assetName = assetName)
+        fn.newCharFN(server = server, prod = prod, assetName = assetName)
         self.reload()
 
     def createNewProp_UI(self):
@@ -594,32 +598,49 @@ class MainWindow(QWidget) :
     def create_new_FX_UI(self):
         prod = self.prodName.text()
         assetName = self.assetName.text()
+        server = self.serverName.text()
+        if not server:
+            return
         if not prod:
             return
         if not assetName:
             return
-        fx.newFX_FN(prod = prod, assetName = assetName)
+        fx.newFX_FN(server, prod = prod, assetName = assetName)
         self.reload()
 
     def openLastEdit_UI(self, name, dep):
         prod = self.prodName.text()
-        fn.openLastEdit_FN (name, dep, prod = prod)
+        server = self.serverName.text()
+        print ( prod )
+        print ( server )
+        if not server:
+            return
+        fn.openLastEdit_FN (name, dep, server, prod = prod)
     
     def openPublish_UI(self, name, dep):
         prod = self.prodName.text()
-        fn.openPublish_FN (name, dep, prod = prod)
+        server = self.serverName.text()
+        if not server:
+            return
+        fn.openPublish_FN (name, dep, prod = prod, server = server)
 
     def deleteAsset_UI(self, name):
+        
         prod = self.prodName.text()
-        fn.deleteAsset_FN(name, prod = prod)
+        server = self.serverName.text()
+
+        fn.deleteAsset_FN(name, server,  prod = prod)
         self.reload()
 
     def renameAsset_UI(self):
         prod = self.prodName.text()
         oldName = self.oldName.text()
         newName = self.newName.text()
+        server = self.serverName.text()
+        if not server:
+            return
         print ( newName )
-        fn.renameAsset_FN (prod = prod, oldName = oldName, newName = newName)
+        fn.renameAsset_FN ( server, prod = prod, oldName = oldName, newName = newName)
         self.reload()
 
     def test_UI(self):
@@ -627,23 +648,38 @@ class MainWindow(QWidget) :
 
     def refPublish_UI(self, name, dep):
         prod = self.prodName.text()
-        fn.refPublishFN(name, dep, prod = prod)
+        server = self.serverName.text()
+        if not server:
+            return
+        fn.refPublishFN(name, dep, prod = prod, server = server)
 
     def importPublish_Char_UI(self, name, dep):
         prod = self.prodName.text()
-        fn.importPublish_Char_FN(name, dep, prod = prod)
+        server = self.serverName.text()
+        if not server:
+            return
+        fn.importPublish_Char_FN(name, dep, prod = prod, server = server)
 
     def openInFolder_Char_UI(self, name, dep):
         prod = self.prodName.text()
-        fn.openInFolder_Char_FN(name, prod = prod)
+        server = self.serverName.text()
+        if not server:
+            return
+        fn.openInFolder_Char_FN(name, server, prod = prod)
    
     def openLastSculpt_UI(self, name, soft):
         prod = self.prodName.text()
-        fn.openLastSculpt_FN (name, soft, prod = prod)
+        server = self.serverName.text()
+        if not server:
+            return
+        fn.openLastSculpt_FN (name, soft, server, prod = prod)
   
     def open_last_FX_UI(self, name):
         prod = self.prodName.text()
-        fx.open_last_FX_FN (name, prod = prod)
+        server = self.serverName.text()
+        if not server:
+            return
+        fx.open_last_FX_FN (name, server, prod = prod)
 
     ## UI CUSTOMIZE ##
 
@@ -655,7 +691,23 @@ class MainWindow(QWidget) :
         self.close() 
         MainWindow()
         
-   
+    def setProd_FN(self):
+        server = self.serverName.text()
+        prod = self.prodName.text()
+        listTuples = [("server", server, "prod", prod)]
+        listOfStr = ["server", "prod"]
+        listOfTxt = [server, prod]
+        zipObj = zip(listOfStr, listOfTxt)
+        new_dico = dict(zipObj)
+        print ( new_dico )
+
+        # dico = {"server": "X:\\", "prod": "_PROD"}
+        jsonString = json.dumps(new_dico)
+        jsonFile = open("prefs.json", "w")
+        jsonFile.write(jsonString)
+        jsonFile.close()
+
+        self.reload()
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):

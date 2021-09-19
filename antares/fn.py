@@ -1,26 +1,26 @@
-import os, shutil, socket
+import os, shutil, socket, json
 import env
 
 
 
-def newCharFN(prod, assetName):
-    check = os.listdir(os.path.join(env.SERVER , prod, env.CHAR_PATH))
+def newCharFN(server, prod, assetName):
+    check = os.listdir(os.path.join(server , prod, env.CHAR_PATH))
     if assetName in check :
         # raise RuntimeError("Sorry, can't do this ! " + assetName + " already exists !")
         print ("Sorry, can't do this ! " + assetName + " already exists !")
 	    
     else:
         departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
-        source = os.path.join(env.SERVER,
+        source = os.path.join(server,
                             prod ,
                             env.TMP_ASSET_PATH)
 
-        destination = os.path.join(env.SERVER ,
+        destination = os.path.join(server ,
                             prod ,
                             env.CHAR_PATH,
                             env.TMP_ASSET)
 
-        path = os.path.join(env.SERVER ,
+        path = os.path.join(server ,
                             prod,
                             env.CHAR_PATH ,
                             assetName)
@@ -108,7 +108,7 @@ def newCharFN(prod, assetName):
                                         env.CHAR_TYPE,
                                         env.TMP_IMAGE)
 
-        picRenamed = os.path.join(env.SERVER,
+        picRenamed = os.path.join(server,
                                         env.IMAGES_PATH,
                                         env.CHAR_TYPE ,
                                         assetName + ".png")
@@ -121,8 +121,8 @@ def newCharFN(prod, assetName):
             print ( "There is no profile picture, sorry... ...")
             print ( "Try again, it will work better")
 
-def openInFolder_Char_FN(name, prod):
-    path = os.path.join( env.SERVER,
+def openInFolder_Char_FN(name, server,prod):
+    path = os.path.join( server,
                         prod,
                         env.CHAR_PATH,
                         name,
@@ -130,16 +130,16 @@ def openInFolder_Char_FN(name, prod):
                         env.SCN_TYPE )
     os.system('explorer.exe %s'%path)
 
-def newPropFN(prod, assetName):
-    check = os.listdir(os.path.join(env.SERVER , prod, env.PROP_PATH))
+def newPropFN(server, prod, assetName):
+    check = os.listdir(os.path.join(server , prod, env.PROP_PATH))
     if assetName in check :
 	    print ("Sorry, can't do this ! " + assetName + " already exists !")
     else:
         departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
 
-        path = os.path.join(env.SERVER , prod, env.PROP_PATH , assetName)
-        source = os.path.join(env.SERVER, prod , env.TMP_ASSET_PATH)
-        destination = os.path.join(env.SERVER , prod , env.PROP_PATH, env.TMP_ASSET)
+        path = os.path.join(server , prod, env.PROP_PATH , assetName)
+        source = os.path.join(server, prod , env.TMP_ASSET_PATH)
+        destination = os.path.join(server , prod , env.PROP_PATH, env.TMP_ASSET)
         #   Copy template
         shutil.copytree(source, destination)
         os.rename(destination, path)
@@ -161,15 +161,15 @@ def newPropFN(prod, assetName):
                 os.rename(editToRename, editRenamed)
                 os.rename(publishToRename, publishRenamed)
         # PROFILE PICTURE
-        picTMP_ASSET_PATH = os.path.join(env.SERVER , prod, env.IMAGES_PATH, "template.png")
-        picDst = os.path.join(env.SERVER , prod, env.IMAGES_PATH, env.PROP_TYPE,"template.png")
-        picRenamed = os.path.join(env.SERVER, prod, env.IMAGES_PATH, env.PROP_TYPE , assetName + ".png")
+        picTMP_ASSET_PATH = os.path.join(server , prod, env.IMAGES_PATH, "template.png")
+        picDst = os.path.join(server , prod, env.IMAGES_PATH, env.PROP_TYPE,"template.png")
+        picRenamed = os.path.join(server, prod, env.IMAGES_PATH, env.PROP_TYPE , assetName + ".png")
         shutil.copyfile( picTMP_ASSET_PATH, picDst)
         os.rename(picDst, picRenamed)
         print ("New Prop created with success")
 
-def openPublish_FN(name, dep, prod):
-     project = os.path.join(env.SERVER ,
+def openPublish_FN(server, name, dep, prod):
+     project = os.path.join(server ,
                             prod ,
                             env.CHAR_PATH ,
                             name ,
@@ -180,16 +180,22 @@ def openPublish_FN(name, dep, prod):
      print ("Publish Path")
      os.startfile(project)
 
-def openLastEdit_FN(name, dep, prod):
-    path = os.path.join(env.SERVER  ,
+def openLastEdit_FN(name, dep, server, prod):
+    path = os.path.join(server  ,
                             prod,
                             env.CHAR_PATH ,
                             name ,
                             env.E_PATH ,
                             dep)
+    print ( path )
     destination = os.listdir( path )
-    destination.remove("_data")
+    print ( destination )
+    try:
+        destination.remove("_data")
+    except:
+        print ( "No data")
     project = os.path.join(path,  destination[-1])
+    print ( project )
     print ("Edit Path is a file")
     os.startfile(project)
 
@@ -198,8 +204,8 @@ def openLastEdit_FN(name, dep, prod):
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
 
-def openLastSculpt_FN(name, soft, prod):
-    path = os.path.join(env.SERVER  ,
+def openLastSculpt_FN(name, soft, server, prod):
+    path = os.path.join(server  ,
                             prod,
                             env.CHAR_PATH ,
                             name ,
@@ -210,9 +216,9 @@ def openLastSculpt_FN(name, soft, prod):
     print ( project )
     os.startfile(project)
 
-def deleteAsset_FN ( name, prod ):
+def deleteAsset_FN (name, server, prod ):
     try :
-        shutil.rmtree(os.path.join(env.SERVER  ,
+        shutil.rmtree(os.path.join(server,
                                     prod,
                                     env.CHAR_PATH ,
                                     name))
@@ -228,10 +234,10 @@ def deleteAsset_FN ( name, prod ):
     
     print ( name + " deleted with success.")
     
-def renameAsset_FN(prod, oldName, newName):
-    oldPath = os.path.join(env.SERVER , prod , env.CHAR_PATH , oldName)
-    newPath = os.path.join(env.SERVER , prod , env.CHAR_PATH , newName)
-    IMAGES_PATHPath = os.path.join(env.SERVER , prod, env.IMAGES_PATH_IMG, env.CHAR_TYPE)
+def renameAsset_FN(server, prod, oldName, newName):
+    oldPath = os.path.join(server , prod , env.CHAR_PATH , oldName)
+    newPath = os.path.join(server , prod , env.CHAR_PATH , newName)
+    IMAGES_PATHPath = os.path.join(server , prod, env.IMAGES_PATH_IMG, env.CHAR_TYPE)
       
     os.rename(oldPath, newPath)
 
@@ -267,9 +273,9 @@ def renameAsset_FN(prod, oldName, newName):
 
 # FUNCTIONS SOCKETS
 
-def refPublishFN(name, dep, prod):
+def refPublishFN( server, name, dep, prod):
     print ( name, dep, prod )
-    ref = os.path.join(env.SERVER,
+    ref = os.path.join(server,
                         prod,
                         env.CHAR_PATH,
                         name,
@@ -287,9 +293,9 @@ def refPublishFN(name, dep, prod):
         s.recv(2048)
         print ( "File referenced with success")
 
-def importPublish_Char_FN(name, dep, prod):
+def importPublish_Char_FN(server, name, dep, prod):
     print ( name, dep, prod )
-    importFile = os.path.join(env.SERVER,
+    importFile = os.path.join(server,
                         prod,
                         env.CHAR_PATH,
                         name,
@@ -328,3 +334,4 @@ def testFN():
     project = osDir  + "04_asset/character/" + perso + pDir + department + "/" + perso + "_P_" + department + ".ma"
         cmds.file( project, r=True, namespace = "CHAR_1")
     '''
+

@@ -3,23 +3,23 @@ import env
 
 
 
-def newFX_FN(prod, assetName):
-    check = os.listdir(os.path.join(env.SERVER , prod, env.FX_PATH))
+def newFX_FN(server, prod, assetName):
+    check = os.listdir(os.path.join(server , prod, env.FX_PATH))
     if assetName in check :
         print ("Sorry, can't do this ! " + assetName + " already exists !")
 	    
     else:
         departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
-        source = os.path.join(env.SERVER,
+        source = os.path.join(server,
                             prod ,
                             env.TMP_FX_PATH)
 
-        destination = os.path.join(env.SERVER ,
+        destination = os.path.join(server ,
                             prod ,
                             env.FX_PATH,
                             env.TMP_FX)
 
-        path = os.path.join(env.SERVER ,
+        path = os.path.join(server ,
                             prod,
                             env.FX_PATH ,
                             assetName)
@@ -39,14 +39,14 @@ def newFX_FN(prod, assetName):
             print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
 
 
-        oldScn = os.path.join(env.SERVER ,
+        oldScn = os.path.join(server ,
                             prod,
                             env.FX_PATH ,
                             assetName,
                             "scenes",
                             env.TMP_SCN_FX)
 
-        newScn = os.path.join(env.SERVER ,
+        newScn = os.path.join(server ,
                             prod,
                             env.FX_PATH ,
                             assetName,
@@ -62,14 +62,14 @@ def newFX_FN(prod, assetName):
             print ( "Try again to rename the scene")
 
         #DATA
-        old_data = os.path.join(env.SERVER ,
+        old_data = os.path.join(server ,
                             prod,
                             env.FX_PATH ,
                             assetName,
                             "_data",
                             "template_001.png")
 
-        new_data = os.path.join(env.SERVER ,
+        new_data = os.path.join(server ,
                             prod,
                             env.FX_PATH ,
                             assetName,
@@ -91,7 +91,7 @@ def newFX_FN(prod, assetName):
                                         env.FX_TYPE,
                                         env.TMP_IMAGE)
 
-        picRenamed = os.path.join(env.SERVER,
+        picRenamed = os.path.join(server,
                                         env.IMAGES_PATH,
                                         env.FX_TYPE ,
                                         assetName + ".png")
@@ -105,8 +105,8 @@ def newFX_FN(prod, assetName):
             print ( "Try again")
 
 
-def open_last_FX_FN(name, prod):
-    path = os.path.join(env.SERVER  ,
+def open_last_FX_FN(name, server, prod):
+    path = os.path.join(server  ,
                             prod,
                             env.FX_PATH ,
                             name,
