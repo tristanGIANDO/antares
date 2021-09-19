@@ -11,11 +11,12 @@ Ensuite il faut renseigner le nom du film ("Instinct", "Roald", etc...) dans PRO
 
 
 
-SERVER = os.path.join("D:\\", "Mes_Projets")
-PROD = "Personal_Projects"
+#SERVER = os.path.join("D:\\", "Mes_Projets")
+#PROD = "Personal_Projects"
+SERVER = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
+PROD = "template_pipeline_film"
 
 #Set Templates
-
 TMP_SERVER = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
 RESOURCES = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
 TMP_PROD = "template_pipeline_film"
