@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 # import package
-import os, time, fn, env, fx, subprocess #psutil
+import os, time, fn, env, fx, json, subprocess #psutil
 import os.path
 from os import PathLike, path
 '''
@@ -22,7 +22,7 @@ class MainWindow(QWidget) :
 
     def __init__(self) :
         super(MainWindow,self).__init__()
-        self.title = f"ANTARES_v0.4"
+        self.title = f"ANTARES_v0.5"
         self.icon = os.path.join(env.RESOURCES,
                                 "icons",
                                 "_UI", "logo.png")
@@ -192,6 +192,12 @@ class MainWindow(QWidget) :
         # tabsLayout_L.tabBarClicked(self.openTab)
 
         self.setLayout(outerLayout)
+
+        # SET PREFERENCES #######################################################
+        prefs_file = open("prefs.json", "r")
+        prefs_json = prefs_file.read()
+        prefs_list = json.loads(prefs_json)
+
         self.show()
     
     #############
@@ -563,6 +569,7 @@ class MainWindow(QWidget) :
         if not assetName:
             return
         fn.newCharFN(prod = prod, assetName = assetName)
+        self.reload()
 
     def createNewProp_UI(self):
         prod = self.prodName.text()
@@ -572,6 +579,7 @@ class MainWindow(QWidget) :
         if not assetName:
             return
         fn.newPropFN(prod = prod, assetName = assetName)
+        self.reload()
 
     def create_new_FX_UI(self):
         prod = self.prodName.text()
@@ -581,6 +589,7 @@ class MainWindow(QWidget) :
         if not assetName:
             return
         fx.newFX_FN(prod = prod, assetName = assetName)
+        self.reload()
 
     def openLastEdit_UI(self, name, dep):
         prod = self.prodName.text()
@@ -593,6 +602,7 @@ class MainWindow(QWidget) :
     def deleteAsset_UI(self, name):
         prod = self.prodName.text()
         fn.deleteAsset_FN(name, prod = prod)
+        self.reload()
 
     def renameAsset_UI(self):
         prod = self.prodName.text()
@@ -600,6 +610,7 @@ class MainWindow(QWidget) :
         newName = self.newName.text()
         print ( newName )
         fn.renameAsset_FN (prod = prod, oldName = oldName, newName = newName)
+        self.reload()
 
     def test_UI(self):
         fn.testFN()
@@ -629,8 +640,6 @@ class MainWindow(QWidget) :
     def openTab(self, tab01_Lay_L, up_tab01_Layout_L):
         tab01_Lay_L.setLayout(up_tab01_Layout_L)
 
-
-    
     def reload(self):
         
         self.close() 
@@ -740,6 +749,7 @@ class ImagePushButton(QPushButton):
         painter.drawPixmap(QRect(QPoint(2,2),QSize(88,88)), self.pixmap)        
 
 if __name__ == "__main__":
+    
     application = QApplication(sys.argv)
 
     # application.setStyle('Fusion')
@@ -753,7 +763,6 @@ if __name__ == "__main__":
 
     sys.exit(application.exec_())
 
-# CLOSE EXECUTE POUR RELOAD ?? IDEA
 
 else:
     window = None
