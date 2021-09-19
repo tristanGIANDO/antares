@@ -36,12 +36,19 @@ class MainWindow(QWidget) :
 
 
     def createWidget(self):
-        self.prodTitle = QLabel ( env.PROD)
+
+        # SET PREFERENCES #######################################################
+        prefs_file = open("prefs.json", "r")
+        prefs_json = prefs_file.read()
+        prefs = json.loads(prefs_json)
+
+
+        self.prodTitle = QLabel ( prefs['server'])
         self.userLabel = QLabel ( "Welcome " + env.USER)
         self.reloadBTN = QPushButton("RELOAD")
         #Set production
-        self.serverName = QLineEdit(env.SERVER)
-        self.prodName = QLineEdit(env.PROD)
+        self.serverName = QLineEdit(prefs['server'])
+        self.prodName = QLineEdit(prefs['prod'])
         self.assetDirName = QLineEdit(env.ASSET_TYPE)
         self.shotDirName = QLineEdit(env.SHOT_TYPE)
         self.char_type_name = QLineEdit(env.CHAR_TYPE)
@@ -193,10 +200,7 @@ class MainWindow(QWidget) :
 
         self.setLayout(outerLayout)
 
-        # SET PREFERENCES #######################################################
-        prefs_file = open("prefs.json", "r")
-        prefs_json = prefs_file.read()
-        prefs_list = json.loads(prefs_json)
+        
 
         self.show()
     
@@ -221,7 +225,8 @@ class MainWindow(QWidget) :
         return outLayout
     
     def mayaTab_UI(self):
-        if os.path.exists(env.SERVER):
+        server = self.serverName.text()
+        if os.path.exists(server):
             server = self.serverName.text()
             print ( server )
 
@@ -389,8 +394,8 @@ class MainWindow(QWidget) :
         return mayaTab
 
     def houdiniTab_UI(self):
-
-        if os.path.exists(env.SERVER):
+        server = self.serverName.text()
+        if os.path.exists(server):
             server = self.serverName.text()
             print ( server )
 
@@ -419,7 +424,7 @@ class MainWindow(QWidget) :
         
 
         #Variable
-        fx_Path = os.path.join(env.SERVER,
+        fx_Path = os.path.join(server,
                                     prod,
                                     env.FX_PATH)
         assetcharacter = os.listdir( fx_Path )
@@ -428,14 +433,14 @@ class MainWindow(QWidget) :
         for position, name in zip(positions, assetcharacter):
             if name == '':
                 continue
-            imageDir = os.path.join(env.SERVER,
+            imageDir = os.path.join(server,
                                     env.IMAGES_PATH,
                                     env.FX_TYPE,
                                     name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
-            path = os.path.join(env.SERVER,
+            path = os.path.join(server,
                                 prod,
                                 env.FX_PATH,
                                 name)
@@ -483,11 +488,12 @@ class MainWindow(QWidget) :
 
     # SHOTS -------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def shotTabUI(self):
+        server = self.serverName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        seqDIR = os.listdir(os.path.join(env.SERVER, prod, env.SHOT_TYPE))
+        seqDIR = os.listdir(os.path.join(server, prod, env.SHOT_TYPE))
         for seq in seqDIR :
             tabs.addTab(self.insideShotTabUI(), seq)
         n.addWidget(tabs)
@@ -507,11 +513,13 @@ class MainWindow(QWidget) :
 
     # SETS -------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def setTabUI(self):
+
+        server = self.serverName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        setDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_PATH))
+        setDIR = os.listdir(os.path.join(server, prod, env.SET_PATH))
         for setName in setDIR :
             tabs.addTab(self.moduleTabUI(setName), setName)
         n.addWidget(tabs)
@@ -522,11 +530,12 @@ class MainWindow(QWidget) :
         return layout
     
     def moduleTabUI(self, setName):
+        server = self.serverName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        moduleDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_PATH, setName))
+        moduleDIR = os.listdir(os.path.join(server, prod, env.SET_PATH, setName))
         for modName in moduleDIR :
             tabs.addTab(self.itemTabUI(setName, modName), modName)
         
@@ -536,22 +545,23 @@ class MainWindow(QWidget) :
         return layout
 
     def itemTabUI(self, setName, modName):
+        server = self.serverName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         item = QPushButton()
-        itemDIR = os.listdir(os.path.join(env.SERVER, prod, env.SET_PATH, setName, modName))
+        itemDIR = os.listdir(os.path.join(server, prod, env.SET_PATH, setName, modName))
 
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, itemDIR):
             if name == '':
                 continue
-            imageDir = os.path.join(env.SERVER, env.IMAGES_PATH, "items", name + ".png")
+            imageDir = os.path.join(server, env.IMAGES_PATH, "items", name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
-            path = os.path.join(env.SERVER, prod)
+            path = os.path.join(server, prod)
             n.addWidget(button)
             
 
@@ -645,6 +655,7 @@ class MainWindow(QWidget) :
         self.close() 
         MainWindow()
         
+   
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):
