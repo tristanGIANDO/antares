@@ -1,0 +1,1 @@
+Copy "shelves" and "icons" in your Maya preferences.

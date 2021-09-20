@@ -1,0 +1,173 @@
+global proc shelf_ANTARES () {
+    global string $gBuffStr;
+    global string $gBuffStr0;
+    global string $gBuffStr1;
+
+
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Increment and save" 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "SAVE" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -overlayLabelColor 0 0 0 
+        -overlayLabelBackColor 1 1 1 1 
+        -image "S:/packages/antares/dev/antares/antares_for_maya/icons/antares_icons/save.ico" 
+        -image1 "S:/packages/antares/dev/antares/antares_for_maya/icons/antares_icons/save.ico" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\nimport shutil\nimport os\n\ndef increment (*args):\n\n    PATH = os.path.join(\"S:\\\\\",\n                        \"packages\",\n                        \"antares\",\n                        \"dev\",\n                        \"antares\",\n                        \"resources\",\n                        \"icons\",\n                        \"_user\",\n                        \"User.png\")\n    boucle = 1\n    nombreDeRep = 0\n    while boucle == 1: \n        fullName = cmds.file( q =1, sn = 1, shn =1)\n        print ( fullName )\n        fullNamePath = cmds.file( q =1, sn = 1)\n        absName = os.path.dirname(fullNamePath)\n        noExtName = fullName.split('.')[0]\n        ext = fullName.split('.')[1]\n        splitName = noExtName.split('_')\n        splitName.reverse()\n        intVersion = int(splitName[0]) + nombreDeRep +1\n        print ( intVersion )\n        strVersion = str(intVersion)\n        padding = strVersion.__len__()\n        if padding == 1:\n            newVersion = '00' + strVersion\n        elif padding == 2:\n            newVersion = '0' + strVersion\n        else:\n            newVersion = strVersion\n        splitName.reverse()\n        listSize = len(splitName)\n        resolvedName = ''\n        for i in range(0, listSize-1):\n            resolvedName += splitName[i] + '_'\n        finalNamePath = absName + '/'+ resolvedName +  newVersion + '.' + ext\n        print ( finalNamePath )\n        #check if the file exist\n        if cmds.file(finalNamePath, q=1, exists = 1) == 1:\n            boucle = 1\n            nombreDeRep += 1\n        else:\n            boucle = 0 \n            cmds.file(rename=finalNamePath)\n            cmds.file( save=True)\n            print ( \"File saved to a new version\" )\n        #PROFILE PICTURE \n        print ( absName + \"/\" + resolvedName +  newVersion + \".png\" )   \n        shutil.copyfile( PATH, absName + \"/_data/\" + resolvedName +  newVersion + \".png\" )\n\nincrement()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    separator
+        -enable 1
+        -width 12
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -style "shelf" 
+        -horizontal 0
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Matrix Constraints User Friendly Interface" 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "MATX" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "MATX" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "S:/packages/antares/dev/antares/antares_for_maya/icons/antares_icons/giando_matrix.png" 
+        -image1 "S:/packages/antares/dev/antares/antares_for_maya/icons/antares_icons/giando_matrix.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\nimport maya.OpenMaya as OpenMaya\nimport sys\nimport math\n\n\n\n###### CREATE MATRIX ######\n\n\ndef create_matrix ( *args ):\n    sl = cmds.ls(sl=True, sn=True)\n    Master = sl[0]\n    Slave = sl[1]\n\n\n    # CREATE NODES\n\n    MultMatX  = cmds.shadingNode('multMatrix',asUtility=True, n='MultMatX_'+Slave)\n    DecMatX = cmds.shadingNode('decomposeMatrix', asUtility=True, n='DecMatX_'+Slave)\n    MultMatX_Offset = cmds.shadingNode('multMatrix',asUtility=True, n='MultMatX_Offset_'+Slave)\n    DecMatX_Offset = cmds.shadingNode('decomposeMatrix', asUtility=True, n='DecMatX_Offset_'+Slave)\n\n\n    # CREATE OFFSET\n    \n    if(cmds.checkBox(checkOffset,q=1,v=1)):\n\n        cmds.connectAttr(Slave+'.worldMatrix[0]',MultMatX_Offset+'.matrixIn[0]')\n        cmds.connectAttr(Master+'.worldInverseMatrix[0]',MultMatX_Offset+'.matrixIn[1]')\n        cmds.connectAttr(MultMatX_Offset+'.matrixSum',DecMatX_Offset+'.inputMatrix')\n        cmds.disconnectAttr (MultMatX_Offset+'.matrixSum',DecMatX_Offset+'.inputMatrix')\n        cmds.delete(MultMatX_Offset)\n        \n    elif(cmds.checkBox(checkOffset,q=1,v=0)):\n        \n        cmds.connectAttr(Slave+'.worldMatrix[0]', DecMatX_Offset+'.inputMatrix')\n        cmds.connectAttr(Master+'.worldInverseMatrix[0]', DecMatX_Offset+'.inputMatrix')\n        \n\n    # CONNECT OFFSET TO MULTIPLY AND DECOMPOSE MATRIX\n\n    cmds.connectAttr(DecMatX_Offset+'.inputMatrix',MultMatX+'.matrixIn[0]')\n    cmds.connectAttr(Master+'.worldMatrix[0]',MultMatX+'.matrixIn[1]')\n    cmds.connectAttr(Slave+'.parentInverseMatrix[0]',MultMatX+'.matrixIn[2]')\n    cmds.connectAttr(MultMatX+'.matrixSum',DecMatX+'.inputMatrix')\n\n\n\n\n    #CHECKBOX INFO\n \n    \n    #TRANSLATE\n    if(cmds.checkBoxGrp(checkMat,q=1,v1=1)):\n        print \"Button is pushed.\"\n        cmds.connectAttr(DecMatX+'.outputTranslate',Slave+'.t')\n        print \"Constraint Translate successful\"\n \n       \n    #ROTATE    \n    if(cmds.checkBoxGrp(checkMat,q=1,v2=1)): \n        print \"Button is pushed.\"   \n        cmds.connectAttr(DecMatX+'.outputRotate',Slave+'.r') \n        print \"Constraint Rotate successful\"\n \n \n    #SCALE        \n    if(cmds.checkBoxGrp(checkMat,q=1,v3=1)): \n        print \"Button is pushed.\"\n        cmds.connectAttr(DecMatX+'.outputScale',Slave+'.s')\n        print \"Constraint Rotate successful\"\n\n\n\n\n\n\n\n#############################\n## USER INTERFACE SETTINGS ##\n#############################\n\n\ndiUi = {}\ndiUi[\"lays\"] = {}\ndiUi[\"ctrls\"] = {}\ndiUi[\"window\"] = {}\n\nif cmds.window(\"giandoMatrix\", exists=True):\n\tcmds.deleteUI(\"giandoMatrix\")\nwindow = diUi[\"window\"][\"main\"]= cmds.window(\"giandoMatrix\", title=\"Giando_Matrix\", sizeable=True, maximizeButton=False)\n\n\n###### LAYERS HIERARCHY\n\ndiUi[\"lays\"][\"root\"] = cmds.frameLayout(l=\"MATRIX\", p=diUi[\"window\"][\"main\"], bgc=(0.0,0.1,0.25), h=50)\ndiUi[\"lays\"][\"rootPan1\"] = cmds.columnLayout(adj=True, p=diUi[\"lays\"][\"root\"])\n\n\n\ncmds.setParent (diUi[\"lays\"][\"rootPan1\"])\ncmds.text ( label = \"Select Master and Slave before running the script.\", align=\"center\")\ncheckOffset = cmds.checkBox( label = \"Maintain Offset\", al=\"center\", v=True )\ncheckMat = cmds.checkBoxGrp( numberOfCheckBoxes=3, label=\"Constraint\", labelArray3=[\"Translate\", \"Rotate\", \"Scale\"], va3=[True, True, True], vr= True )\ncmds.button ( label= \"Create Matrix\", enableBackground=True, command=create_matrix, backgroundColor=[0.0, 0.4, 0.4])\n\n\n\n\ncmds.showWindow (diUi[\"window\"][\"main\"])" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    separator
+        -enable 1
+        -width 12
+        -height 35
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -style "shelf" 
+        -horizontal 0
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "CommandPort for VS Code" 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "VSCode" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "VSCode" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n# Open new ports\ncmds.commandPort(name=\":7001\", sourceType=\"mel\", echoOutput=True)\ncmds.commandPort(name=\":7002\", sourceType=\"python\", echoOutput=True)\nprint('VSCode connected to maya')" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Connect Antares to Maya" 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "Port" 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "Port" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "pythonFamily.png" 
+        -image1 "pythonFamily.png" 
+        -style "iconOnly" 
+        -marginWidth 1
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n# Open new ports\ncmds.commandPort(name=\":1789\", sourceType=\"python\", echoOutput=True)\nprint('Antares connected to maya')" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+
+} 
