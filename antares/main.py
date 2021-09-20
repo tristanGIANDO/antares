@@ -22,7 +22,7 @@ class MainWindow(QWidget) :
 
     def __init__(self) :
         super(MainWindow,self).__init__()
-        self.title = f"ANTARES_v0.5"
+        self.title = f"ANTARES_v0.6"
         self.icon = os.path.join(env.RESOURCES,
                                 "icons",
                                 "_UI", "logo.png")
@@ -271,7 +271,7 @@ class MainWindow(QWidget) :
         for position, name in zip(positions, assetcharacter):
             if name == '':
                 continue
-            imageDir = os.path.join(server,
+            imageDir = os.path.join(env.TMP_SERVER,
                                     env.IMAGES_PATH,
                                     env.CHAR_TYPE,
                                     name + ".png")

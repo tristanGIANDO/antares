@@ -108,7 +108,7 @@ def newCharFN(server, prod, assetName):
                                         env.CHAR_TYPE,
                                         env.TMP_IMAGE)
 
-        picRenamed = os.path.join(server,
+        picRenamed = os.path.join(env.RESOURCES,
                                         env.IMAGES_PATH,
                                         env.CHAR_TYPE ,
                                         assetName + ".png")
