@@ -1,25 +1,31 @@
-import  os
-
-
-'''
-IMPORTANT A FAIRE
-SET PRODUCTION
-Pour set le projet, il suffit de changer l'adresse du serveur (exemple : "GANDALF\\" ou "MERLIN\\") dans SERVER >>>> ligne 14
-Ensuite il faut renseigner le nom du film ("Instinct", "Roald", etc...) dans PROD >>>> ligne 15
-'''
+import  os, json
 
 
 
+prefs_file = open("prefs.json", "r")
+prefs_json = prefs_file.read()
+prefs = json.loads(prefs_json)
 
-#SERVER = os.path.join("D:\\", "Mes_Projets")
-#PROD = "Personal_Projects"
-SERVER = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
-PROD = "template_pipeline_film"
+
+
 
 #Set Templates
-TMP_SERVER = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
-RESOURCES = os.path.join("S:\\", "packages", "antares", "dev", "antares", "resources")
-TMP_PROD = "template_pipeline_film"
+TMP_SERVER = os.path.join(prefs['tmp_server'],
+                                prefs['tmp_package'],
+                                prefs['tmp_appli'],
+                                prefs['tmp_version'],
+                                prefs['tmp_appli'],
+                                prefs['tmp_resources'])
+
+RESOURCES = os.path.join(prefs['tmp_server'],
+                                prefs['tmp_package'],
+                                prefs['tmp_appli'],
+                                prefs['tmp_version'],
+                                prefs['tmp_appli'],
+                                prefs['tmp_resources'])
+
+TMP_PROD = prefs['tmp_prod']
+
 userComplete = str(os.listdir(os.path.join(RESOURCES, "icons", "_user")))
 userSplitText = userComplete.replace('.png', '')
 userSplitCroc01 = userSplitText.replace("['", "")

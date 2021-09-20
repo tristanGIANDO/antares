@@ -99,6 +99,18 @@ class MainWindow(QWidget) :
         for check in [self.checkBoxAbc, self.checkBoxMash, self.checkBoxRenderMan]:
             check.setChecked(True)
 
+
+        #PREFS MENU
+        self.shortcut_LBL = QLabel ( "Access to some shortcuts" )
+        self.resources_BTN = QPushButton("RESOURCES")
+        self.maya_prefs_BTN = QPushButton("MAYA PREFERENCES")
+        self.library_LBL = QLabel ( "Modify Assets and User profile pictures" )
+        self.library_BTN = QPushButton("MODIFY LIBRARY")
+        self.user_BTN = QPushButton("MODIFY USER PROFILE PICTURE")
+        self.theme_LBL = QLabel ( "Choose your theme" )
+        self.defaultTheme_BTN = QPushButton("Default Theme")
+        self.darkTheme_BTN = QPushButton("Dark Theme")
+        
         #IN MENU
         self.last_edit_LBL = "Open Last Edit "
         self.open_publish_LBL = "Open Publish"
@@ -126,11 +138,15 @@ class MainWindow(QWidget) :
         Layout_L = QVBoxLayout()
         tabsLayout_L = QTabWidget()
         tab01_Lay_L = QWidget()
+        tab02_Lay_L = QWidget()
         up_tab01_Layout_L = QVBoxLayout()
         mid_tab01_Layout_L = QGridLayout()
         dwn_tab01_Layout_L = QVBoxLayout()
+        main_tab02_Layout_L = QVBoxLayout()
         Layout_R = QVBoxLayout()
         tabs_Lay_R = QTabWidget()
+        Separador = QFrame()
+        
         #ADD WIDGETS
         topLayout.addWidget(self.userLabel)
         topLayout.addWidget(self.prodTitle)
@@ -166,11 +182,14 @@ class MainWindow(QWidget) :
         mid_tab01_Layout_L.addWidget(self.edit_type_LBL, 10,0)
         mid_tab01_Layout_L.addWidget(self.publish_type_LBL, 11,0)
 
-        mid_tab01_Layout_L.addWidget( self.oldNameLabel, 12,0 )
-        mid_tab01_Layout_L.addWidget( self.oldName, 12, 1 )
-        mid_tab01_Layout_L.addWidget( self.newNameLabel , 13,0)
-        mid_tab01_Layout_L.addWidget( self.newName , 13,1)
-        mid_tab01_Layout_L.addWidget(self.renameButton, 14,0)
+        mid_tab01_Layout_L.addWidget(Separador, 12,0)
+        
+
+        mid_tab01_Layout_L.addWidget( self.oldNameLabel, 13,0 )
+        mid_tab01_Layout_L.addWidget( self.oldName, 13, 1 )
+        mid_tab01_Layout_L.addWidget( self.newNameLabel , 14,0)
+        mid_tab01_Layout_L.addWidget( self.newName , 14,1)
+        mid_tab01_Layout_L.addWidget(self.renameButton, 15,0)
 
         for widget in [self.plugIn_Label,
                         self.checkBoxAbc,
@@ -179,10 +198,26 @@ class MainWindow(QWidget) :
             dwn_tab01_Layout_L.addWidget(widget)
         Layout_L.addWidget(tabsLayout_L)
         Layout_R.addWidget(tabs_Lay_R)
+
+
+        for widget in [self.shortcut_LBL,
+                        self.resources_BTN,
+                        self.maya_prefs_BTN,
+                        self.library_LBL,
+                        self.library_BTN,
+                        self.user_BTN,
+                        self.theme_LBL,
+                        self.defaultTheme_BTN,
+                        self.darkTheme_BTN]:
+            main_tab02_Layout_L.addWidget(widget)
+
         tabsLayout_L.addTab(tab01_Lay_L, "HOME")
+        tabsLayout_L.addTab(tab02_Lay_L, "PREFS")
         tabs_Lay_R.addTab(self.assetTabUI(), "ASSETS")
         tabs_Lay_R.addTab(self.shotTabUI(), "SHOTS")
         tabs_Lay_R.addTab(self.setTabUI(), "SETS")
+
+
         #ADD LAYOUTS
         up_tab01_Layout_L.addLayout(mid_tab01_Layout_L)
         up_tab01_Layout_L.addLayout(dwn_tab01_Layout_L)
@@ -190,13 +225,17 @@ class MainWindow(QWidget) :
         outerLayout.addLayout(Layout_L, 2, 0)
         outerLayout.addLayout(Layout_R, 2, 1)
         tab01_Lay_L.setLayout(up_tab01_Layout_L)
+        tab02_Lay_L.setLayout(main_tab02_Layout_L)
         
         #SET CUSTOM
         outerLayout.setColumnStretch(1,1)
         up_tab01_Layout_L.addStretch(1)
         up_tab01_Layout_L.setSpacing(5)
+        main_tab02_Layout_L.addStretch(1)
         tabsLayout_L.setTabPosition(tabsLayout_L.West)
         tabsLayout_L.setMovable(True)
+        Separador.setFrameShape(QFrame.HLine)
+        Separador.setLineWidth(1)
         # tabsLayout_L.tabBarClicked(self.openTab)
 
         self.setLayout(outerLayout)
@@ -694,18 +733,29 @@ class MainWindow(QWidget) :
     def setProd_FN(self):
         server = self.serverName.text()
         prod = self.prodName.text()
-        listTuples = [("server", server, "prod", prod)]
-        listOfStr = ["server", "prod"]
-        listOfTxt = [server, prod]
+        
+        listOfStr = ["server",
+                    "prod",
+                    "tmp_server",
+                    "tmp_package",
+                    "tmp_appli",
+                    "tmp_version",
+                    "tmp_resources",
+                    "tmp_prod"]
+        listOfTxt = [server,
+                    prod,
+                    "S:\\",
+                    "packages",
+                    "antares",
+                    "dev",
+                    "resources",
+                    "template_pipeline_film"]
+
         zipObj = zip(listOfStr, listOfTxt)
         new_dico = dict(zipObj)
-        print ( new_dico )
-
-        # dico = {"server": "X:\\", "prod": "_PROD"}
-        jsonString = json.dumps(new_dico)
-        jsonFile = open("prefs.json", "w")
-        jsonFile.write(jsonString)
-        jsonFile.close()
+        base_file = open("prefs.json", "w")
+        json.dump(new_dico, base_file)
+        base_file.close()
 
         self.reload()
 
