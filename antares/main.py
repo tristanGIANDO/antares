@@ -47,8 +47,10 @@ class MainWindow(QWidget) :
         self.userLabel = QLabel ( "Welcome " + env.USER)
         self.reloadBTN = QPushButton("RELOAD")
         #Set production
-        self.serverName = QLineEdit("//" + prefs['server'] + "/" + prefs['folder'])
-        self.folderName = QLineEdit(prefs['folder'])
+        slash = "/"
+        path = os.path.join(prefs['server'])
+        self.serverName = QLineEdit(r"\\gandalf/3D4_21_22")
+        self.folderName = QLineEdit("prefs['folder']")
         self.prodName = QLineEdit(prefs['prod'])
         self.assetDirName = QLineEdit(env.ASSET_TYPE)
         self.shotDirName = QLineEdit(env.SHOT_TYPE)
@@ -267,6 +269,8 @@ class MainWindow(QWidget) :
     
     def mayaTab_UI(self):
         server = self.serverName.text()
+        cwd = os.getcwd
+        print ( cwd )
         if os.path.exists(server):
             server = self.serverName.text()
             print ( server )
@@ -281,14 +285,14 @@ class MainWindow(QWidget) :
                 print ( server )
                 prod = env.TMP_PROD
                 print ( prod )
-                print ( "error in")
+                print ( "error prod")
 
         else:
             server = env.TMP_SERVER
             print ( server )
             prod = env.TMP_PROD
             print ( prod )
-            print ( "error out")
+            print ( "error server")
         
 
         mayaTab = QWidget() 
@@ -573,12 +577,12 @@ class MainWindow(QWidget) :
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        setDIR = os.listdir(os.path.join(server,
+        # setDIR = os.listdir(os.path.join(server,
                                          
-                                        prod,
-                                        env.SET_PATH))
-        for setName in setDIR :
-            tabs.addTab(self.moduleTabUI(setName), setName)
+        #                                 prod,
+        #                                 env.SET_PATH))
+        # for setName in setDIR :
+        #     tabs.addTab(self.moduleTabUI(setName), setName)
         n.addWidget(tabs)
         n.addWidget(self.setBTN)
         n.addWidget(self.libraryBTN)
