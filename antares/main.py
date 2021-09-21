@@ -47,7 +47,8 @@ class MainWindow(QWidget) :
         self.userLabel = QLabel ( "Welcome " + env.USER)
         self.reloadBTN = QPushButton("RELOAD")
         #Set production
-        self.serverName = QLineEdit(prefs['server'])
+        self.serverName = QLineEdit("//" + prefs['server'] + "/" + prefs['folder'])
+        self.folderName = QLineEdit(prefs['folder'])
         self.prodName = QLineEdit(prefs['prod'])
         self.assetDirName = QLineEdit(env.ASSET_TYPE)
         self.shotDirName = QLineEdit(env.SHOT_TYPE)
@@ -274,17 +275,20 @@ class MainWindow(QWidget) :
                                         self.prodName.text())):
                 prod = self.prodName.text()
                 print ( prod )
+                print ( "production set")
             else:
                 server = env.TMP_SERVER
                 print ( server )
                 prod = env.TMP_PROD
                 print ( prod )
+                print ( "error in")
 
         else:
             server = env.TMP_SERVER
             print ( server )
             prod = env.TMP_PROD
             print ( prod )
+            print ( "error out")
         
 
         mayaTab = QWidget() 
@@ -305,6 +309,7 @@ class MainWindow(QWidget) :
                                     prod,
                                     env.CHAR_PATH)
         assetcharacter = os.listdir( characterPath )
+        print (characterPath)
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, assetcharacter):
@@ -367,6 +372,7 @@ class MainWindow(QWidget) :
                 year,month,day,hour,minute,second=time.localtime(modified)[:-3]
                 date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
                 allEdits = os.listdir(os.path.join( server ,
+                                     
                                     prod ,
                                     env.CHAR_PATH ,
                                     name ,
@@ -396,6 +402,7 @@ class MainWindow(QWidget) :
             #MENU ITEMS GLOBAL
             sculpt = menu.addMenu("sculpt")
             sculpt_path = os.listdir(os.path.join(server,
+                                         
                                         prod,
                                         env.CHAR_PATH,
                                         name,
@@ -435,6 +442,7 @@ class MainWindow(QWidget) :
 
     def houdiniTab_UI(self):
         server = self.serverName.text()
+        folder = self.folderName.text()
         if os.path.exists(server):
             server = self.serverName.text()
             print ( server )
@@ -481,6 +489,7 @@ class MainWindow(QWidget) :
             button.setFixedSize(100, 100)
             
             path = os.path.join(server,
+                                 
                                 prod,
                                 env.FX_PATH,
                                 name)
@@ -529,13 +538,17 @@ class MainWindow(QWidget) :
     # SHOTS -------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def shotTabUI(self):
         server = self.serverName.text()
+        folder = self.folderName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        seqDIR = os.listdir(os.path.join(server, prod, env.SHOT_TYPE))
-        for seq in seqDIR :
-            tabs.addTab(self.insideShotTabUI(), seq)
+        # seqDIR = os.listdir(os.path.join(server,
+                                        #  
+                                        # prod,
+                                        # env.SHOT_TYPE))
+        # for seq in seqDIR :
+        #     tabs.addTab(self.insideShotTabUI(), seq)
         n.addWidget(tabs)
         layout.setLayout(n)
         return layout
@@ -555,11 +568,15 @@ class MainWindow(QWidget) :
     def setTabUI(self):
 
         server = self.serverName.text()
+        folder = self.folderName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        setDIR = os.listdir(os.path.join(server, prod, env.SET_PATH))
+        setDIR = os.listdir(os.path.join(server,
+                                         
+                                        prod,
+                                        env.SET_PATH))
         for setName in setDIR :
             tabs.addTab(self.moduleTabUI(setName), setName)
         n.addWidget(tabs)
@@ -571,11 +588,15 @@ class MainWindow(QWidget) :
     
     def moduleTabUI(self, setName):
         server = self.serverName.text()
+        folder = self.serverName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
-        moduleDIR = os.listdir(os.path.join(server, prod, env.SET_PATH, setName))
+        moduleDIR = os.listdir(os.path.join(server,
+                                            prod,
+                                            env.SET_PATH,
+                                            setName))
         for modName in moduleDIR :
             tabs.addTab(self.itemTabUI(setName, modName), modName)
         
@@ -586,22 +607,33 @@ class MainWindow(QWidget) :
 
     def itemTabUI(self, setName, modName):
         server = self.serverName.text()
+        folder = self.serverName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         item = QPushButton()
-        itemDIR = os.listdir(os.path.join(server, prod, env.SET_PATH, setName, modName))
+        itemDIR = os.listdir(os.path.join(server,
+                                             
+                                            prod,
+                                            env.SET_PATH,
+                                            setName,
+                                            modName))
 
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, itemDIR):
             if name == '':
                 continue
-            imageDir = os.path.join(server, env.IMAGES_PATH, "items", name + ".png")
+            imageDir = os.path.join(server,
+                                    env.IMAGES_PATH,
+                                    "items",
+                                    name + ".png")
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
-            path = os.path.join(server, prod)
+            path = os.path.join(server,
+                                     
+                                    prod)
             n.addWidget(button)
             
 
@@ -615,13 +647,14 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         assetName = self.assetName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
         if not server:
             return
         if not prod:
             return
         if not assetName:
             return
-        fn.newCharFN(server = server, prod = prod, assetName = assetName)
+        fn.newCharFN( server = server, prod = prod, assetName = assetName)
         self.reload()
 
     def createNewProp_UI(self):
@@ -638,37 +671,41 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         assetName = self.assetName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
         if not server:
             return
         if not prod:
             return
         if not assetName:
             return
-        fx.newFX_FN(server, prod = prod, assetName = assetName)
+        fx.newFX_FN(  server, prod = prod, assetName = assetName)
         self.reload()
 
     def openLastEdit_UI(self, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
         print ( prod )
         print ( server )
         if not server:
             return
-        fn.openLastEdit_FN (name, dep, server, prod = prod)
+        fn.openLastEdit_FN (  name, dep, server, prod = prod)
     
     def openPublish_UI(self, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
         if not server:
             return
-        fn.openPublish_FN (name, dep, prod = prod, server = server)
+        fn.openPublish_FN (  name, dep, prod = prod, server = server)
 
     def deleteAsset_UI(self, name):
         
         prod = self.prodName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
 
-        fn.deleteAsset_FN(name, server,  prod = prod)
+        fn.deleteAsset_FN(  name, server,  prod = prod)
         self.reload()
 
     def renameAsset_UI(self):
@@ -676,10 +713,11 @@ class MainWindow(QWidget) :
         oldName = self.oldName.text()
         newName = self.newName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
         if not server:
             return
         print ( newName )
-        fn.renameAsset_FN ( server, prod = prod, oldName = oldName, newName = newName)
+        fn.renameAsset_FN (   server, prod = prod, oldName = oldName, newName = newName)
         self.reload()
 
     def test_UI(self):
@@ -688,27 +726,31 @@ class MainWindow(QWidget) :
     def refPublish_UI(self, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
         if not server:
             return
-        fn.refPublishFN(name, dep, prod = prod, server = server)
+        fn.refPublishFN(  name, dep, prod = prod, server = server)
 
     def importPublish_Char_UI(self, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
         if not server:
             return
-        fn.importPublish_Char_FN(name, dep, prod = prod, server = server)
+        fn.importPublish_Char_FN(  name, dep, prod = prod, server = server)
 
     def openInFolder_Char_UI(self, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
+        folder = self.serverName.text()
         if not server:
             return
-        fn.openInFolder_Char_FN(name, server, prod = prod)
+        fn.openInFolder_Char_FN(  name, server, prod = prod)
    
     def openLastSculpt_UI(self, name, soft):
         prod = self.prodName.text()
         server = self.serverName.text()
+
         if not server:
             return
         fn.openLastSculpt_FN (name, soft, server, prod = prod)
