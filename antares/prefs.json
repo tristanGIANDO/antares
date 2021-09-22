@@ -1,8 +1,1 @@
-{"server": "\\gandalf/3D4_21_22",
-    "prod": "instinct",
-    "tmp_server": "S:\\",
-    "tmp_package": "packages",
-    "tmp_appli": "antares",
-    "tmp_version": "dev",
-    "tmp_resources": "resources",
-    "tmp_prod": "template_pipeline_film"}
+{"server": "\\\\gandalf/3D4_21_22", "prod": "instinct", "tmp_server": "C:\\Git", "tmp_package": "packages", "tmp_appli": "antares", "tmp_version": "dev", "tmp_resources": "resources", "tmp_prod": "template_pipeline_film"}

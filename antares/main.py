@@ -22,7 +22,7 @@ class MainWindow(QWidget) :
 
     def __init__(self) :
         super(MainWindow,self).__init__()
-        self.title = f"ANTARES_v0.6"
+        self.title = f"ANTARES_v0.7"
         self.icon = os.path.join(env.RESOURCES,
                                 "icons",
                                 "_UI", "logo.png")
