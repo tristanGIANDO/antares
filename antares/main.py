@@ -692,12 +692,23 @@ class MainWindow(QWidget) :
                                     name ,
                                     env.E_PATH ,
                                     dep)
-                editProject = os.listdir( os.path.join(path ,
+                try:
+                    editProject = os.listdir( os.path.join(path ,
                                                     "_data" ))
-
-                editImage = os.path.join(path ,
+                    
+                    editImage = os.path.join(path ,
                                     "_data",
                                     editProject[-2])
+
+                except:
+                    editProject = os.listdir( os.path.join(path ,
+                                                    "data" ))
+
+                    editImage = os.path.join(path ,
+                                    "data",
+                                    editProject[-2])
+
+                
 
                 publishImage = os.path.join(itemPath ,
                                     name ,
