@@ -82,16 +82,19 @@ def newFX_FN(server, prod, assetName):
             print ( "Try again to rename data")
 
         # PROFILE PICTURE
-        picTMP_ASSET_PATH = os.path.join(env.RESOURCES ,
+        picTMP_ASSET_PATH = os.path.join(server,
+                                        prod,
                                         env.IMAGES_PATH,
                                         env.TMP_IMAGE)
 
-        picDst = os.path.join(env.RESOURCES,
+        picDst = os.path.join(server,
+                                        prod,
                                         env.IMAGES_PATH,
                                         env.FX_TYPE,
                                         env.TMP_IMAGE)
 
         picRenamed = os.path.join(server,
+                                        prod,
                                         env.IMAGES_PATH,
                                         env.FX_TYPE ,
                                         assetName + ".png")
@@ -115,3 +118,31 @@ def open_last_FX_FN(name, server, prod):
     project = os.path.join(path,  destination[-1])
     print ( project )
     os.startfile(project)
+
+def delete_FX_FN (name, server, prod ):
+    try :
+        shutil.rmtree(os.path.join(server,
+                                    prod,
+                                    env.FX_PATH ,
+                                    name))
+    except:
+        print ("You already removed the folder.")
+    try:
+        os.remove(os.path.join(server,
+                                    prod,
+                                    env.IMAGES_PATH,
+                                    env.FX_TYPE,
+                                    name + ".png"))
+    except:
+        print ("You already removed the asset picture.")
+    
+    print ( name + " deleted with success.")
+
+def openLastEdit_FN(name, dep, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.FX_PATH ,
+                            name,
+                            dep)
+    print (path)
+    os.startfile(path)

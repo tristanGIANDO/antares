@@ -26,11 +26,21 @@ RESOURCES = os.path.join(prefs['tmp_server'],
 
 TMP_PROD = prefs['tmp_prod']
 
-userComplete = str(os.listdir(os.path.join(RESOURCES, "icons", "_user")))
+ICON = os.path.join(prefs['tmp_server'],
+                                prefs['tmp_package'],
+                                prefs['tmp_appli'],
+                                prefs['tmp_version'],
+                                prefs['tmp_appli'],
+                                "icon.ico")
+
+userComplete = str(os.listdir(os.path.join("C:\\", "antares_user")))
 userSplitText = userComplete.replace('.png', '')
 userSplitCroc01 = userSplitText.replace("['", "")
 userSplit = userSplitCroc01.replace("']", "")
 USER = userSplit
+USER_PIC = os.path.join("C:\\",
+                        "antares_user",
+                        USER + ".png")
 TMP_ASSET = "_template_workspace_asset"
 TMP_FX = "_template_workspace_houdini"
 TMP_SCN_FX = "template_001.hipnc"
@@ -43,21 +53,23 @@ ASSET_TYPE = "04_asset"
 SHOT_TYPE = "05_shot"
 CHAR_TYPE = "character"
 PROP_TYPE = "prop"
+SET_TYPE = "set"
 FX_TYPE = "FX"
 MAYA_TYPE= "maya"
 SCULPT_TYPE = "sculpt"
 SCN_TYPE = "scenes"
 EDIT_TYPE = "edit"
 PUBLISH_TYPE = "publish"
+LIBRARY = "_library"
 # Path
-IMAGES_PATH = os.path.join("icons", "_library", "Images")
+IMAGES_PATH = os.path.join("_library", "Images")
 TMP_ASSET_PATH = os.path.join(ASSET_TYPE,TMP_ASSET)
 TMP_FX_PATH = os.path.join(ASSET_TYPE,TMP_FX)
-SET_PATH = os.path.join(ASSET_TYPE, "set")
 E_PATH = os.path.join(MAYA_TYPE, SCN_TYPE, EDIT_TYPE)
 P_PATH = os.path.join(MAYA_TYPE, SCN_TYPE, PUBLISH_TYPE)
 CHAR_PATH = os.path.join(ASSET_TYPE, CHAR_TYPE )
 PROP_PATH = os.path.join(ASSET_TYPE, PROP_TYPE )
+SET_PATH = os.path.join(ASSET_TYPE, SET_TYPE )
 FX_PATH = os.path.join(ASSET_TYPE, FX_TYPE )
 
 PORT = 1789

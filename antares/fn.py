@@ -99,16 +99,19 @@ def newCharFN(server, prod, assetName):
                     print ( dpt + " isn't renamed correctly (data)... ...")
 
         # PROFILE PICTURE
-        picTMP_ASSET_PATH = os.path.join(env.RESOURCES ,
+        picTMP_ASSET_PATH = os.path.join(server ,
+                                        prod,
                                         env.IMAGES_PATH,
                                         env.TMP_IMAGE)
 
-        picDst = os.path.join(env.RESOURCES,
+        picDst = os.path.join(server,
+                                        prod,
                                         env.IMAGES_PATH,
                                         env.CHAR_TYPE,
                                         env.TMP_IMAGE)
 
-        picRenamed = os.path.join(env.RESOURCES,
+        picRenamed = os.path.join(server,
+                                        prod,
                                         env.IMAGES_PATH,
                                         env.CHAR_TYPE ,
                                         assetName + ".png")
@@ -128,7 +131,7 @@ def openInFolder_Char_FN(name, server,prod):
                         name,
                         env.MAYA_TYPE,
                         env.SCN_TYPE )
-    os.system('explorer.exe %s'%path)
+    os.startfile(path)
 
 def newPropFN(server, prod, assetName):
     check = os.listdir(os.path.join(server , prod, env.PROP_PATH))
@@ -225,7 +228,8 @@ def deleteAsset_FN (name, server, prod ):
     except:
         print ("You already removed the folder.")
     try:
-        os.remove(os.path.join(env.RESOURCES,
+        os.remove(os.path.join(server,
+                                    prod,
                                     env.IMAGES_PATH,
                                     env.CHAR_TYPE,
                                     name + ".png"))
@@ -335,3 +339,27 @@ def testFN():
         cmds.file( project, r=True, namespace = "CHAR_1")
     '''
 
+###### UI CUSTOMIZE
+
+
+def open_library_FN(server,prod):
+    path = os.path.join( server,
+                        prod,
+                        env.LIBRARY )
+    os.startfile(path)
+
+def open_resources_FN(server,prod):
+    path = os.path.join( server,
+                        prod,
+                        "02_ressource")
+    os.startfile(path)
+
+def open_user_picture_FN():
+    path = os.path.join( "C:\\",
+                        "antares_user")
+    os.startfile(path)
+
+def open_prefs_FN():
+    path = os.path.join( "C:\\",
+                        "antares_user")
+    os.startfile(path)
