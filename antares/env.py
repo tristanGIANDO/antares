@@ -7,7 +7,7 @@ prefs_json = prefs_file.read()
 prefs = json.loads(prefs_json)
 
 
-
+VERSION = "1.1"
 
 #Set Templates
 TMP_SERVER = os.path.join(prefs['tmp_server'],

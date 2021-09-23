@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 # import package
-import os, time, fn, env, fx, item, prop, json, subprocess #psutil
+import os, time, fn, env, fx, item, prop, json
 import os.path
 from os import PathLike, path
 '''
@@ -22,7 +22,7 @@ class MainWindow(QWidget) :
 
     def __init__(self) :
         super(MainWindow,self).__init__()
-        self.title = f"ANTARES_v1.1"
+        self.title = f"ANTARES_v" + env.VERSION
         self.icon = env.ICON
 
         self.resize(1000, 500)
@@ -41,6 +41,9 @@ class MainWindow(QWidget) :
         prefs_json = prefs_file.read()
         prefs = json.loads(prefs_json)
 
+        # prefs_file = open("default.json", "r")
+        # prefs_json = prefs_file.read()
+        # prefs = json.loads(prefs_json)
 
         self.prodTitle = QLabel ( prefs['prod'])
         self.userPic = QLabel ( "Welcome ")
@@ -276,8 +279,10 @@ class MainWindow(QWidget) :
         self.show()
     
     #############
-
+    '''
     # ASSETS ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    '''
+
     def assetTabUI(self):
         Separador = QFrame()
         Separador.setFrameShape(QFrame.HLine)
@@ -286,7 +291,7 @@ class MainWindow(QWidget) :
         outLayout = QWidget()
         globalLayout = QVBoxLayout()
         tabs = QTabWidget()
-        tabs.addTab(self.mayaTab_UI(), "CHARACTERS")
+        tabs.addTab(self.character_tab_UI(), "CHARACTERS")
         tabs.addTab(self.propsTab_UI(), "PROPS")
         tabs.addTab(self.setTabUI(), "ITEMS")
         tabs.addTab(self.houdiniTab_UI(), "FX")
@@ -297,7 +302,7 @@ class MainWindow(QWidget) :
         outLayout.setLayout(globalLayout)
         return outLayout
     
-    def mayaTab_UI(self):
+    def character_tab_UI(self):
         server = self.serverName.text()
         cwd = os.getcwd
         print ( cwd )
@@ -341,6 +346,11 @@ class MainWindow(QWidget) :
                                     env.CHAR_PATH)
         assetcharacter = os.listdir( characterPath )
         print (characterPath)
+
+        #New Chara Button
+        self.newCharBTN.setFixedSize(100, 100)
+        layoutChar.addWidget(self.newCharBTN)
+
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, assetcharacter):
@@ -459,9 +469,7 @@ class MainWindow(QWidget) :
             
 
             button.setMenu(menu)
-        #New Chara Button
-        self.newCharBTN.setFixedSize(100, 100)
-        layoutChar.addWidget(self.newCharBTN)
+        
         
         
 
@@ -511,6 +519,11 @@ class MainWindow(QWidget) :
                                     env.PROP_PATH)
         assetcharacter = os.listdir( prop_path )
         print (prop_path)
+
+        #New Chara Button
+        self.newPropBTN.setFixedSize(100, 100)
+        layoutProp.addWidget(self.newPropBTN)
+
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, assetcharacter):
@@ -612,32 +625,28 @@ class MainWindow(QWidget) :
                 lastSculpt = actions.addAction(self.last_edit_LBL)
                 actions.addAction(self.open_in_folder_LBL)
 
-                lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft)) 
+                lastSculpt.triggered.connect(partial(self.openLastSculpt_prop_UI, name, soft)) 
 
 
             menu.addSeparator()
             openInFolder = menu.addAction(self.open_in_folder_LBL)
             menu.addAction(self.duplicate_asset_LBL)
-            delete = menu.addAction(self.delete_asset_LBL)
             menu.addAction(self.create_new_task_LBL)
+            menu.addSeparator()
+            delete = menu.addAction(self.delete_asset_LBL)
             #Connections
             delete.triggered.connect(partial(self.deleteAsset_UI, name))
-            openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
+            openInFolder.triggered.connect(partial(self.openInFolder_prop_UI, name)) 
 
             
 
             button.setMenu(menu)
-        #New Chara Button
-        self.newPropBTN.setFixedSize(100, 100)
-        layoutProp.addWidget(self.newPropBTN)
+        
         
         
 
         prop_tab.setLayout(base)
         return prop_tab
-
-
-
 
     def houdiniTab_UI(self):
         server = self.serverName.text()
@@ -735,36 +744,10 @@ class MainWindow(QWidget) :
         houdini_Tab.setLayout(base)
         return houdini_Tab
 
-    # SHOTS -------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    def shotTabUI(self):
-        server = self.serverName.text()
-        folder = self.folderName.text()
-        prod = self.prodName.text()
-        layout = QWidget()
-        n = QVBoxLayout()
-        tabs = QTabWidget()
-        # seqDIR = os.listdir(os.path.join(server,
-                                        #  
-                                        # prod,
-                                        # env.SHOT_TYPE))
-        # for seq in seqDIR :
-        #     tabs.addTab(self.insideShotTabUI(), seq)
-        n.addWidget(tabs)
-        layout.setLayout(n)
-        return layout
-  
-    def insideShotTabUI(self):
-        houdiniTab = QWidget()
-        layout = QHBoxLayout()
-        layout.addWidget(QPushButton("seq0010_sh0010"))
-        self.cb = QComboBox()
-        self.cb.addItem("Tractor On")
-        self.cb.addItem("Tractor Off")
-        layout.addWidget(self.cb)
-        houdiniTab.setLayout(layout)
-        return houdiniTab
+    '''
+    # SETS ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    '''
 
-    # SETS -------------------------------------------------------------------------------------------------------------------------------------------------------------------
     def setTabUI(self):
 
         server = self.serverName.text()
@@ -969,6 +952,39 @@ class MainWindow(QWidget) :
 
         return layout
 
+
+    '''
+    # SHOTS ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    '''
+    def shotTabUI(self):
+        server = self.serverName.text()
+        folder = self.folderName.text()
+        prod = self.prodName.text()
+        layout = QWidget()
+        n = QVBoxLayout()
+        tabs = QTabWidget()
+        # seqDIR = os.listdir(os.path.join(server,
+                                        #  
+                                        # prod,
+                                        # env.SHOT_TYPE))
+        # for seq in seqDIR :
+        #     tabs.addTab(self.insideShotTabUI(), seq)
+        n.addWidget(tabs)
+        layout.setLayout(n)
+        return layout
+  
+    def insideShotTabUI(self):
+        houdiniTab = QWidget()
+        layout = QHBoxLayout()
+        layout.addWidget(QPushButton("seq0010_sh0010"))
+        self.cb = QComboBox()
+        self.cb.addItem("Tractor On")
+        self.cb.addItem("Tractor Off")
+        layout.addWidget(self.cb)
+        houdiniTab.setLayout(layout)
+        return houdiniTab
+
+
     ## CONNECTIONS UI ##
     #CHARACTER
     def createNewChara_UI(self):
@@ -1082,6 +1098,21 @@ class MainWindow(QWidget) :
         if not server:
             return
         prop.openPublish_FN (  server, name, dep, prod = prod)
+
+    def openLastSculpt_prop_UI(self, name, soft):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        prop.openLastSculpt_FN (name, soft, server, prod = prod)
+
+    def openInFolder_prop_UI(self, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        folder = self.serverName.text()
+        if not server:
+            return
+        prop.openInFolder_FN(  name, server, prod = prod)
 
     # ITEMS
 
