@@ -2,6 +2,7 @@ import os, shutil, socket, json
 import env
 
 
+# CHARACTER
 
 def newCharFN(server, prod, assetName):
     check = os.listdir(os.path.join(server , prod, env.CHAR_PATH))
@@ -133,44 +134,6 @@ def openInFolder_Char_FN(name, server,prod):
                         env.SCN_TYPE )
     os.startfile(path)
 
-def newPropFN(server, prod, assetName):
-    check = os.listdir(os.path.join(server , prod, env.PROP_PATH))
-    if assetName in check :
-	    print ("Sorry, can't do this ! " + assetName + " already exists !")
-    else:
-        departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
-
-        path = os.path.join(server , prod, env.PROP_PATH , assetName)
-        source = os.path.join(server, prod , env.TMP_ASSET_PATH)
-        destination = os.path.join(server , prod , env.PROP_PATH, env.TMP_ASSET)
-        #   Copy template
-        shutil.copytree(source, destination)
-        os.rename(destination, path)
-        #Rename Scenes
-        for dpt in departments:
-            editToRename = os.path.join(path , env.EDIT_TYPE , dpt , env.TMP_SCN_TYPE_TYPE_TYPE_E + ".ma")
-            publishToRename = os.path.join(path , env.PUBLISH_TYPE , dpt , env.TMP_SCN_TYPE_TYPE_TYPE_P + ".ma")
-            editRenamed = os.path.join(path , env.EDIT_TYPE , dpt , assetName + "_E_" + dpt + "_001.ma")
-            publishRenamed = os.path.join(path , env.PUBLISH_TYPE , dpt , assetName + "_P_" + dpt + ".ma")
-            os.rename(editToRename, editRenamed )
-            os.rename(publishToRename, publishRenamed)
-        #Rename EDIT_TYPE data
-        for n in [".jpg", ".png", ".txt"]:
-            for dpt in departments:
-                editToRename = os.path.join(path , env.EDIT_TYPE , dpt , "data" , env.TMP_SCN_TYPE_TYPE_TYPE_E + n)
-                editRenamed = os.path.join(path , env.EDIT_TYPE , dpt , "data" , assetName + "_E_" + dpt + "_001" + n)
-                publishToRename = os.path.join(path , env.PUBLISH_TYPE , dpt , env.TMP_SCN_TYPE_TYPE_TYPE_P + n)
-                publishRenamed = os.path.join(path , env.PUBLISH_TYPE , dpt , assetName + "_P_" + dpt + n)
-                os.rename(editToRename, editRenamed)
-                os.rename(publishToRename, publishRenamed)
-        # PROFILE PICTURE
-        picTMP_ASSET_PATH = os.path.join(server , prod, env.IMAGES_PATH, "template.png")
-        picDst = os.path.join(server , prod, env.IMAGES_PATH, env.PROP_TYPE,"template.png")
-        picRenamed = os.path.join(server, prod, env.IMAGES_PATH, env.PROP_TYPE , assetName + ".png")
-        shutil.copyfile( picTMP_ASSET_PATH, picDst)
-        os.rename(picDst, picRenamed)
-        print ("New Prop created with success")
-
 def openPublish_FN(server, name, dep, prod):
      project = os.path.join(server ,
                             prod ,
@@ -201,8 +164,6 @@ def openLastEdit_FN(name, dep, server, prod):
     print ( project )
     print ("Edit Path is a file")
     os.startfile(project)
-
-
 
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
@@ -274,6 +235,7 @@ def renameAsset_FN(server, prod, oldName, newName):
     os.rename(picDst, picRenamed)
     
     print ( "'", oldName , "' renamed '", newName, "' with success")
+
 
 # FUNCTIONS SOCKETS
 

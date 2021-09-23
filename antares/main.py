@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 # import package
-import os, time, fn, env, fx, item, json, subprocess #psutil
+import os, time, fn, env, fx, item, prop, json, subprocess #psutil
 import os.path
 from os import PathLike, path
 '''
@@ -470,7 +470,6 @@ class MainWindow(QWidget) :
 
     def propsTab_UI(self):
         server = self.serverName.text()
-        
 
         if os.path.exists(server):
             server = self.serverName.text()
@@ -480,35 +479,38 @@ class MainWindow(QWidget) :
                                         self.prodName.text())):
                 prod = self.prodName.text()
                 print ( prod )
+                print ( "production set")
             else:
                 server = env.TMP_SERVER
                 print ( server )
                 prod = env.TMP_PROD
                 print ( prod )
+                print ( "error prod")
 
         else:
             server = env.TMP_SERVER
             print ( server )
             prod = env.TMP_PROD
             print ( prod )
+            print ( "error server")
+        
 
-        props_Tab = QWidget()
+        prop_tab = QWidget() 
         base = QGridLayout()
         group_prop = QGroupBox("PROPS")
         base.addWidget(group_prop)
-        flowLayout_prop = FlowLayout()
-        group_prop.setLayout(flowLayout_prop)
 
-        #New Prop Buttons
-        self.newPropBTN.setFixedSize(100, 100)
-        flowLayout_prop.addWidget(self.newPropBTN)
         
 
+        #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
+        layoutProp = FlowLayout()
+        group_prop.setLayout(layoutProp)
         #Variable
-        prop_Path = os.path.join(server,
+        prop_path = os.path.join(server,
                                     prod,
                                     env.PROP_PATH)
-        assetcharacter = os.listdir( prop_Path )
+        assetcharacter = os.listdir( prop_path )
+        print (prop_path)
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
         for position, name in zip(positions, assetcharacter):
@@ -523,51 +525,119 @@ class MainWindow(QWidget) :
             button.setFixedSize(100, 100)
             
             path = os.path.join(server,
-                                 
-                                prod,
-                                env.PROP_PATH,
-                                name)
-            editProject = os.listdir( os.path.join(path ,
-                                                    "_data" ))
-            editImage = os.path.join(path ,
-                                    "_data",
-                                    editProject[-1])
-
-            flowLayout_prop.addWidget(button)
+                                prod)
+            layoutProp.addWidget(button)
 
             # CREER LISTE DE TOUS LES DEPARTEMENTS
-            asset_list = os.listdir( os.path.join(prop_Path ,
-                                                    name ))
+            departmentList = os.listdir( os.path.join(prop_path ,
+                                                        name ,
+                                                        env.E_PATH))
             #CREER MENU
             menu = QMenu(parent = self)
             menu.addAction( "Name = " + name )
             menu.addSeparator()
-            department = ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]
-            # for dep in department:
+            for dep in departmentList:
+                #VARIABLES
+                path = os.path.join(prop_path ,
+                                    name ,
+                                    env.E_PATH ,
+                                    dep)
+                editProject = os.listdir( os.path.join(path ,
+                                                    "_data" ))
 
-            #     #SubMenu
-            #     items = menu.addAction(dep)
-            #     items.triggered.connect(partial(self.open_dep_FX_UI, name, dep))
+                editImage = os.path.join(path ,
+                                    "_data",
+                                    editProject[-2])
+
+                publishImage = os.path.join(prop_path ,
+                                    name ,
+                                    env.P_PATH ,
+                                    dep ,
+                                    name + "_P_" + dep + ".png")
+
+                destination = os.listdir( os.path.join(server,
+                                    prod ,
+                                    env.PROP_PATH ,
+                                    name ,
+                                    env.E_PATH ,
+                                    dep ))
+
+                file = os.path.join(server,
+                                    prod ,
+                                    env.PROP_PATH ,
+                                    name ,
+                                    env.E_PATH ,
+                                    dep ,
+                                    destination[-1])
+
+                modified = os.path.getmtime(file)
+                year,month,day,hour,minute,second=time.localtime(modified)[:-3]
+                date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                allEdits = os.listdir(os.path.join( server ,
+                                    prod ,
+                                    env.PROP_PATH ,
+                                    name ,
+                                    env.E_PATH ,
+                                    dep ))
+
+                #SubMenu
+                items = menu.addMenu(dep)
+                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
+                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
+                
+                Edits = items.addMenu("All Edits")
+                for i in allEdits:
+                    Edits.addAction(i + " (" + date + ") (To Do)")  
+                refPublish = items.addAction(self.ref_publish_LBL)
+                importPublish = items.addAction(self.import_publish_LBL)
+
+                #CONNECTIONS
+                lastEdit.triggered.connect(partial(self.openLastEdit_prop_UI, name, dep)) 
+                openPublish.triggered.connect(partial(self.openPublish_prop_UI, name, dep))  
+
                 
 
+
+
             #MENU ITEMS GLOBAL
+            sculpt = menu.addMenu("sculpt")
+            sculpt_path = os.listdir(os.path.join(server,
+                                         
+                                        prod,
+                                        env.PROP_PATH,
+                                        name,
+                                        env.SCULPT_TYPE))
+            for soft in sculpt_path:
+                actions = sculpt.addMenu(soft)
+                lastSculpt = actions.addAction(self.last_edit_LBL)
+                actions.addAction(self.open_in_folder_LBL)
+
+                lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft)) 
+
 
             menu.addSeparator()
-            lastEdit = menu.addAction(QIcon(editImage), self.last_edit_LBL )
+            openInFolder = menu.addAction(self.open_in_folder_LBL)
+            menu.addAction(self.duplicate_asset_LBL)
             delete = menu.addAction(self.delete_asset_LBL)
+            menu.addAction(self.create_new_task_LBL)
             #Connections
-            delete.triggered.connect(partial(self.delete_FX_UI, name))
-            lastEdit.triggered.connect(partial(self.open_last_FX_UI, name)) 
+            delete.triggered.connect(partial(self.deleteAsset_UI, name))
+            openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
 
             
 
             button.setMenu(menu)
+        #New Chara Button
+        self.newPropBTN.setFixedSize(100, 100)
+        layoutProp.addWidget(self.newPropBTN)
+        
+        
 
-        # self.newProp_BTN.setFixedSize(100, 100)
-        # flowLayout_prop.addWidget(self.newProp_BTN)
+        prop_tab.setLayout(base)
+        return prop_tab
 
-        props_Tab.setLayout(base)
-        return props_Tab
+
+
 
     def houdiniTab_UI(self):
         server = self.serverName.text()
@@ -900,7 +970,7 @@ class MainWindow(QWidget) :
         return layout
 
     ## CONNECTIONS UI ##
-    #MAYA
+    #CHARACTER
     def createNewChara_UI(self):
         prod = self.prodName.text()
         assetName = self.assetName.text()
@@ -915,30 +985,14 @@ class MainWindow(QWidget) :
         fn.newCharFN( server = server, prod = prod, assetName = assetName)
         self.reload()
 
-    def createNewProp_UI(self):
+    def openLastSculpt_UI(self, name, soft):
         prod = self.prodName.text()
-        assetName = self.assetName.text()
-        if not prod:
-            return
-        if not assetName:
-            return
-        fn.newPropFN(prod = prod, assetName = assetName)
-        self.reload()
-
-    def create_new_FX_UI(self):
-        prod = self.prodName.text()
-        assetName = self.assetName.text()
         server = self.serverName.text()
-        folder = self.serverName.text()
+
         if not server:
             return
-        if not prod:
-            return
-        if not assetName:
-            return
-        fx.newFX_FN(  server, prod = prod, assetName = assetName)
-        self.reload()
-
+        fn.openLastSculpt_FN (name, soft, server, prod = prod)
+    
     def openLastEdit_UI(self, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
@@ -978,9 +1032,6 @@ class MainWindow(QWidget) :
         fn.renameAsset_FN (   server, prod = prod, oldName = oldName, newName = newName)
         self.reload()
 
-    def test_UI(self):
-        fn.testFN()
-
     def refPublish_UI(self, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
@@ -1005,7 +1056,34 @@ class MainWindow(QWidget) :
             return
         fn.openInFolder_Char_FN(  name, server, prod = prod)
 
-    #ITEMS
+
+    # PROPS
+    def createNewProp_UI(self):
+        prod = self.prodName.text()
+        assetName = self.assetName.text()
+        server = self.serverName.text()
+        if not prod:
+            return
+        if not assetName:
+            return
+        prop.newProp_FN(server, prod = prod, assetName = assetName)
+        self.reload()
+
+    def openLastEdit_prop_UI(self, name, dep):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        prop.openLastEdit_FN (  name, dep, server, prod = prod)    
+
+    def openPublish_prop_UI(self, name, dep):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        prop.openPublish_FN (  server, name, dep, prod = prod)
+
+    # ITEMS
 
     def openLastEdit_item_UI(self, name, dep, setName, modName):
         prod = self.prodName.text()
@@ -1030,16 +1108,24 @@ class MainWindow(QWidget) :
         if not server:
             return
         item.openLastSculpt_FN (name, soft, server, setName, modName, prod = prod)
-    #SCULPT
-    def openLastSculpt_UI(self, name, soft):
-        prod = self.prodName.text()
-        server = self.serverName.text()
+   
 
+    # FX
+
+    def create_new_FX_UI(self):
+        prod = self.prodName.text()
+        assetName = self.assetName.text()
+        server = self.serverName.text()
+        folder = self.serverName.text()
         if not server:
             return
-        fn.openLastSculpt_FN (name, soft, server, prod = prod)
-    
-    #HOUDINI
+        if not prod:
+            return
+        if not assetName:
+            return
+        fx.newFX_FN(  server, prod = prod, assetName = assetName)
+        self.reload()
+
     def open_last_FX_UI(self, name):
         prod = self.prodName.text()
         server = self.serverName.text()
@@ -1061,6 +1147,7 @@ class MainWindow(QWidget) :
 
         fx.delete_FX_FN(  name, server,  prod = prod)
         self.reload()
+
 
     ## UI CUSTOMIZE ##
 
