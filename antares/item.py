@@ -2,7 +2,7 @@ import os, shutil
 import env
 
 
-def openPublish_FN(server, name, dep, prod):
+def openPublish_FN(name, dep, server, setName, modName, prod):
      project = os.path.join(server ,
                             prod ,
                             env.SET_PATH ,
@@ -16,11 +16,13 @@ def openPublish_FN(server, name, dep, prod):
      print ("Publish Path")
      os.startfile(project)
 
-def openLastEdit_FN(name, dep, server, prod):
+def openLastEdit_FN(name, dep, server, setName, modName, prod):
     path = os.path.join(server  ,
-                            prod,
-                            env.CHAR_PATH ,
-                            name ,
+                            prod ,
+                            env.SET_PATH ,
+                            setName,
+                            modName,
+                            name,
                             env.E_PATH ,
                             dep)
     print ( path )
@@ -40,11 +42,13 @@ def openLastEdit_FN(name, dep, server, prod):
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
 
-def openLastSculpt_FN(name, soft, server, prod):
+def openLastSculpt_FN(name, soft, server, setName, modName, prod):
     path = os.path.join(server  ,
-                            prod,
-                            env.CHAR_PATH ,
-                            name ,
+                            prod ,
+                            env.SET_PATH ,
+                            setName,
+                            modName,
+                            name,
                             env.SCULPT_TYPE,
                             soft)
     destination = os.listdir( path )

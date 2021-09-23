@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 # import package
-import os, time, fn, env, fx, json, subprocess #psutil
+import os, time, fn, env, fx, item, json, subprocess #psutil
 import os.path
 from os import PathLike, path
 '''
@@ -22,7 +22,7 @@ class MainWindow(QWidget) :
 
     def __init__(self) :
         super(MainWindow,self).__init__()
-        self.title = f"ANTARES_v1.0"
+        self.title = f"ANTARES_v1.1"
         self.icon = env.ICON
 
         self.resize(1000, 500)
@@ -80,9 +80,9 @@ class MainWindow(QWidget) :
         self.setProd = QPushButton("Set Production")
         #NEW ASSETS
         self.newCharBTN = QPushButton("NEW CHARACTER")
-        self.newPropBTN = QPushButton("NEW PROP (to do)")
-        self.itemBTN = QPushButton("NEW ITEM (to do)")
-        self.libraryBTN = QPushButton("NEW IMAGES_PATHRARY (to do)")
+        self.newPropBTN = QPushButton("NEW PROP")
+        self.itemBTN = QPushButton("NEW ITEM")
+        self.libraryBTN = QPushButton("NEW LIBRARY (to do)")
         self.setBTN = QPushButton("NEW SET (to do)")
         self.newFX_BTN = QPushButton("NEW HIP")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
@@ -247,7 +247,6 @@ class MainWindow(QWidget) :
         tabsLayout_L.addTab(tab02_Lay_L, "PREFS")
         tabs_Lay_R.addTab(self.assetTabUI(), "ASSETS")
         tabs_Lay_R.addTab(self.shotTabUI(), "SHOTS")
-        tabs_Lay_R.addTab(self.setTabUI(), "SETS")
 
 
         #ADD LAYOUTS
@@ -287,8 +286,10 @@ class MainWindow(QWidget) :
         outLayout = QWidget()
         globalLayout = QVBoxLayout()
         tabs = QTabWidget()
-        tabs.addTab(self.mayaTab_UI(), "MAYA")
-        tabs.addTab(self.houdiniTab_UI(), "HOUDINI")
+        tabs.addTab(self.mayaTab_UI(), "CHARACTERS")
+        tabs.addTab(self.propsTab_UI(), "PROPS")
+        tabs.addTab(self.setTabUI(), "ITEMS")
+        tabs.addTab(self.houdiniTab_UI(), "FX")
         globalLayout.addWidget(self.assetName_LBL)
         globalLayout.addWidget(self.assetName)
         globalLayout.addWidget(Separador)
@@ -327,11 +328,8 @@ class MainWindow(QWidget) :
         mayaTab = QWidget() 
         base = QGridLayout()
         groupChara = QGroupBox("CHARACTERS")
-        groupProp = QGroupBox("PROPS")
-        # groupSet = QGroupBox("SETS")
         base.addWidget(groupChara)
-        base.addWidget(groupProp)
-        # base.addWidget(groupSet)
+
         
 
         #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -464,15 +462,112 @@ class MainWindow(QWidget) :
         #New Chara Button
         self.newCharBTN.setFixedSize(100, 100)
         layoutChar.addWidget(self.newCharBTN)
-        #SET PROP GROUP
-        layoutProp = FlowLayout()
-        groupProp.setLayout(layoutProp)
-        #New Chara Buttons
-        self.newPropBTN.setFixedSize(100, 100)
-        layoutProp.addWidget(self.newPropBTN)
+        
+        
 
         mayaTab.setLayout(base)
         return mayaTab
+
+    def propsTab_UI(self):
+        server = self.serverName.text()
+        
+
+        if os.path.exists(server):
+            server = self.serverName.text()
+            print ( server )
+
+            if os.path.exists(os.path.join(server,
+                                        self.prodName.text())):
+                prod = self.prodName.text()
+                print ( prod )
+            else:
+                server = env.TMP_SERVER
+                print ( server )
+                prod = env.TMP_PROD
+                print ( prod )
+
+        else:
+            server = env.TMP_SERVER
+            print ( server )
+            prod = env.TMP_PROD
+            print ( prod )
+
+        props_Tab = QWidget()
+        base = QGridLayout()
+        group_prop = QGroupBox("PROPS")
+        base.addWidget(group_prop)
+        flowLayout_prop = FlowLayout()
+        group_prop.setLayout(flowLayout_prop)
+
+        #New Prop Buttons
+        self.newPropBTN.setFixedSize(100, 100)
+        flowLayout_prop.addWidget(self.newPropBTN)
+        
+
+        #Variable
+        prop_Path = os.path.join(server,
+                                    prod,
+                                    env.PROP_PATH)
+        assetcharacter = os.listdir( prop_Path )
+        #Create Button characters 
+        positions = [(i, j) for i in range(50) for j in range(5)]
+        for position, name in zip(positions, assetcharacter):
+            if name == '':
+                continue
+            imageDir = os.path.join(server,
+                                    prod,
+                                    env.IMAGES_PATH,
+                                    env.PROP_TYPE,
+                                    name + ".png")
+            button = ImagePushButton(name, path = imageDir)
+            button.setFixedSize(100, 100)
+            
+            path = os.path.join(server,
+                                 
+                                prod,
+                                env.PROP_PATH,
+                                name)
+            editProject = os.listdir( os.path.join(path ,
+                                                    "_data" ))
+            editImage = os.path.join(path ,
+                                    "_data",
+                                    editProject[-1])
+
+            flowLayout_prop.addWidget(button)
+
+            # CREER LISTE DE TOUS LES DEPARTEMENTS
+            asset_list = os.listdir( os.path.join(prop_Path ,
+                                                    name ))
+            #CREER MENU
+            menu = QMenu(parent = self)
+            menu.addAction( "Name = " + name )
+            menu.addSeparator()
+            department = ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]
+            # for dep in department:
+
+            #     #SubMenu
+            #     items = menu.addAction(dep)
+            #     items.triggered.connect(partial(self.open_dep_FX_UI, name, dep))
+                
+
+            #MENU ITEMS GLOBAL
+
+            menu.addSeparator()
+            lastEdit = menu.addAction(QIcon(editImage), self.last_edit_LBL )
+            delete = menu.addAction(self.delete_asset_LBL)
+            #Connections
+            delete.triggered.connect(partial(self.delete_FX_UI, name))
+            lastEdit.triggered.connect(partial(self.open_last_FX_UI, name)) 
+
+            
+
+            button.setMenu(menu)
+
+        # self.newProp_BTN.setFixedSize(100, 100)
+        # flowLayout_prop.addWidget(self.newProp_BTN)
+
+        props_Tab.setLayout(base)
+        return props_Tab
 
     def houdiniTab_UI(self):
         server = self.serverName.text()
@@ -760,8 +855,8 @@ class MainWindow(QWidget) :
                 importPublish = items.addAction(self.import_publish_LBL)
 
                 #CONNECTIONS
-                lastEdit.triggered.connect(partial(self.openLastEdit_UI, name, dep)) 
-                openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
+                lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, setName, modName)) 
+                openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, setName, modName))  
                 refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
                 importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
                 
@@ -909,7 +1004,32 @@ class MainWindow(QWidget) :
         if not server:
             return
         fn.openInFolder_Char_FN(  name, server, prod = prod)
-   
+
+    #ITEMS
+
+    def openLastEdit_item_UI(self, name, dep, setName, modName):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        print ( prod )
+        print ( server )
+        if not server:
+            return
+        item.openLastEdit_FN (  name, dep, server, setName, modName, prod = prod)
+
+    def openPublish_item_UI(self, name, dep, setName, modName):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        item.openPublish_FN (  name, dep, server, setName, modName, prod = prod)
+
+    def openLastSculpt_item_UI(self, name, soft, setName, modName):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+
+        if not server:
+            return
+        item.openLastSculpt_FN (name, soft, server, setName, modName, prod = prod)
     #SCULPT
     def openLastSculpt_UI(self, name, soft):
         prod = self.prodName.text()
