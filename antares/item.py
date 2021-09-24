@@ -3,11 +3,22 @@ import env
 
 #GLOBAL
 
-def create_new_set_FN(self):
-    print ( "to do")
+def create_new_set_FN(name, server,prod):
+    directory = os.path.join(server,
+                                    prod,
+                                    env.SET_PATH ,
+                                    name)
+    
+    os.makedirs(directory)
 
-def create_new_module_FN(self):
-    print ( "to do")
+def create_new_module_FN(name, server, setName, prod):
+    directory = os.path.join(server,
+                                    prod,
+                                    env.SET_PATH ,
+                                    setName,
+                                    name)
+    
+    os.makedirs(directory)
 
 def create_new_item_FN(self):
     print ( "to do")

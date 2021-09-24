@@ -117,7 +117,6 @@ def newFX_FN(server, prod, assetName):
         print ( project )
         os.startfile(project)
 
-
 def open_last_FX_FN(name, server, prod):
     path = os.path.join(server  ,
                             prod,
@@ -148,11 +147,22 @@ def delete_FX_FN (name, server, prod ):
     
     print ( name + " deleted with success.")
 
-def openLastEdit_FN(name, dep, server, prod):
+def open_in_folder_dep_FX_FN(name, dep, server, prod):
     path = os.path.join(server  ,
                             prod,
                             env.FX_PATH ,
                             name,
                             dep)
+    print (path)
+    os.startfile(path)
+
+def open_all_FX_FN(name, edit, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.FX_PATH ,
+                            name,
+                            "scenes",
+                            edit)
+
     print (path)
     os.startfile(path)

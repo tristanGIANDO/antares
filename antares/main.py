@@ -330,16 +330,17 @@ class MainWindow(QWidget) :
     def character_tab_UI(self):
         server = self.serverName.text()
         cwd = os.getcwd
-        print ( cwd )
+        
         if os.path.exists(server):
             server = self.serverName.text()
-            print ( server )
+            
+            
 
             if os.path.exists(os.path.join(server,
                                         self.prodName.text())):
                 prod = self.prodName.text()
-                print ( prod )
-                print ( "production set")
+                
+                print ( "production set on", server, " >>>> ", prod)
             else:
                 server = env.TMP_SERVER
                 print ( server )
@@ -370,7 +371,7 @@ class MainWindow(QWidget) :
                                     prod,
                                     env.CHAR_PATH)
         assetcharacter = os.listdir( characterPath )
-        print (characterPath)
+        
 
         #New Chara Button
         self.newCharBTN.setFixedSize(100, 100)
@@ -506,13 +507,12 @@ class MainWindow(QWidget) :
 
         if os.path.exists(server):
             server = self.serverName.text()
-            print ( server )
+            
 
             if os.path.exists(os.path.join(server,
                                         self.prodName.text())):
                 prod = self.prodName.text()
-                print ( prod )
-                print ( "production set")
+                
             else:
                 server = env.TMP_SERVER
                 print ( server )
@@ -526,14 +526,11 @@ class MainWindow(QWidget) :
             prod = env.TMP_PROD
             print ( prod )
             print ( "error server")
-        
 
         prop_tab = QWidget() 
         base = QGridLayout()
         group_prop = QGroupBox("PROPS")
         base.addWidget(group_prop)
-
-        
 
         #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
         layoutProp = FlowLayout()
@@ -543,7 +540,7 @@ class MainWindow(QWidget) :
                                     prod,
                                     env.PROP_PATH)
         assetcharacter = os.listdir( prop_path )
-        print (prop_path)
+        
 
         #New Chara Button
         self.newPropBTN.setFixedSize(100, 100)
@@ -678,12 +675,12 @@ class MainWindow(QWidget) :
         folder = self.folderName.text()
         if os.path.exists(server):
             server = self.serverName.text()
-            print ( server )
+            
 
             if os.path.exists(os.path.join(server,
                                         self.prodName.text())):
                 prod = self.prodName.text()
-                print ( prod )
+                
             else:
                 server = env.TMP_SERVER
                 print ( server )
@@ -734,9 +731,6 @@ class MainWindow(QWidget) :
 
             flowLayout.addWidget(button)
 
-            # CREER LISTE DE TOUS LES DEPARTEMENTS
-            asset_list = os.listdir( os.path.join(fx_Path ,
-                                                    name ))
             #CREER MENU
             menu = QMenu(parent = self)
             menu.addAction( "Name = " + name )
@@ -744,22 +738,21 @@ class MainWindow(QWidget) :
             department = ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]
             scenes = os.listdir(os.path.join(path,
                                             "scenes"))
-            
-            for edit in scenes:
-                menuItem = menu.addAction(edit)
 
             for dep in department:
-
                 #SubMenu
                 items = menu.addAction(dep)
                 items.triggered.connect(partial(self.open_dep_FX_UI, name, dep))
                 
-
             #MENU ITEMS GLOBAL
-
             menu.addSeparator()
-            lastEdit = menu.addAction(QIcon(editImage), self.last_edit_LBL )
             delete = menu.addAction(self.delete_asset_LBL)
+            Edits = menu.addMenu("All Edits")
+            for edit in scenes:
+                Edits.addAction(edit)  
+            lastEdit = menu.addAction(QIcon(editImage), self.last_edit_LBL )
+            Edits.triggered.connect(partial(self.open_all_FX_UI, name, edit))
+            
             #Connections
             delete.triggered.connect(partial(self.delete_FX_UI, name))
             lastEdit.triggered.connect(partial(self.open_last_FX_UI, name)) 
@@ -787,11 +780,7 @@ class MainWindow(QWidget) :
         layout_for_buttons = QVBoxLayout()
         tabs = QTabWidget()
         
-        # for i in range(self.tabs.count()):
-        #     if self.tabs.tabText(i) == "product add":
-        #         self.tabs.setCurrentIndex(i)
-        #     else:
-        #         pass
+        
 
         setDIR = os.listdir(os.path.join(server,
                                          
@@ -799,11 +788,15 @@ class MainWindow(QWidget) :
                                         env.SET_PATH))
         for setName in setDIR :
             tabs.addTab(self.moduleTabUI(setName), setName)
-        layout_for_buttons.addWidget(tabs)
+
+
+        a = layout_for_buttons.addWidget(tabs)
         layout_for_buttons.addWidget(self.new_set_BTN)
         layout_for_buttons.addWidget(self.new_module_BTN)
         layout_for_buttons.addWidget(self.new_item_BTN)
         layout.setLayout(layout_for_buttons)
+
+        print (a )
 
         return layout
     
@@ -1039,8 +1032,6 @@ class MainWindow(QWidget) :
         layout.setLayout(n)
         return layout
   
-
-
     ## CONNECTIONS UI ##
     #CHARACTER
     def createNewChara_UI(self):
@@ -1171,23 +1162,25 @@ class MainWindow(QWidget) :
         prop.openInFolder_FN(  name, server, prod = prod)
 
     # ITEMS
-    def create_new_set_UI(self, name, dep, setName, modName):
+    def create_new_set_UI(self):
         prod = self.prodName.text()
         server = self.serverName.text()
+        name = self.assetName.text()
         print ( prod )
         print ( server )
         if not server:
             return
-        item.create_new_set_FN (  name, dep, server, setName, modName, prod = prod)
+        item.create_new_set_FN (  name, server, prod = prod)
 
-    def create_new_module_UI(self, name, dep, setName, modName):
+    def create_new_module_UI(self, setName):
         prod = self.prodName.text()
         server = self.serverName.text()
+        name = self.assetName.text()
         print ( prod )
         print ( server )
         if not server:
             return
-        item.create_new_module_FN (  name, dep, server, setName, modName, prod = prod)
+        item.create_new_module_FN (  name, server, setName, prod = prod)
 
     def create_new_item_UI(self, name, dep, setName, modName):
         prod = self.prodName.text()
@@ -1251,7 +1244,15 @@ class MainWindow(QWidget) :
         server = self.serverName.text()
         if not server:
             return
-        fx.open_last_FX_FN (  name, dep, server, prod = prod)
+        fx.open_in_folder_dep_FX_FN (  name, dep, server, prod)
+
+    def open_all_FX_UI(self, name, edit):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        fx.open_all_FX_FN (  name, edit, server, prod)
+        print ( edit )
 
     def delete_FX_UI(self, name):
         
