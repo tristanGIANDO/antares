@@ -7,20 +7,13 @@ INCREMENT AND SAVE
 By Tristan GIANDORIGGIO and Alwin DUREZ
 '''
 
-VERSION = 0.1
+VERSION = 0.2
 print ( VERSION )
 
 def increment (*args):
 
-    PATH = os.path.join("S:\\",
-                        "packages",
-                        "antares",
-                        "dev",
-                        "antares",
-                        "resources",
-                        "icons",
-                        "_user",
-                        "User.png")
+    PATH = os.listdir(os.path.join("C:\\",
+                        "antares_user"))
     boucle = 1
     nombreDeRep = 0
     while boucle == 1: 
@@ -61,6 +54,7 @@ def increment (*args):
         #PROFILE PICTURE 
         print ( absName + "/" + resolvedName +  newVersion + ".png" )   
         shutil.copyfile( PATH, absName + "/_data/" + resolvedName +  newVersion + ".png" )
+        print ("Image copied with succes")
 
 
 

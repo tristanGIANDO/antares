@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 /*-----QWidget-----*/
 QWidget
 {
-	background-color: #3a3a3a;
+	background-color: #2a2a2a;
 	color: #fff;
 	selection-background-color: #7bb4e9;
 	selection-color: #000;
@@ -36,7 +36,7 @@ QLabel
 {
 	background-color: transparent;
 	color: #fff;
-	font: Impact;
+	font: Times;
 
 }
 
@@ -188,7 +188,7 @@ QPushButton
 	border-radius: 3px;
 	border-color: #051a39;
 	padding: 5px;
-	font: Impact;
+	font: Times;
 
 }
 

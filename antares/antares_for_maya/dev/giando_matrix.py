@@ -53,23 +53,23 @@ def create_matrix ( *args ):
     
     #TRANSLATE
     if(cmds.checkBoxGrp(checkMat,q=1,v1=1)):
-        print "Button is pushed."
+        print ( "Button is pushed.")
         cmds.connectAttr(DecMatX+'.outputTranslate',Slave+'.t')
-        print "Constraint Translate successful"
+        print ( "Constraint Translate successful" )
  
        
     #ROTATE    
     if(cmds.checkBoxGrp(checkMat,q=1,v2=1)): 
-        print "Button is pushed."   
+        print ("Button is pushed."   )
         cmds.connectAttr(DecMatX+'.outputRotate',Slave+'.r') 
-        print "Constraint Rotate successful"
+        print ("Constraint Rotate successful")
  
  
     #SCALE        
     if(cmds.checkBoxGrp(checkMat,q=1,v3=1)): 
-        print "Button is pushed."
+        print ("Button is pushed.")
         cmds.connectAttr(DecMatX+'.outputScale',Slave+'.s')
-        print "Constraint Rotate successful"
+        print ("Constraint Rotate successful")
 
 
 

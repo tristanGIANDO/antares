@@ -107,6 +107,16 @@ def newFX_FN(server, prod, assetName):
         except:
             print ( "Try again")
 
+        path = os.path.join(server  ,
+                                prod,
+                                env.FX_PATH ,
+                                assetName,
+                                "scenes")
+        destination = os.listdir( path )
+        project = os.path.join(path,  destination[-1])
+        print ( project )
+        os.startfile(project)
+
 
 def open_last_FX_FN(name, server, prod):
     path = os.path.join(server  ,

@@ -99,6 +99,47 @@ def newCharFN(server, prod, assetName):
                 except:
                     print ( dpt + " isn't renamed correctly (data)... ...")
 
+        #Rename Sculpt
+        mudbox_to_rename = os.path.join(server,
+                                        prod,
+                                        env.CHAR_PATH,
+                                        assetName,
+                                        env.MUDBOX_PATH,
+                                        env.TMP_SCN_TYPE_SCULPT + ".mud")
+
+        mudbox_renamed = os.path.join(server,
+                                        prod,
+                                        env.CHAR_PATH,
+                                        assetName,
+                                        env.MUDBOX_PATH,
+                                        assetName + "_E_sculpt_001.mud")
+
+        zbrush_to_rename = os.path.join(server,
+                                        prod,
+                                        env.CHAR_PATH,
+                                        assetName,
+                                        env.ZBRUSH_PATH,
+                                        env.TMP_SCN_TYPE_SCULPT + ".ZPR")
+
+        zbrush_renamed = os.path.join(server,
+                                        prod,
+                                        env.CHAR_PATH,
+                                        assetName,
+                                        env.ZBRUSH_PATH,
+                                        assetName + "_E_sculpt_001.ZPR")
+
+        try:
+            os.rename(mudbox_to_rename, mudbox_renamed)
+            print ( "mudbox file renamed correctly")
+        except:
+            print ( "mudbox file isn't renamed correctly")
+
+        try:
+            os.rename(zbrush_to_rename, zbrush_renamed)
+            print ( "zbrush file renamed correctly")
+        except:
+            print ( "zbrush file isn't renamed correctly")
+
         # PROFILE PICTURE
         picTMP_ASSET_PATH = os.path.join(server ,
                                         prod,

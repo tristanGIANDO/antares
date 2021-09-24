@@ -7,7 +7,7 @@ prefs_json = prefs_file.read()
 prefs = json.loads(prefs_json)
 
 
-VERSION = "1.1"
+VERSION = "1.2"
 
 #Set Templates
 TMP_SERVER = os.path.join(prefs['tmp_server'],
@@ -56,6 +56,8 @@ PROP_TYPE = "prop"
 SET_TYPE = "set"
 FX_TYPE = "FX"
 MAYA_TYPE= "maya"
+MUDBOX_TYPE = "mudbox"
+ZBRUSH_TYPE = "zBrush"
 SCULPT_TYPE = "sculpt"
 SCN_TYPE = "scenes"
 EDIT_TYPE = "edit"
@@ -71,5 +73,7 @@ CHAR_PATH = os.path.join(ASSET_TYPE, CHAR_TYPE )
 PROP_PATH = os.path.join(ASSET_TYPE, PROP_TYPE )
 SET_PATH = os.path.join(ASSET_TYPE, SET_TYPE )
 FX_PATH = os.path.join(ASSET_TYPE, FX_TYPE )
+MUDBOX_PATH = os.path.join(SCULPT_TYPE, MUDBOX_TYPE)
+ZBRUSH_PATH = os.path.join(SCULPT_TYPE, ZBRUSH_TYPE)
 
 PORT = 1789

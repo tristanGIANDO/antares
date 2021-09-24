@@ -104,7 +104,8 @@ class MainWindow(QWidget) :
         self.checkBoxRenderMan = QCheckBox("Pixar RenderMan")
         for check in [self.checkBoxAbc, self.checkBoxMash, self.checkBoxRenderMan]:
             check.setChecked(True)
-
+        self.shot_Label = QLabel ( "Coming Soon !")
+        self.edit_Label = QLabel ( "Coming Soon !")
 
         #PREFS MENU
         self.shortcut_LBL = QLabel ( "Access to some shortcuts" )
@@ -250,6 +251,7 @@ class MainWindow(QWidget) :
         tabsLayout_L.addTab(tab02_Lay_L, "PREFS")
         tabs_Lay_R.addTab(self.assetTabUI(), "ASSETS")
         tabs_Lay_R.addTab(self.shotTabUI(), "SHOTS")
+        tabs_Lay_R.addTab(self.editTabUI(), "EDITING")
 
 
         #ADD LAYOUTS
@@ -718,11 +720,17 @@ class MainWindow(QWidget) :
             menu.addAction( "Name = " + name )
             menu.addSeparator()
             department = ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]
-            # for dep in department:
+            scenes = os.listdir(os.path.join(path,
+                                            "scenes"))
+            
+            for edit in scenes:
+                menuItem = menu.addAction(edit)
 
-            #     #SubMenu
-            #     items = menu.addAction(dep)
-            #     items.triggered.connect(partial(self.open_dep_FX_UI, name, dep))
+            for dep in department:
+
+                #SubMenu
+                items = menu.addAction(dep)
+                items.triggered.connect(partial(self.open_dep_FX_UI, name, dep))
                 
 
             #MENU ITEMS GLOBAL
@@ -962,6 +970,7 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
+        n.addWidget(self.shot_Label)
         tabs = QTabWidget()
         # seqDIR = os.listdir(os.path.join(server,
                                         #  
@@ -983,6 +992,23 @@ class MainWindow(QWidget) :
         layout.addWidget(self.cb)
         houdiniTab.setLayout(layout)
         return houdiniTab
+
+
+    '''
+    # EDITING ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    '''
+    def editTabUI(self):
+        server = self.serverName.text()
+        prod = self.prodName.text()
+        layout = QWidget()
+        n = QVBoxLayout()
+        n.addWidget(self.edit_Label)
+        tabs = QTabWidget()
+
+        n.addWidget(tabs)
+        layout.setLayout(n)
+        return layout
+  
 
 
     ## CONNECTIONS UI ##
@@ -1208,7 +1234,7 @@ class MainWindow(QWidget) :
                     tmp_server,
                     "packages",
                     "antares",
-                    "dev",
+                    env.VERSION,
                     "resources",
                     "template_pipeline_film"]
 
