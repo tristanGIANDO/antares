@@ -1,6 +1,18 @@
 import os, shutil
 import env
 
+#GLOBAL
+
+def create_new_set_FN(self):
+    print ( "to do")
+
+def create_new_module_FN(self):
+    print ( "to do")
+
+def create_new_item_FN(self):
+    print ( "to do")
+
+#ITEMS
 
 def openPublish_FN(name, dep, server, setName, modName, prod):
      project = os.path.join(server ,
@@ -36,8 +48,6 @@ def openLastEdit_FN(name, dep, server, setName, modName, prod):
     print ( project )
     print ("Edit Path is a file")
     os.startfile(project)
-
-
 
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")

@@ -24,14 +24,17 @@ class MainWindow(QWidget) :
         super(MainWindow,self).__init__()
         self.title = f"ANTARES_v" + env.VERSION
         self.icon = env.ICON
-
+        
         self.resize(1000, 500)
         self.move(100, 100)
         self.setWindowTitle(self.title)
         self.setWindowIcon(QtGui.QIcon(self.icon))
+
         
+
         self.createWidget()
         self.createLayout()
+   
 
 
     def createWidget(self):
@@ -40,10 +43,6 @@ class MainWindow(QWidget) :
         prefs_file = open("prefs.json", "r")
         prefs_json = prefs_file.read()
         prefs = json.loads(prefs_json)
-
-        # prefs_file = open("default.json", "r")
-        # prefs_json = prefs_file.read()
-        # prefs = json.loads(prefs_json)
 
         self.prodTitle = QLabel ( prefs['prod'])
         self.userPic = QLabel ( "Welcome ")
@@ -84,11 +83,17 @@ class MainWindow(QWidget) :
         #NEW ASSETS
         self.newCharBTN = QPushButton("NEW CHARACTER")
         self.newPropBTN = QPushButton("NEW PROP")
-        self.itemBTN = QPushButton("NEW ITEM")
-        self.libraryBTN = QPushButton("NEW LIBRARY (to do)")
-        self.setBTN = QPushButton("NEW SET (to do)")
+        self.new_item_BTN = QPushButton("NEW ITEM")
+        self.new_module_BTN = QPushButton("NEW MODULE")
+        self.new_set_BTN = QPushButton("NEW SET")
         self.newFX_BTN = QPushButton("NEW HIP")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
+        self.set_name = QLineEdit("set name")
+        self.module_name = QLineEdit("module name")
+        self.item_name = QLineEdit("item name")
+        
+
+
         #RENAME ASSET
         self.assetName_LBL = QLabel ( "Please Enter New Asset Name")
         self.assetName = QLineEdit("Antares")
@@ -127,8 +132,11 @@ class MainWindow(QWidget) :
         self.duplicate_asset_LBL = "Duplicate Asset"
         self.delete_asset_LBL = "Delete Asset"
         self.create_new_task_LBL = "Create New Task"
+        
+        '''
+        # CONNECTIONS
+        '''
 
-        #CONNECTIONS
         self.newCharBTN.clicked.connect(self.createNewChara_UI)
         self.newPropBTN.clicked.connect(self.createNewProp_UI)
         self.newFX_BTN.clicked.connect(self.create_new_FX_UI)
@@ -139,6 +147,9 @@ class MainWindow(QWidget) :
         self.resources_BTN.clicked.connect(self.open_resources_UI)
         self.user_BTN.clicked.connect(self.open_user_picture_UI)
         self.maya_prefs_BTN.clicked.connect(self.open_prefs_UI)
+        self.new_set_BTN.clicked.connect(self.create_new_set_UI)
+        self.new_module_BTN.clicked.connect(self.create_new_module_UI)
+        self.new_item_BTN.clicked.connect(self.create_new_item_UI)
 
         self.userPic.setPixmap(self.pixmap)
         self.prodTitle.setFont(QFont('Times', 30))
@@ -161,7 +172,19 @@ class MainWindow(QWidget) :
         tabs_Lay_R = QTabWidget()
         Separador = QFrame()
 
+        # create menu
+        menubar = QMenuBar()
 
+        outerLayout.addWidget(menubar, 0, 0)
+        actionFile = menubar.addMenu("File")
+        # actionFile.addAction("New")
+        # actionFile.addAction("Open")
+        # actionFile.addAction("Save")
+        # actionFile.addSeparator()
+        # actionFile.addAction("Quit")
+        # menubar.addMenu("Edit")
+        # menubar.addMenu("View")
+        menubar.addMenu("Help")
         data = {
         'instinct',
         'roald'
@@ -700,7 +723,6 @@ class MainWindow(QWidget) :
             button.setFixedSize(100, 100)
             
             path = os.path.join(server,
-                                 
                                 prod,
                                 env.FX_PATH,
                                 name)
@@ -759,22 +781,30 @@ class MainWindow(QWidget) :
     def setTabUI(self):
 
         server = self.serverName.text()
-        folder = self.folderName.text()
+
         prod = self.prodName.text()
         layout = QWidget()
-        n = QVBoxLayout()
+        layout_for_buttons = QVBoxLayout()
         tabs = QTabWidget()
+        
+        # for i in range(self.tabs.count()):
+        #     if self.tabs.tabText(i) == "product add":
+        #         self.tabs.setCurrentIndex(i)
+        #     else:
+        #         pass
+
         setDIR = os.listdir(os.path.join(server,
                                          
                                         prod,
                                         env.SET_PATH))
         for setName in setDIR :
             tabs.addTab(self.moduleTabUI(setName), setName)
-        n.addWidget(tabs)
-        n.addWidget(self.setBTN)
-        n.addWidget(self.libraryBTN)
-        n.addWidget(self.itemBTN)
-        layout.setLayout(n)
+        layout_for_buttons.addWidget(tabs)
+        layout_for_buttons.addWidget(self.new_set_BTN)
+        layout_for_buttons.addWidget(self.new_module_BTN)
+        layout_for_buttons.addWidget(self.new_item_BTN)
+        layout.setLayout(layout_for_buttons)
+
         return layout
     
     def moduleTabUI(self, setName):
@@ -1141,6 +1171,32 @@ class MainWindow(QWidget) :
         prop.openInFolder_FN(  name, server, prod = prod)
 
     # ITEMS
+    def create_new_set_UI(self, name, dep, setName, modName):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        print ( prod )
+        print ( server )
+        if not server:
+            return
+        item.create_new_set_FN (  name, dep, server, setName, modName, prod = prod)
+
+    def create_new_module_UI(self, name, dep, setName, modName):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        print ( prod )
+        print ( server )
+        if not server:
+            return
+        item.create_new_module_FN (  name, dep, server, setName, modName, prod = prod)
+
+    def create_new_item_UI(self, name, dep, setName, modName):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        print ( prod )
+        print ( server )
+        if not server:
+            return
+        item.create_new_item_FN (  name, dep, server, setName, modName, prod = prod)
 
     def openLastEdit_item_UI(self, name, dep, setName, modName):
         prod = self.prodName.text()

@@ -10,6 +10,7 @@ prefs = json.loads(prefs_json)
 VERSION = "1.2"
 
 #Set Templates
+server = r"\\gandalf\3D4_21_22"
 TMP_SERVER = os.path.join(prefs['tmp_server'],
                                 prefs['tmp_package'],
                                 prefs['tmp_appli'],
@@ -26,12 +27,14 @@ RESOURCES = os.path.join(prefs['tmp_server'],
 
 TMP_PROD = prefs['tmp_prod']
 
-ICON = os.path.join(prefs['tmp_server'],
+ICON = os.path.join(server,
+                                "_partage",
+                                "ANTARES",
                                 prefs['tmp_package'],
                                 prefs['tmp_appli'],
                                 prefs['tmp_version'],
                                 prefs['tmp_appli'],
-                                "icon.ico")
+                                "logo.ico")
 
 userComplete = str(os.listdir(os.path.join("C:\\", "antares_user")))
 userSplitText = userComplete.replace('.png', '')
