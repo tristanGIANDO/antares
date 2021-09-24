@@ -11,12 +11,12 @@ def create_new_set_FN(name, server,prod):
     
     os.makedirs(directory)
 
-def create_new_module_FN(name, server, setName, prod):
+def create_new_module_FN(server, set, module, prod):
     directory = os.path.join(server,
                                     prod,
                                     env.SET_PATH ,
-                                    setName,
-                                    name)
+                                    set,
+                                    module)
     
     os.makedirs(directory)
 

@@ -91,6 +91,8 @@ class MainWindow(QWidget) :
         self.set_name = QLineEdit("set name")
         self.module_name = QLineEdit("module name")
         self.item_name = QLineEdit("item name")
+        self.arrow_01 = QLabel(">")
+        self.arrow_02 = QLabel(">")
         
 
 
@@ -148,7 +150,7 @@ class MainWindow(QWidget) :
         self.user_BTN.clicked.connect(self.open_user_picture_UI)
         self.maya_prefs_BTN.clicked.connect(self.open_prefs_UI)
         self.new_set_BTN.clicked.connect(self.create_new_set_UI)
-        self.new_module_BTN.clicked.connect(self.create_new_module_UI)
+        
         self.new_item_BTN.clicked.connect(self.create_new_item_UI)
 
         self.userPic.setPixmap(self.pixmap)
@@ -776,29 +778,39 @@ class MainWindow(QWidget) :
         server = self.serverName.text()
 
         prod = self.prodName.text()
-        layout = QWidget()
-        layout_for_buttons = QVBoxLayout()
+        main_layout = QWidget()
+        layout_to_set = QVBoxLayout()
         tabs = QTabWidget()
+        layout_for_text = QHBoxLayout()
+        layout_for_buttons = QHBoxLayout()
         
         
 
         setDIR = os.listdir(os.path.join(server,
-                                         
                                         prod,
                                         env.SET_PATH))
         for setName in setDIR :
-            tabs.addTab(self.moduleTabUI(setName), setName)
+            b = tabs.addTab(self.moduleTabUI(setName), setName)
 
 
-        a = layout_for_buttons.addWidget(tabs)
+        layout_for_text.addWidget(self.set_name)
+        layout_for_text.addWidget(self.arrow_01)
+        layout_for_text.addWidget(self.module_name)
+        layout_for_text.addWidget(self.arrow_02)
+        layout_for_text.addWidget(self.item_name)
         layout_for_buttons.addWidget(self.new_set_BTN)
         layout_for_buttons.addWidget(self.new_module_BTN)
         layout_for_buttons.addWidget(self.new_item_BTN)
-        layout.setLayout(layout_for_buttons)
 
-        print (a )
+        layout_to_set.addWidget(tabs)
+        layout_to_set.addLayout(layout_for_text)
+        layout_to_set.addLayout(layout_for_buttons)
+        main_layout.setLayout(layout_to_set)
 
-        return layout
+        print ( setDIR )
+
+        self.new_module_BTN.clicked.connect(partial(self.create_new_module_UI))
+        return main_layout
     
     def moduleTabUI(self, setName):
         server = self.serverName.text()
@@ -1172,15 +1184,16 @@ class MainWindow(QWidget) :
             return
         item.create_new_set_FN (  name, server, prod = prod)
 
-    def create_new_module_UI(self, setName):
+    def create_new_module_UI(self, set):
         prod = self.prodName.text()
         server = self.serverName.text()
-        name = self.assetName.text()
+        set = self.set_name.text()
+        module = self.module_name.text()
         print ( prod )
         print ( server )
         if not server:
             return
-        item.create_new_module_FN (  name, server, setName, prod = prod)
+        item.create_new_module_FN (  server, set, module, prod = prod)
 
     def create_new_item_UI(self, name, dep, setName, modName):
         prod = self.prodName.text()
