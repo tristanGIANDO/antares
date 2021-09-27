@@ -170,9 +170,9 @@ def openInFolder_Char_FN(name, server,prod):
     path = os.path.join( server,
                         prod,
                         env.CHAR_PATH,
-                        name,
-                        env.MAYA_TYPE,
-                        env.SCN_TYPE )
+                        name)
+                        # env.MAYA_TYPE,
+                        # env.SCN_TYPE )
     os.startfile(path)
 
 def openPublish_FN(server, name, dep, prod):
@@ -220,6 +220,15 @@ def openLastSculpt_FN(name, soft, server, prod):
     project = os.path.join(path,  destination[-1])
     print ( project )
     os.startfile(project)
+
+def open_in_folder_sculpt_FN(name, soft, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.SCULPT_TYPE,
+                            soft)
+    os.startfile(path)
 
 def deleteAsset_FN (name, server, prod ):
     try :

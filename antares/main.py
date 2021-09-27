@@ -29,6 +29,7 @@ class MainWindow(QWidget) :
         self.move(100, 100)
         self.setWindowTitle(self.title)
         self.setWindowIcon(QtGui.QIcon(self.icon))
+        
 
         
 
@@ -135,6 +136,11 @@ class MainWindow(QWidget) :
         self.delete_asset_LBL = "Delete Asset"
         self.create_new_task_LBL = "Create New Task"
         
+        self.progress = QProgressBar(self)
+        self.progress.setGeometry(830,10,150,20)
+        self.progress.setValue(0)
+
+       
         '''
         # CONNECTIONS
         '''
@@ -150,7 +156,7 @@ class MainWindow(QWidget) :
         self.user_BTN.clicked.connect(self.open_user_picture_UI)
         self.maya_prefs_BTN.clicked.connect(self.open_prefs_UI)
         self.new_set_BTN.clicked.connect(self.create_new_set_UI)
-        
+        self.new_module_BTN.clicked.connect(self.create_new_module_UI)
         self.new_item_BTN.clicked.connect(self.create_new_item_UI)
 
         self.userPic.setPixmap(self.pixmap)
@@ -159,6 +165,9 @@ class MainWindow(QWidget) :
 
 
     def createLayout(self):
+        server = self.serverName.text()
+        prod = self.prodName.text()
+
         # LAYOUT HIERARCHY
         outerLayout = QGridLayout()
         topLayout = QHBoxLayout()
@@ -179,32 +188,9 @@ class MainWindow(QWidget) :
 
         outerLayout.addWidget(menubar, 0, 0)
         actionFile = menubar.addMenu("File")
-        # actionFile.addAction("New")
-        # actionFile.addAction("Open")
-        # actionFile.addAction("Save")
-        # actionFile.addSeparator()
-        # actionFile.addAction("Quit")
-        # menubar.addMenu("Edit")
-        # menubar.addMenu("View")
         menubar.addMenu("Help")
-        data = {
-        'instinct',
-        'roald'
-        }
-        self.model = QStandardItemModel()
-        # states
-        self.comboStates = QComboBox()
-        # self.comboStates.setFixedSize(325, 50)
-        self.comboStates.setModel(self.model)
-        # add data
-        for v in ("instinct", "roald"):
-            state = QStandardItem(v)
-            self.model.appendRow(state)
-            for value in v:
-                city = QStandardItem(value)
-
-
-
+        
+     
         #ADD WIDGETS
         topLayout.addWidget(self.userPic)
         topLayout.addWidget(self.userLabel)
@@ -249,7 +235,6 @@ class MainWindow(QWidget) :
         mid_tab01_Layout_L.addWidget( self.newNameLabel , 14,0)
         mid_tab01_Layout_L.addWidget( self.newName , 14,1)
         mid_tab01_Layout_L.addWidget(self.renameButton, 15,0)
-        mid_tab01_Layout_L.addWidget(self.comboStates)
 
         # for widget in [self.plugIn_Label,
         #                 self.checkBoxAbc,
@@ -480,9 +465,10 @@ class MainWindow(QWidget) :
             for soft in sculpt_path:
                 actions = sculpt.addMenu(soft)
                 lastSculpt = actions.addAction(self.last_edit_LBL)
-                actions.addAction(self.open_in_folder_LBL)
+                openInFolder_sculpt = actions.addAction(self.open_in_folder_LBL)
 
-                lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft)) 
+                lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft))
+                openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_char_UI, name, soft)) 
 
 
             menu.addSeparator()
@@ -776,12 +762,12 @@ class MainWindow(QWidget) :
     def setTabUI(self):
 
         server = self.serverName.text()
-
         prod = self.prodName.text()
         main_layout = QWidget()
         layout_to_set = QVBoxLayout()
         tabs = QTabWidget()
         layout_for_text = QHBoxLayout()
+        layout_for_combo = QHBoxLayout()
         layout_for_buttons = QHBoxLayout()
         
         
@@ -790,9 +776,39 @@ class MainWindow(QWidget) :
                                         prod,
                                         env.SET_PATH))
         for setName in setDIR :
-            b = tabs.addTab(self.moduleTabUI(setName), setName)
+            tabs.addTab(self.moduleTabUI(setName), setName)
+
+        
 
 
+
+        #SET COMBO BOX
+        
+        self.model_set = QStandardItemModel()
+        self.combo_set = QComboBox()
+        self.combo_set.setModel(self.model_set)
+        # add data
+        for v in setDIR:
+            set = QStandardItem(v)
+            self.model_set.appendRow(set)
+            for value in v:
+                QStandardItem(value)
+        # module = self.combo_set.currentText()
+        # moduleDIR = os.listdir(os.path.join(setDIR, module))
+
+        # self.model_module = QStandardItemModel()
+        # self.combo_module = QComboBox()
+        # self.combo_module.setModel(self.model_module)
+        # # add data
+        # for v in moduleDIR:
+        #     module = QStandardItem(v)
+        #     self.model_module.appendRow(module)
+        #     for value in v:
+        #         QStandardItem(value)
+
+
+        layout_for_combo.addWidget(self.combo_set)
+        # layout_for_combo.addWidget(self.combo_module)
         layout_for_text.addWidget(self.set_name)
         layout_for_text.addWidget(self.arrow_01)
         layout_for_text.addWidget(self.module_name)
@@ -804,12 +820,13 @@ class MainWindow(QWidget) :
 
         layout_to_set.addWidget(tabs)
         layout_to_set.addLayout(layout_for_text)
+        layout_to_set.addLayout(layout_for_combo)
         layout_to_set.addLayout(layout_for_buttons)
         main_layout.setLayout(layout_to_set)
 
         print ( setDIR )
 
-        self.new_module_BTN.clicked.connect(partial(self.create_new_module_UI))
+        
         return main_layout
     
     def moduleTabUI(self, setName):
@@ -1131,6 +1148,12 @@ class MainWindow(QWidget) :
             return
         fn.openInFolder_Char_FN(  name, server, prod = prod)
 
+    def open_in_folder_sculpt_char_UI(self, name, soft):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        fn.open_in_folder_sculpt_FN(  name, soft, server, prod = prod)
 
     # PROPS
     def createNewProp_UI(self):
@@ -1177,23 +1200,25 @@ class MainWindow(QWidget) :
     def create_new_set_UI(self):
         prod = self.prodName.text()
         server = self.serverName.text()
-        name = self.assetName.text()
+        name = self.set_name.text()
         print ( prod )
         print ( server )
         if not server:
             return
         item.create_new_set_FN (  name, server, prod = prod)
+        self.reload()
 
     def create_new_module_UI(self, set):
         prod = self.prodName.text()
         server = self.serverName.text()
-        set = self.set_name.text()
+        set = self.combo_set.currentText()
         module = self.module_name.text()
         print ( prod )
         print ( server )
         if not server:
             return
         item.create_new_module_FN (  server, set, module, prod = prod)
+        self.reload()
 
     def create_new_item_UI(self, name, dep, setName, modName):
         prod = self.prodName.text()
