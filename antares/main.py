@@ -129,12 +129,12 @@ class MainWindow(QWidget) :
         #IN MENU
         self.last_edit_LBL = "Open Last Edit "
         self.open_publish_LBL = "Open Publish"
-        self.ref_publish_LBL = "Reference Publish"
-        self.import_publish_LBL = "Import Publish"
+        self.ref_publish_LBL = "Reference Publish (open socket)"
+        self.import_publish_LBL = "Import Publish (open socket)"
         self.open_in_folder_LBL = "Open In Folder"
-        self.duplicate_asset_LBL = "Duplicate Asset"
+        self.duplicate_asset_LBL = "Duplicate Asset (to do)"
         self.delete_asset_LBL = "Delete Asset"
-        self.create_new_task_LBL = "Create New Task"
+        self.create_new_task_LBL = "Create New Task (to do)"
         
         self.progress = QProgressBar(self)
         self.progress.setGeometry(830,10,150,20)
@@ -197,11 +197,8 @@ class MainWindow(QWidget) :
         topLayout.addWidget(self.userLabel)
         topLayout.addWidget(self.prodTitle)
         topLayout.addWidget(self.reloadBTN)
-        for widget in [self.prodLabel,
-                        self.createProd,
-                        self.setProd]:
-            up_tab01_Layout_L.addWidget(widget)
-
+        
+        up_tab01_Layout_L.addWidget(self.prodLabel)
         mid_tab01_Layout_L.addWidget(self.serverName, 0,1)
         mid_tab01_Layout_L.addWidget(self.prodName, 1,1)
         mid_tab01_Layout_L.addWidget(self.assetDirName, 2,1)
@@ -231,12 +228,16 @@ class MainWindow(QWidget) :
         mid_tab01_Layout_L.addWidget(Separador, 12,0)
         
 
-        mid_tab01_Layout_L.addWidget( self.oldNameLabel, 13,0 )
-        mid_tab01_Layout_L.addWidget( self.oldName, 13, 1 )
-        mid_tab01_Layout_L.addWidget( self.newNameLabel , 14,0)
-        mid_tab01_Layout_L.addWidget( self.newName , 14,1)
-        mid_tab01_Layout_L.addWidget(self.renameButton, 15,0)
+        # mid_tab01_Layout_L.addWidget( self.oldNameLabel, 13,0 )
+        # mid_tab01_Layout_L.addWidget( self.oldName, 13, 1 )
+        # mid_tab01_Layout_L.addWidget( self.newNameLabel , 14,0)
+        # mid_tab01_Layout_L.addWidget( self.newName , 14,1)
+        # mid_tab01_Layout_L.addWidget(self.renameButton, 15,0)
 
+        for widget in [#self.createProd,
+                        self.setProd]:
+            dwn_tab01_Layout_L.addWidget(widget)
+            
         # for widget in [self.plugIn_Label,
         #                 self.checkBoxAbc,
         #                 self.checkBoxMash,
