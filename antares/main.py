@@ -818,11 +818,16 @@ class MainWindow(QWidget) :
         
         
 
+
         setDIR = os.listdir(os.path.join(server,
                                         prod,
                                         env.SET_PATH))
-        for setName in setDIR :
-            tabs.addTab(self.moduleTabUI(setName), setName)
+        for moduleName in setDIR :
+            tabs.addTab(self.moduleTabUI(moduleName), moduleName)
+
+        moduleDIR = os.listdir(os.path.join(server,
+                                        prod,
+                                        env.SET_PATH))
 
         
 
@@ -839,21 +844,21 @@ class MainWindow(QWidget) :
             self.model_set.appendRow(set)
             for value in v:
                 QStandardItem(value)
-        # module = self.combo_set.currentText()
-        # moduleDIR = os.listdir(os.path.join(setDIR, module))
 
+        #MODULE COMBO BOX
+        
         # self.model_module = QStandardItemModel()
         # self.combo_module = QComboBox()
         # self.combo_module.setModel(self.model_module)
         # # add data
         # for v in moduleDIR:
-        #     module = QStandardItem(v)
-        #     self.model_module.appendRow(module)
+        #     set = QStandardItem(v)
+        #     self.model_set.appendRow(set)
         #     for value in v:
         #         QStandardItem(value)
 
 
-        layout_for_combo.addWidget(self.combo_set)
+        # layout_for_combo.addWidget(self.combo_set)
         # layout_for_combo.addWidget(self.combo_module)
         layout_for_text.addWidget(self.set_name)
         layout_for_text.addWidget(self.arrow_01)
@@ -1317,23 +1322,23 @@ class MainWindow(QWidget) :
     def create_new_module_UI(self, set):
         prod = self.prodName.text()
         server = self.serverName.text()
-        set = self.combo_set.currentText()
+        set = self.set_name.text()
         module = self.module_name.text()
-        print ( prod )
-        print ( server )
         if not server:
             return
         item.create_new_module_FN (  server, set, module, prod = prod)
         self.reload()
 
-    def create_new_item_UI(self, name, dep, setName, modName):
+    def create_new_item_UI(self, set):
         prod = self.prodName.text()
         server = self.serverName.text()
-        print ( prod )
-        print ( server )
+        set = self.set_name.text()
+        module = self.module_name.text()
+        items = self.item_name.text()
         if not server:
             return
-        item.create_new_item_FN (  name, dep, server, setName, modName, prod = prod)
+        item.create_new_item_FN ( server, set, module, items, prod = prod)
+        self.reload()
 
     def openLastEdit_item_UI(self, name, dep, setName, modName):
         prod = self.prodName.text()
@@ -1372,6 +1377,7 @@ class MainWindow(QWidget) :
         if not server:
             return
         item.open_in_folder_edits_FN (  name, dep, server, setName, modName, prod)
+    
     # FX
 
     def create_new_FX_UI(self):
