@@ -253,3 +253,4 @@ def deleteAsset_FN (name, server, prod ):
         print ("You already removed the asset picture.")
     
     print ( name + " deleted with success.")
+    
