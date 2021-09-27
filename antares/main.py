@@ -89,9 +89,9 @@ class MainWindow(QWidget) :
         self.new_set_BTN = QPushButton("NEW SET")
         self.newFX_BTN = QPushButton("NEW HIP")
         self.incrementSave = QPushButton("INCREMENT AND SAVE")
-        self.set_name = QLineEdit("set name")
-        self.module_name = QLineEdit("module name")
-        self.item_name = QLineEdit("item name")
+        self.set_name = QLineEdit("set_name")
+        self.module_name = QLineEdit("module_name")
+        self.item_name = QLineEdit("item_name")
         self.arrow_01 = QLabel(">")
         self.arrow_02 = QLabel(">")
         
@@ -1080,7 +1080,7 @@ class MainWindow(QWidget) :
             delete = menu.addAction(self.delete_asset_LBL)
             menu.addAction(self.create_new_task_LBL)
             #Connections
-            delete.triggered.connect(partial(self.deleteAsset_UI, name))
+            delete.triggered.connect(partial(self.deleteAsset_item_UI, name, setName, modName))
             openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
 
             
@@ -1377,6 +1377,14 @@ class MainWindow(QWidget) :
         if not server:
             return
         item.open_in_folder_edits_FN (  name, dep, server, setName, modName, prod)
+    
+    def deleteAsset_item_UI(self, name, server, setName, modName):
+        
+        prod = self.prodName.text()
+        server = self.serverName.text()
+
+        item.deleteAsset_FN(  name, server, setName, modName, prod = prod)
+        self.reload()
     
     # FX
 

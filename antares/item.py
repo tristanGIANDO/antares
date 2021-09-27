@@ -266,19 +266,21 @@ def open_in_folder_edits_FN(name, dep, server, setName, modName, prod):
                             dep)
     os.startfile(path)
 
-def deleteAsset_FN (name, server, prod ):
+def deleteAsset_FN (name, server, setName, modName, prod ):
     try :
         shutil.rmtree(os.path.join(server,
                                     prod,
-                                    env.CHAR_PATH ,
-                                    name))
+                                    env.SET_PATH ,
+                                    setName,
+                                    modName,
+                                    name,))
     except:
         print ("You already removed the folder.")
     try:
         os.remove(os.path.join(server,
                                     prod,
                                     env.IMAGES_PATH,
-                                    env.CHAR_TYPE,
+                                    env.ITEM_TYPE,
                                     name + ".png"))
     except:
         print ("You already removed the asset picture.")
