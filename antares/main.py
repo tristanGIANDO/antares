@@ -123,7 +123,7 @@ class MainWindow(QWidget) :
         self.library_BTN = QPushButton("MODIFY LIBRARY")
         self.user_BTN = QPushButton("MODIFY USER PROFILE PICTURE")
         self.theme_LBL = QLabel ( "Choose your theme" )
-        self.defaultTheme_BTN = QPushButton("Default Theme")
+        self.lightTheme_BTN = QPushButton("Light Theme")
         self.darkTheme_BTN = QPushButton("Dark Theme")
         
         #IN MENU
@@ -158,6 +158,7 @@ class MainWindow(QWidget) :
         self.new_set_BTN.clicked.connect(self.create_new_set_UI)
         self.new_module_BTN.clicked.connect(self.create_new_module_UI)
         self.new_item_BTN.clicked.connect(self.create_new_item_UI)
+        self.lightTheme_BTN.clicked.connect(self.lightTheme_FN)
 
         self.userPic.setPixmap(self.pixmap)
         self.prodTitle.setFont(QFont('Times', 30))
@@ -250,11 +251,11 @@ class MainWindow(QWidget) :
                         self.resources_BTN,
                         self.library_LBL,
                         self.library_BTN,
-                        self.user_BTN,
-                        self.theme_LBL,
-                        self.defaultTheme_BTN,
-                        self.darkTheme_BTN,
-                        self.tmp_server_Name]:
+                        self.user_BTN]:
+                        # self.theme_LBL,
+                        # self.lightTheme_BTN,
+                        # self.darkTheme_BTN,
+                        # self.tmp_server_Name]:
             main_tab02_Layout_L.addWidget(widget)
 
         tabsLayout_L.addTab(tab01_Lay_L, "HOME")
@@ -1486,6 +1487,22 @@ class MainWindow(QWidget) :
         server = self.serverName.text()
         fn.open_prefs_FN(server)
 
+    def lightTheme_FN(self):
+        
+
+        application = QApplication(sys.argv)
+
+        application.setStyle('Fusion')
+
+        file = QFile("./darkTheme.qss")
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        application.setStyleSheet(stream.readAll())
+
+
+        self.reload()
+
+
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):
         super(FlowLayout, self).__init__(parent)
@@ -1593,6 +1610,7 @@ if __name__ == "__main__":
     application = QApplication(sys.argv)
 
     # application.setStyle('Fusion')
+
     file = QFile("./darkTheme.qss")
     file.open(QFile.ReadOnly | QFile.Text)
     stream = QTextStream(file)
