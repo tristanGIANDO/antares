@@ -117,8 +117,8 @@ class MainWindow(QWidget) :
 
         #PREFS MENU
         self.shortcut_LBL = QLabel ( "Access to some shortcuts" )
-        self.resources_BTN = QPushButton("RESOURCES")
-        self.maya_prefs_BTN = QPushButton("MAYA PREFERENCES")
+        self.resources_BTN = QPushButton("Resources of << " + prefs['prod'] + " >>")
+        self.antares_for_maya_BTN = QPushButton("ANTARES FOR MAYA")
         self.library_LBL = QLabel ( "Modify Assets and User profile pictures" )
         self.library_BTN = QPushButton("MODIFY LIBRARY")
         self.user_BTN = QPushButton("MODIFY USER PROFILE PICTURE")
@@ -154,7 +154,7 @@ class MainWindow(QWidget) :
         self.library_BTN.clicked.connect(self.open_library_UI)
         self.resources_BTN.clicked.connect(self.open_resources_UI)
         self.user_BTN.clicked.connect(self.open_user_picture_UI)
-        self.maya_prefs_BTN.clicked.connect(self.open_prefs_UI)
+        self.antares_for_maya_BTN.clicked.connect(self.open_prefs_UI)
         self.new_set_BTN.clicked.connect(self.create_new_set_UI)
         self.new_module_BTN.clicked.connect(self.create_new_module_UI)
         self.new_item_BTN.clicked.connect(self.create_new_item_UI)
@@ -246,8 +246,8 @@ class MainWindow(QWidget) :
 
 
         for widget in [self.shortcut_LBL,
+                        self.antares_for_maya_BTN,
                         self.resources_BTN,
-                        self.maya_prefs_BTN,
                         self.library_LBL,
                         self.library_BTN,
                         self.user_BTN,
@@ -1483,7 +1483,8 @@ class MainWindow(QWidget) :
         fn.open_user_picture_FN()
 
     def open_prefs_UI(self):
-        fn.open_prefs_FN()
+        server = self.serverName.text()
+        fn.open_prefs_FN(server)
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):

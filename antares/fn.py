@@ -364,7 +364,8 @@ def testFN():
 def open_library_FN(server,prod):
     path = os.path.join( server,
                         prod,
-                        env.LIBRARY )
+                        env.LIBRARY,
+                        "Images" )
     os.startfile(path)
 
 def open_resources_FN(server,prod):
@@ -378,7 +379,10 @@ def open_user_picture_FN():
                         "antares_user")
     os.startfile(path)
 
-def open_prefs_FN():
-    path = os.path.join( "C:\\",
-                        "antares_user")
+def open_prefs_FN(server):
+    path = os.path.join( server,
+                        "_partage",
+                        "ANTARES",
+                        "packages",
+                        "antares_for_maya")
     os.startfile(path)
