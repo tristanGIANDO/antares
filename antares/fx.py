@@ -166,3 +166,12 @@ def open_all_FX_FN(name, edit, server, prod):
 
     print (path)
     os.startfile(path)
+
+def open_in_folder_edits_FN(name, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.FX_PATH ,
+                            name,
+                            env.SCN_TYPE)
+    print (path)
+    os.startfile(path)

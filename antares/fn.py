@@ -206,8 +206,15 @@ def openLastEdit_FN(name, dep, server, prod):
     print ("Edit Path is a file")
     os.startfile(project)
 
-def openAllEdits_FN(name, dep, prod):
-    print ("Edit Path")
+def open_in_folder_edits_FN(name, dep, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.E_PATH ,
+                            dep)
+    
+    os.startfile(path)
 
 def openLastSculpt_FN(name, soft, server, prod):
     path = os.path.join(server  ,

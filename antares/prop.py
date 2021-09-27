@@ -216,3 +216,40 @@ def openInFolder_FN(name, server,prod):
                         env.MAYA_TYPE,
                         env.SCN_TYPE )
     os.startfile(path)
+
+def open_in_folder_sculpt_FN(name, soft, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.PROP_PATH ,
+                            name ,
+                            env.SCULPT_TYPE,
+                            soft)
+    os.startfile(path)
+
+def open_in_folder_edits_FN(name, dep, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.PROP_PATH ,
+                            name ,
+                            env.E_PATH ,
+                            dep)
+    os.startfile(path)
+
+def deleteAsset_FN (name, server, prod ):
+    try :
+        shutil.rmtree(os.path.join(server,
+                                    prod,
+                                    env.PROP_PATH ,
+                                    name))
+    except:
+        print ("You already removed the folder.")
+    try:
+        os.remove(os.path.join(server,
+                                    prod,
+                                    env.IMAGES_PATH,
+                                    env.PROP_TYPE,
+                                    name + ".png"))
+    except:
+        print ("You already removed the asset picture.")
+    
+    print ( name + " deleted with success.")

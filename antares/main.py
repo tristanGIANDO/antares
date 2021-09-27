@@ -321,8 +321,6 @@ class MainWindow(QWidget) :
         if os.path.exists(server):
             server = self.serverName.text()
             
-            
-
             if os.path.exists(os.path.join(server,
                                         self.prodName.text())):
                 prod = self.prodName.text()
@@ -439,9 +437,9 @@ class MainWindow(QWidget) :
                 lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
                 openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
                 
-                Edits = items.addMenu("All Edits")
-                for i in allEdits:
-                    Edits.addAction(i + " (" + date + ") (To Do)")  
+                Edits = items.addAction("All Edits")
+                # for i in allEdits:
+                #     Edits.addAction(i + " (" + date + ") (To Do)")  
                 refPublish = items.addAction(self.ref_publish_LBL)
                 importPublish = items.addAction(self.import_publish_LBL)
 
@@ -450,6 +448,7 @@ class MainWindow(QWidget) :
                 openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
                 refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
                 importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
+                Edits.triggered.connect(partial(self.open_in_folder_edits_char_UI, name, dep))
                 
 
 
@@ -608,15 +607,16 @@ class MainWindow(QWidget) :
                 lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
                 openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
                 
-                Edits = items.addMenu("All Edits")
-                for i in allEdits:
-                    Edits.addAction(i + " (" + date + ") (To Do)")  
-                refPublish = items.addAction(self.ref_publish_LBL)
-                importPublish = items.addAction(self.import_publish_LBL)
+                Edits = items.addAction("All Edits")
+                # for i in allEdits:
+                #     Edits.addAction(i + " (" + date + ") (To Do)")  
+                # refPublish = items.addAction(self.ref_publish_LBL)
+                # importPublish = items.addAction(self.import_publish_LBL)
 
                 #CONNECTIONS
                 lastEdit.triggered.connect(partial(self.openLastEdit_prop_UI, name, dep)) 
                 openPublish.triggered.connect(partial(self.openPublish_prop_UI, name, dep))  
+                Edits.triggered.connect(partial(self.open_in_folder_edits_prop_UI, name, dep))
 
                 
 
@@ -633,9 +633,10 @@ class MainWindow(QWidget) :
             for soft in sculpt_path:
                 actions = sculpt.addMenu(soft)
                 lastSculpt = actions.addAction(self.last_edit_LBL)
-                actions.addAction(self.open_in_folder_LBL)
+                openInFolder_sculpt = actions.addAction(self.open_in_folder_LBL)
 
                 lastSculpt.triggered.connect(partial(self.openLastSculpt_prop_UI, name, soft)) 
+                openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_prop_UI, name, soft)) 
 
 
             menu.addSeparator()
@@ -645,7 +646,7 @@ class MainWindow(QWidget) :
             menu.addSeparator()
             delete = menu.addAction(self.delete_asset_LBL)
             #Connections
-            delete.triggered.connect(partial(self.deleteAsset_UI, name))
+            delete.triggered.connect(partial(self.deleteAsset_prop_UI, name))
             openInFolder.triggered.connect(partial(self.openInFolder_prop_UI, name)) 
 
             
@@ -723,7 +724,7 @@ class MainWindow(QWidget) :
             menu = QMenu(parent = self)
             menu.addAction( "Name = " + name )
             menu.addSeparator()
-            department = ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]
+            department = ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scenes", "scripts", "sim", "tex", "video"]
             scenes = os.listdir(os.path.join(path,
                                             "scenes"))
 
@@ -735,15 +736,16 @@ class MainWindow(QWidget) :
             #MENU ITEMS GLOBAL
             menu.addSeparator()
             delete = menu.addAction(self.delete_asset_LBL)
-            Edits = menu.addMenu("All Edits")
-            for edit in scenes:
-                Edits.addAction(edit)  
+            Edits = menu.addAction("All Edits")
+            # for edit in scenes:
+            #     Edits.addAction(edit)  
             lastEdit = menu.addAction(QIcon(editImage), self.last_edit_LBL )
-            Edits.triggered.connect(partial(self.open_all_FX_UI, name, edit))
+            # Edits.triggered.connect(partial(self.open_all_FX_UI, name, edit))
             
             #Connections
             delete.triggered.connect(partial(self.delete_FX_UI, name))
             lastEdit.triggered.connect(partial(self.open_last_FX_UI, name)) 
+            Edits.triggered.connect(partial(self.open_in_folder_edits_FX_UI, name))
 
             
 
@@ -961,17 +963,18 @@ class MainWindow(QWidget) :
                 lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
                 openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
                 
-                Edits = items.addMenu("All Edits")
-                for i in allEdits:
-                    Edits.addAction(i + " (" + date + ") (To Do)")  
-                refPublish = items.addAction(self.ref_publish_LBL)
-                importPublish = items.addAction(self.import_publish_LBL)
+                Edits = items.addAction("All Edits")
+                # for i in allEdits:
+                #     Edits.addAction(i + " (" + date + ") (To Do)")  
+                # refPublish = items.addAction(self.ref_publish_LBL)
+                # importPublish = items.addAction(self.import_publish_LBL)
 
                 #CONNECTIONS
                 lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, setName, modName)) 
                 openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, setName, modName))  
-                refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
-                importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
+                # refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
+                # importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
+                Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, name, dep, setName, modName))
                 
 
 
@@ -989,9 +992,10 @@ class MainWindow(QWidget) :
             for soft in sculpt_path:
                 actions = sculpt.addMenu(soft)
                 lastSculpt = actions.addAction(self.last_edit_LBL)
-                actions.addAction(self.open_in_folder_LBL)
+                openInFolder_sculpt = actions.addAction(self.open_in_folder_LBL)
 
                 lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft)) 
+                openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_item_UI, name, soft, setName, modName)) 
 
 
             menu.addSeparator()
@@ -1155,6 +1159,13 @@ class MainWindow(QWidget) :
             return
         fn.open_in_folder_sculpt_FN(  name, soft, server, prod = prod)
 
+    def open_in_folder_edits_char_UI(self, name, dep):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        fn.open_in_folder_edits_FN (  name, dep, server, prod)
+
     # PROPS
     def createNewProp_UI(self):
         prod = self.prodName.text()
@@ -1195,6 +1206,29 @@ class MainWindow(QWidget) :
         if not server:
             return
         prop.openInFolder_FN(  name, server, prod = prod)
+
+    def open_in_folder_sculpt_prop_UI(self, name, soft):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        prop.open_in_folder_sculpt_FN(  name, soft, server, prod = prod)
+
+    def open_in_folder_edits_prop_UI(self, name, dep):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        prop.open_in_folder_edits_FN (  name, dep, server, prod)
+
+    def deleteAsset_prop_UI(self, name):
+        
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        folder = self.serverName.text()
+
+        prop.deleteAsset_FN(  name, server,  prod = prod)
+        self.reload()
 
     # ITEMS
     def create_new_set_UI(self):
@@ -1252,8 +1286,20 @@ class MainWindow(QWidget) :
         if not server:
             return
         item.openLastSculpt_FN (name, soft, server, setName, modName, prod = prod)
-   
 
+    def open_in_folder_sculpt_item_UI(self, name, soft, setName, modName):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        item.open_in_folder_sculpt_FN(  name, soft, server, setName, modName, prod = prod)
+   
+    def open_in_folder_edits_item_UI(self, name, dep, setName, modName):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        item.open_in_folder_edits_FN (  name, dep, server, setName, modName, prod)
     # FX
 
     def create_new_FX_UI(self):
@@ -1291,6 +1337,13 @@ class MainWindow(QWidget) :
             return
         fx.open_all_FX_FN (  name, edit, server, prod)
         print ( edit )
+
+    def open_in_folder_edits_FX_UI(self, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        fx.open_in_folder_edits_FN (  name, server, prod)
 
     def delete_FX_UI(self, name):
         

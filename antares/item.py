@@ -77,6 +77,17 @@ def openLastSculpt_FN(name, soft, server, setName, modName, prod):
     print ( project )
     os.startfile(project)
 
+def open_in_folder_edits_FN(name, dep, server, setName, modName, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SET_PATH ,
+                            setName,
+                            modName,
+                            name,
+                            env.E_PATH ,
+                            dep)
+    os.startfile(path)
+
 def deleteAsset_FN (name, server, prod ):
     try :
         shutil.rmtree(os.path.join(server,
@@ -132,3 +143,14 @@ def renameAsset_FN(server, prod, oldName, newName):
     os.rename(picDst, picRenamed)
     
     print ( "'", oldName , "' renamed '", newName, "' with success")
+
+def open_in_folder_sculpt_FN(name, soft, server, setName, modName, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SET_PATH ,
+                            setName,
+                            modName,
+                            name,
+                            env.SCULPT_TYPE,
+                            soft)
+    os.startfile(path)
