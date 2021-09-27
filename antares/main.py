@@ -412,18 +412,38 @@ class MainWindow(QWidget) :
                                     name ,
                                     env.E_PATH ,
                                     dep ))
+                #LAST EDIT
+                last_path = os.path.join(server,
+                            prod,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.E_PATH ,
+                            dep)
+                destination = os.listdir( last_path )
+                try:
+                    destination.remove("_data")
+                except:
+                    print ( "No data")
+                last_edit_file = os.path.join(last_path,  destination[-1])
+                
+                publish_file = os.path.join(server ,
+                            prod ,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.P_PATH ,
+                            dep ,
+                            name + "_P_" + dep + ".ma")
 
-                file = os.path.join(server,
-                                    prod ,
-                                    env.CHAR_PATH ,
-                                    name ,
-                                    env.E_PATH ,
-                                    dep ,
-                                    destination[-1])
+                # DATE LAST EDIT
+                last_edit_modified = os.path.getmtime(last_edit_file)
+                year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
+                date_last_edit = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                
+                # DATE LAST EDIT
+                publish_modified = os.path.getmtime(publish_file)
+                year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
+                publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
 
-                modified = os.path.getmtime(file)
-                year,month,day,hour,minute,second=time.localtime(modified)[:-3]
-                date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
                 allEdits = os.listdir(os.path.join( server ,
                                      
                                     prod ,
@@ -434,8 +454,8 @@ class MainWindow(QWidget) :
 
                 #SubMenu
                 items = menu.addMenu(dep)
-                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
-                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
+                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date_last_edit + " )" )
+                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
                 
                 Edits = items.addAction("All Edits")
                 # for i in allEdits:
@@ -584,17 +604,45 @@ class MainWindow(QWidget) :
                                     env.E_PATH ,
                                     dep ))
 
-                file = os.path.join(server,
-                                    prod ,
-                                    env.PROP_PATH ,
-                                    name ,
-                                    env.E_PATH ,
-                                    dep ,
-                                    destination[-1])
+                #LAST EDIT
+                last_path = os.path.join(server,
+                            prod,
+                            env.PROP_PATH ,
+                            name ,
+                            env.E_PATH ,
+                            dep)
+                destination = os.listdir( last_path )
+                try:
+                    destination.remove("_data")
+                except:
+                    print ( "No data")
+                last_edit_file = os.path.join(last_path,  destination[-1])
+                
+                publish_file = os.path.join(server ,
+                            prod ,
+                            env.PROP_PATH ,
+                            name ,
+                            env.P_PATH ,
+                            dep ,
+                            name + "_P_" + dep + ".ma")
 
-                modified = os.path.getmtime(file)
-                year,month,day,hour,minute,second=time.localtime(modified)[:-3]
-                date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                # DATE LAST EDIT
+                last_edit_modified = os.path.getmtime(last_edit_file)
+                year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
+                date_last_edit = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                
+                # DATE LAST EDIT
+                publish_modified = os.path.getmtime(publish_file)
+                year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
+                publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+
+                
+
+                #SubMenu
+                items = menu.addMenu(dep)
+                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date_last_edit + " )" )
+                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
+                
                 allEdits = os.listdir(os.path.join( server ,
                                     prod ,
                                     env.PROP_PATH ,
@@ -602,11 +650,6 @@ class MainWindow(QWidget) :
                                     env.E_PATH ,
                                     dep ))
 
-                #SubMenu
-                items = menu.addMenu(dep)
-                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
-                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
-                
                 Edits = items.addAction("All Edits")
                 # for i in allEdits:
                 #     Edits.addAction(i + " (" + date + ") (To Do)")  
@@ -935,19 +978,51 @@ class MainWindow(QWidget) :
                                     env.E_PATH ,
                                     dep ))
 
-                file = os.path.join(server,
-                                    prod ,
-                                    env.SET_PATH ,
-                                    setName,
-                                    modName,
-                                    name ,
-                                    env.E_PATH ,
-                                    dep ,
-                                    destination[-1])
+                #LAST EDIT
+                last_path = os.path.join(server,
+                            prod,
+                            env.SET_PATH ,
+                            setName,
+                            modName,
+                            name ,
+                            env.E_PATH ,
+                            dep)
+                destination = os.listdir( last_path )
+                try:
+                    destination.remove("_data")
+                except:
+                    print ( "No data")
+                last_edit_file = os.path.join(last_path,  destination[-1])
+                
+                publish_file = os.path.join(server ,
+                            prod ,
+                            env.SET_PATH ,
+                            setName,
+                            modName,
+                            name ,
+                            env.P_PATH ,
+                            dep ,
+                            name + "_P_" + dep + ".ma")
 
-                modified = os.path.getmtime(file)
-                year,month,day,hour,minute,second=time.localtime(modified)[:-3]
-                date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                # DATE LAST EDIT
+                last_edit_modified = os.path.getmtime(last_edit_file)
+                year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
+                last_edit_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                
+                # DATE LAST EDIT
+                publish_modified = os.path.getmtime(publish_file)
+                year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
+                publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+               
+               
+               
+                
+
+                #SubMenu
+                items = menu.addMenu(dep)
+                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + last_edit_date + " )" )
+                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
+                
                 allEdits = os.listdir(os.path.join( server ,
                                      
                                     prod ,
@@ -958,11 +1033,6 @@ class MainWindow(QWidget) :
                                     env.E_PATH ,
                                     dep ))
 
-                #SubMenu
-                items = menu.addMenu(dep)
-                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date + " )" )
-                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + date + " )")
-                
                 Edits = items.addAction("All Edits")
                 # for i in allEdits:
                 #     Edits.addAction(i + " (" + date + ") (To Do)")  
@@ -1106,7 +1176,7 @@ class MainWindow(QWidget) :
         folder = self.serverName.text()
         if not server:
             return
-        fn.openPublish_FN (  name, dep, prod = prod, server = server)
+        fn.openPublish_FN (  name, dep, server, prod = prod)
 
     def deleteAsset_UI(self, name):
         

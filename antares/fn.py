@@ -175,7 +175,7 @@ def openInFolder_Char_FN(name, server,prod):
                         # env.SCN_TYPE )
     os.startfile(path)
 
-def openPublish_FN(server, name, dep, prod):
+def openPublish_FN(name, dep, server, prod):
      project = os.path.join(server ,
                             prod ,
                             env.CHAR_PATH ,
