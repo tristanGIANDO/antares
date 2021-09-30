@@ -885,7 +885,7 @@ class MainWindow(QWidget) :
                 print ( "No data" )
 
             print ( item )
-
+            
             #Create Button characters 
             positions = [(i, j) for i in range(50) for j in range(5)]
             for position, name in zip(positions, item):
@@ -1284,15 +1284,13 @@ class MainWindow(QWidget) :
         item.create_new_module_FN (  server, set, module, prod = prod)
         self.reload()
 
-    def create_new_item_UI(self, set):
+    def create_new_item_UI(self, dep, module):
         prod = self.prodName.text()
         server = self.serverName.text()
-        set = self.set_name.text()
-        module = self.module_name.text()
-        items = self.item_name.text()
+        assetName = self.assetName.text()
         if not server:
             return
-        item.create_new_item_FN ( server, set, module, items, prod = prod)
+        item.create_new_item_FN ( server, dep, module, assetName, prod = prod)
         self.reload()
 
     def openLastEdit_item_UI(self, name, dep, module):

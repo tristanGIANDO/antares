@@ -20,38 +20,50 @@ def create_new_module_FN(server, set, module, prod):
     
     os.makedirs(directory)
 
-def create_new_item_FN(server, set, module, items, prod):
-    directory = os.path.join(server,
+def create_new_item_FN(server, dep, module, assetName, prod):
+    directory = os.makedirs(os.path.join(server,
                                     prod,
-                                    env.SET_PATH ,
-                                    set,
+                                    env.SET_PATH,
                                     module,
-                                    items)
+                                    env.E_PATH,
+                                    assetName))
     
-    check = os.listdir(os.path.join(server , prod, env.CHAR_PATH))
-    if items in check :
+    check = os.listdir(os.path.join(server ,
+                                    prod,
+                                    env.SET_PATH,
+                                    module,
+                                    env.E_PATH,
+                                    assetName))
+    if assetName in check :
         # raise RuntimeError("Sorry, can't do this ! " + items + " already exists !")
-        print ("Sorry, can't do this ! " + items + " already exists !")
+        print ("Sorry, can't do this ! " + assetName + " already exists !")
 	    
     else:
         departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
         source = os.path.join(server,
                             prod ,
-                            env.TMP_ASSET_PATH)
+                            env.TMP_ASSET_PATH,
+                            env.E_PATH,
+                            dep,
+                            env.TMP_SCN_TYPE_E)
 
         destination = os.path.join(server ,
                             prod ,
                             env.SET_PATH ,
-                            set,
                             module,
-                            env.TMP_ASSET)
+                            env.E_PATH,
+                            dep,
+                            directory,
+                            env.TMP_SCN_TYPE_E)
 
         path = os.path.join(server ,
                             prod,
-                            env.SET_PATH ,
-                            set,
+                            env.SET_PATH,
                             module,
-                            items)
+                            env.E_PATH,
+                            dep,
+                            directory,
+                            assetName)
 
         #   Copy template
         if os.path.isdir(destination):
@@ -64,7 +76,7 @@ def create_new_item_FN(server, set, module, items, prod):
             os.rename(destination, path)
             print (" Template renamed, it works well")
         except:
-            print ( "I couldn't rename " + items + " correctly ! Please do it by hand !")
+            print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
 
         #Rename Scenes
         for dpt in departments:
@@ -81,12 +93,12 @@ def create_new_item_FN(server, set, module, items, prod):
             editRenamed = os.path.join(path ,
                                         env.E_PATH ,
                                         dpt ,
-                                        items + "_E_" + dpt + "_001.ma")
+                                        assetName + "_E_" + dpt + "_001.ma")
 
             publishRenamed = os.path.join(path ,
                                         env.P_PATH ,
                                         dpt ,
-                                        items + "_P_" + dpt + ".ma")
+                                        assetName + "_P_" + dpt + ".ma")
 
             try:
                 os.rename(editToRename, editRenamed )
@@ -107,7 +119,7 @@ def create_new_item_FN(server, set, module, items, prod):
                                         env.E_PATH ,
                                         dpt ,
                                         "_data" ,
-                                        items + "_E_" + dpt + "_001" + n)
+                                        assetName + "_E_" + dpt + "_001" + n)
 
                 publishToRename = os.path.join(path ,
                                         env.P_PATH ,
@@ -117,7 +129,7 @@ def create_new_item_FN(server, set, module, items, prod):
                 publishRenamed = os.path.join(path ,
                                         env.P_PATH ,
                                         dpt ,
-                                        items + "_P_" + dpt + n)
+                                        assetName + "_P_" + dpt + n)
 
                 try :
                     os.rename(editToRename, editRenamed)
@@ -132,7 +144,7 @@ def create_new_item_FN(server, set, module, items, prod):
                                         env.SET_PATH ,
                                         set,
                                         module,
-                                        items,
+                                        assetName,
                                         env.MUDBOX_PATH,
                                         env.TMP_SCN_TYPE_SCULPT + ".mud")
 
@@ -141,16 +153,16 @@ def create_new_item_FN(server, set, module, items, prod):
                                         env.SET_PATH ,
                                         set,
                                         module,
-                                        items,
+                                        assetName,
                                         env.MUDBOX_PATH,
-                                        items + "_E_sculpt_001.mud")
+                                        assetName + "_E_sculpt_001.mud")
 
         zbrush_to_rename = os.path.join(server,
                                         prod,
                                         env.SET_PATH ,
                                         set,
                                         module,
-                                        items,
+                                        assetName,
                                         env.ZBRUSH_PATH,
                                         env.TMP_SCN_TYPE_SCULPT + ".ZPR")
 
@@ -159,9 +171,9 @@ def create_new_item_FN(server, set, module, items, prod):
                                         env.SET_PATH ,
                                         set,
                                         module,
-                                        items,
+                                        assetName,
                                         env.ZBRUSH_PATH,
-                                        items + "_E_sculpt_001.ZPR")
+                                        assetName + "_E_sculpt_001.ZPR")
 
         try:
             os.rename(mudbox_to_rename, mudbox_renamed)
@@ -191,7 +203,7 @@ def create_new_item_FN(server, set, module, items, prod):
                                         prod,
                                         env.IMAGES_PATH,
                                         env.ITEM_TYPE ,
-                                        items + ".png")
+                                        assetName + ".png")
         try:
             shutil.copyfile( picTMP_ASSET_PATH, picDst)
             os.rename(picDst, picRenamed)
