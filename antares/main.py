@@ -1006,9 +1006,9 @@ class MainWindow(QWidget) :
 
                     Edits = items.addAction("All Edits")
                     #CONNECTIONS
-                    lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, setName)) 
-                    openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, setName))  
-                    Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, name, dep, setName))
+                    lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, module)) 
+                    openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, module))  
+                    Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, name, dep, module))
                     
 
 
@@ -1295,14 +1295,14 @@ class MainWindow(QWidget) :
         item.create_new_item_FN ( server, set, module, items, prod = prod)
         self.reload()
 
-    def openLastEdit_item_UI(self, name, dep, setName, modName):
+    def openLastEdit_item_UI(self, name, dep, module):
         prod = self.prodName.text()
         server = self.serverName.text()
         print ( prod )
         print ( server )
         if not server:
             return
-        item.openLastEdit_FN (  name, dep, server, setName, modName, prod = prod)
+        item.openLastEdit_FN (  name, dep, server, module, prod = prod)
 
     def openPublish_item_UI(self, name, dep, setName, modName):
         prod = self.prodName.text()
