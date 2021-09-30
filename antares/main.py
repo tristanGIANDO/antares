@@ -865,8 +865,7 @@ class MainWindow(QWidget) :
         #MODULE PATH
         module_path = os.listdir(os.path.join(server,
                                     prod,
-                                    env.SET_PATH,
-                                    setName))
+                                    env.SET_PATH))
         
         # ITEM PATH
         for module in module_path:
@@ -876,7 +875,6 @@ class MainWindow(QWidget) :
             item = os.listdir(os.path.join(server,
                                     prod,
                                     env.SET_PATH,
-                                    setName,
                                     module,
                                     env.E_PATH,
                                     "geoLo"))
@@ -910,7 +908,6 @@ class MainWindow(QWidget) :
                 departmentList = os.listdir( os.path.join(server ,
                                                             prod,
                                                             env.SET_PATH,
-                                                            setName,
                                                             module,
                                                             env.E_PATH))
                 #CREER MENU
@@ -922,7 +919,6 @@ class MainWindow(QWidget) :
                     path = os.path.join(server ,
                                         prod,
                                         env.SET_PATH,
-                                        setName,
                                         module,
                                         env.E_PATH ,
                                         dep)
@@ -947,7 +943,6 @@ class MainWindow(QWidget) :
                     publishImage = os.path.join(server ,
                                         prod,
                                         env.SET_PATH,
-                                        setName,
                                         module,
                                         env.P_PATH,
                                         dep ,
@@ -956,7 +951,6 @@ class MainWindow(QWidget) :
                     destination = os.listdir( os.path.join(server,
                                         prod ,
                                         env.SET_PATH ,
-                                        setName,
                                         module,
                                         env.E_PATH ,
                                         dep))
@@ -965,7 +959,6 @@ class MainWindow(QWidget) :
                     last_path = os.path.join(server,
                                 prod,
                                 env.SET_PATH ,
-                                setName,
                                 module,
                                 env.E_PATH ,
                                 dep)
@@ -979,7 +972,6 @@ class MainWindow(QWidget) :
                     publish_file = os.path.join(server ,
                                 prod ,
                                 env.SET_PATH ,
-                                setName,
                                 module,
                                 env.P_PATH ,
                                 dep ,
@@ -1008,7 +1000,6 @@ class MainWindow(QWidget) :
                                         
                                         prod ,
                                         env.SET_PATH ,
-                                        setName,
                                         module,
                                         env.E_PATH ,
                                         dep ))
@@ -1028,7 +1019,6 @@ class MainWindow(QWidget) :
                                             
                                             prod,
                                             env.SET_PATH ,
-                                            setName,
                                             module,
                                             env.SCULPT_TYPE))
                 for soft in sculpt_path:
