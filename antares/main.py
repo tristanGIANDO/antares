@@ -52,7 +52,6 @@ class MainWindow(QWidget) :
         self.reloadBTN = QPushButton("RELOAD")
         #Set production
         self.serverName = QLineEdit(r"\\gandalf/3D4_21_22")
-        self.folderName = QLineEdit("prefs['folder']")
         self.tmp_server_Name = QLineEdit(prefs['tmp_server'])
         self.prodName = QLineEdit(prefs['prod'])
         self.assetDirName = QLineEdit(env.ASSET_TYPE)
@@ -307,7 +306,7 @@ class MainWindow(QWidget) :
         tabs = QTabWidget()
         tabs.addTab(self.character_tab_UI(), "CHARACTERS")
         tabs.addTab(self.propsTab_UI(), "PROPS")
-        tabs.addTab(self.setTabUI(), "ITEMS")
+        tabs.addTab(self.setTabUI(), "ENVIROS")
         tabs.addTab(self.houdiniTab_UI(), "FX")
         globalLayout.addWidget(self.assetName_LBL)
         globalLayout.addWidget(self.assetName)
@@ -826,13 +825,6 @@ class MainWindow(QWidget) :
         for moduleName in setDIR :
             tabs.addTab(self.moduleTabUI(moduleName), moduleName)
 
-        moduleDIR = os.listdir(os.path.join(server,
-                                        prod,
-                                        env.SET_PATH))
-
-        
-
-
 
         #SET COMBO BOX
         
@@ -846,21 +838,6 @@ class MainWindow(QWidget) :
             for value in v:
                 QStandardItem(value)
 
-        #MODULE COMBO BOX
-        
-        # self.model_module = QStandardItemModel()
-        # self.combo_module = QComboBox()
-        # self.combo_module.setModel(self.model_module)
-        # # add data
-        # for v in moduleDIR:
-        #     set = QStandardItem(v)
-        #     self.model_set.appendRow(set)
-        #     for value in v:
-        #         QStandardItem(value)
-
-
-        # layout_for_combo.addWidget(self.combo_set)
-        # layout_for_combo.addWidget(self.combo_module)
         layout_for_text.addWidget(self.set_name)
         layout_for_text.addWidget(self.arrow_01)
         layout_for_text.addWidget(self.module_name)
@@ -881,45 +858,32 @@ class MainWindow(QWidget) :
         
         return main_layout
     
+
     def moduleTabUI(self, setName):
         server = self.serverName.text()
-        folder = self.serverName.text()
-        prod = self.prodName.text()
-        layout = QWidget()
-        n = QVBoxLayout()
-        tabs = QTabWidget()
-        moduleDIR = os.listdir(os.path.join(server,
-                                            prod,
-                                            env.SET_PATH,
-                                            setName))
-        for modName in moduleDIR :
-            tabs.addTab(self.itemTabUI(setName, modName), modName)
-        
-        n.addWidget(tabs)
-        
-        layout.setLayout(n)
-        return layout
-
-    def itemTabUI(self, setName, modName):
-        server = self.serverName.text()
-        folder = self.serverName.text()
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
         item = QPushButton()
         #Variable
-        itemPath = os.path.join(server,
+        module_path = os.listdir(os.path.join(server,
+                                    prod,
+                                    env.SET_PATH,
+                                    setName))
+        
+        for module in module_path:
+            print ( module )
+        
+
+            item = os.listdir(os.path.join(server,
                                     prod,
                                     env.SET_PATH,
                                     setName,
-                                    modName)
-        asset_item = os.listdir( itemPath )
-
-        itemDIR = os.listdir(os.path.join(server,
-                                            prod,
-                                            env.SET_PATH,
-                                            setName,
-                                            modName))
+                                    module,
+                                    env.E_PATH,
+                                    "geoLo"))
+            
+            print ( item )
 
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
@@ -939,7 +903,7 @@ class MainWindow(QWidget) :
                                     prod)
             n.addWidget(button)
             # CREER LISTE DE TOUS LES DEPARTEMENTS
-            departmentList = os.listdir( os.path.join(itemPath ,
+            departmentList = os.listdir( os.path.join(module_path ,
                                                         name ,
                                                         env.E_PATH))
             #CREER MENU
@@ -948,7 +912,7 @@ class MainWindow(QWidget) :
             menu.addSeparator()
             for dep in departmentList:
                 #VARIABLES
-                path = os.path.join(itemPath ,
+                path = os.path.join(module_path ,
                                     name ,
                                     env.E_PATH ,
                                     dep)
@@ -970,7 +934,7 @@ class MainWindow(QWidget) :
 
                 
 
-                publishImage = os.path.join(itemPath ,
+                publishImage = os.path.join(module_path ,
                                     name ,
                                     env.P_PATH ,
                                     dep ,
@@ -980,7 +944,6 @@ class MainWindow(QWidget) :
                                     prod ,
                                     env.SET_PATH ,
                                     setName,
-                                    modName,
                                     name ,
                                     env.E_PATH ,
                                     dep ))
@@ -990,7 +953,6 @@ class MainWindow(QWidget) :
                             prod,
                             env.SET_PATH ,
                             setName,
-                            modName,
                             name ,
                             env.E_PATH ,
                             dep)
@@ -1005,7 +967,6 @@ class MainWindow(QWidget) :
                             prod ,
                             env.SET_PATH ,
                             setName,
-                            modName,
                             name ,
                             env.P_PATH ,
                             dep ,
@@ -1035,23 +996,15 @@ class MainWindow(QWidget) :
                                     prod ,
                                     env.SET_PATH ,
                                     setName,
-                                    modName,
                                     name ,
                                     env.E_PATH ,
                                     dep ))
 
                 Edits = items.addAction("All Edits")
-                # for i in allEdits:
-                #     Edits.addAction(i + " (" + date + ") (To Do)")  
-                # refPublish = items.addAction(self.ref_publish_LBL)
-                # importPublish = items.addAction(self.import_publish_LBL)
-
                 #CONNECTIONS
-                lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, setName, modName)) 
-                openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, setName, modName))  
-                # refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
-                # importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
-                Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, name, dep, setName, modName))
+                lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, setName)) 
+                openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, setName))  
+                Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, name, dep, setName))
                 
 
 
@@ -1063,7 +1016,6 @@ class MainWindow(QWidget) :
                                         prod,
                                         env.SET_PATH ,
                                         setName,
-                                        modName,
                                         name,
                                         env.SCULPT_TYPE))
             for soft in sculpt_path:
@@ -1072,7 +1024,7 @@ class MainWindow(QWidget) :
                 openInFolder_sculpt = actions.addAction(self.open_in_folder_LBL)
 
                 lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft)) 
-                openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_item_UI, name, soft, setName, modName)) 
+                openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_item_UI, name, soft, setName)) 
 
 
             menu.addSeparator()
@@ -1081,7 +1033,7 @@ class MainWindow(QWidget) :
             delete = menu.addAction(self.delete_asset_LBL)
             menu.addAction(self.create_new_task_LBL)
             #Connections
-            delete.triggered.connect(partial(self.deleteAsset_item_UI, name, setName, modName))
+            delete.triggered.connect(partial(self.deleteAsset_item_UI, name, setName))
             openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
 
             
