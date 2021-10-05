@@ -810,16 +810,16 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         main_layout = QWidget()
         layout_to_set = QVBoxLayout()
-        tabs = QTabWidget()
-        layout_for_text = QHBoxLayout()
+        # tabs = QTabWidget()
+        item_layout = self.item_layout_UI()
         layout_for_combo = QHBoxLayout()
+        layout_for_text = QHBoxLayout()
         layout_for_buttons = QHBoxLayout()
         
         setDIR = os.listdir(os.path.join(server,
                                         prod,
                                         env.SET_PATH))
-        for moduleName in setDIR :
-            tabs.addTab(self.moduleTabUI(moduleName), moduleName)
+        
 
 
         #SET COMBO BOX
@@ -834,6 +834,7 @@ class MainWindow(QWidget) :
             for value in v:
                 QStandardItem(value)
 
+        layout_for_combo.addWidget(self.combo_set)
         layout_for_text.addWidget(self.set_name)
         layout_for_text.addWidget(self.arrow_01)
         layout_for_text.addWidget(self.module_name)
@@ -841,26 +842,27 @@ class MainWindow(QWidget) :
         layout_for_text.addWidget(self.item_name)
         layout_for_buttons.addWidget(self.new_set_BTN)
         layout_for_buttons.addWidget(self.new_module_BTN)
-        layout_for_buttons.addWidget(self.new_item_BTN)
 
-        layout_to_set.addWidget(tabs)
-        layout_to_set.addLayout(layout_for_text)
         layout_to_set.addLayout(layout_for_combo)
+        layout_to_set.addWidget(item_layout)
+        layout_to_set.addLayout(layout_for_text)
         layout_to_set.addLayout(layout_for_buttons)
         main_layout.setLayout(layout_to_set)
 
-        print ( setDIR )
+        
 
         
         return main_layout
     
 
-    def moduleTabUI(self, setName):
+    def item_layout_UI(self):
         server = self.serverName.text()
         prod = self.prodName.text()
         layout = QWidget()
+        grid = QGridLayout()
         n = QVBoxLayout()
         item = QPushButton()
+        n.addLayout(grid)
         
         #MODULE PATH
         module_path = os.listdir(os.path.join(server,
@@ -869,9 +871,6 @@ class MainWindow(QWidget) :
         
         # ITEM PATH
         for module in module_path:
-            print ( module )
-        
-
             item = os.listdir(os.path.join(server,
                                     prod,
                                     env.SET_PATH,
@@ -883,166 +882,176 @@ class MainWindow(QWidget) :
                 item.remove("_data")
             except:
                 print ( "No data" )
-
-            print ( item )
             
-            #Create Button characters 
-            positions = [(i, j) for i in range(50) for j in range(5)]
-            for position, name in zip(positions, item):
-                if name == '':
-                    continue
                 
 
-                imageDir = os.path.join(server,
-                                        prod,
-                                        env.IMAGES_PATH,
-                                        "items",
-                                        name + ".png")
-                button = ImagePushButton(name, path = imageDir)
-                button.setFixedSize(100, 100)
+            # #SET ITEM GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
+            # layoutItem = FlowLayout()
+            # n.addLayout(layoutItem)
+            # #New Chara Button
+            # self.new_item_BTN.setFixedSize(100, 100)
+            # grid.addWidget(self.new_item_BTN)
+
+
+            # #Create Button items 
+            # positions = [(i, j) for i in range(5) for j in range(50)]
+            # for position, name in zip(positions, item):
+            #     if name == '':
+            #         continue
                 
-                path = os.path.join(server,
-                                        prod)
-                n.addWidget(button)
-                # CREER LISTE DE TOUS LES DEPARTEMENTS
-                departmentList = os.listdir( os.path.join(server ,
-                                                            prod,
-                                                            env.SET_PATH,
-                                                            module,
-                                                            env.E_PATH))
-                #CREER MENU
-                menu = QMenu(parent = self)
-                menu.addAction( "Name = " + name )
-                menu.addSeparator()
-                for dep in departmentList:
-                    #VARIABLES
-                    path = os.path.join(server ,
-                                        prod,
-                                        env.SET_PATH,
-                                        module,
-                                        env.E_PATH ,
-                                        dep)
-                    try:
-                        editProject = os.listdir( os.path.join(path ,
-                                                        "_data" ))
+            #     imageDir = os.path.join(server,
+            #                             prod,
+            #                             env.IMAGES_PATH,
+            #                             "items",
+            #                             name + ".png")
+
+            #     button = ImagePushButton(name, path = imageDir)
+            #     button.setFixedSize(100, 100)
+                
+            #     path = os.path.join(server,
+            #                             prod)
+
+            #     grid.addWidget(button)
+            #     # CREER LISTE DE TOUS LES DEPARTEMENTS
+            #     departmentList = os.listdir( os.path.join(server ,
+            #                                                 prod,
+            #                                                 env.SET_PATH,
+            #                                                 module,
+            #                                                 env.E_PATH))
+            #     #CREER MENU
+            #     menu = QMenu(parent = self)
+            #     menu.addAction( "Name = " + name )
+            #     menu.addSeparator()
+            #     for dep in departmentList:
+            #         #VARIABLES
+            #         path = os.path.join(server ,
+            #                             prod,
+            #                             env.SET_PATH,
+            #                             module,
+            #                             env.E_PATH ,
+            #                             dep)
+            #         try:
+            #             editProject = os.listdir( os.path.join(path ,
+            #                                             "_data" ))
                         
-                        editImage = os.path.join(path ,
-                                        "_data",
-                                        editProject[-2])
+            #             editImage = os.path.join(path ,
+            #                             "_data",
+            #                             editProject[-1])
 
-                    except:
-                        editProject = os.listdir( os.path.join(path ,
-                                                        "data" ))
+            #         except:
+            #             editProject = os.listdir( os.path.join(path ,
+            #                                             "_data" ))
 
-                        editImage = os.path.join(path ,
-                                        "data",
-                                        editProject[-2])
+            #             editImage = os.path.join(path ,
+            #                             "_data",
+            #                             editProject[-1])
 
                     
 
-                    publishImage = os.path.join(server ,
-                                        prod,
-                                        env.SET_PATH,
-                                        module,
-                                        env.P_PATH,
-                                        dep ,
-                                        name + "_P_" + dep + ".png")
+            #         publishImage = os.path.join(server ,
+            #                             prod,
+            #                             env.SET_PATH,
+            #                             module,
+            #                             env.P_PATH,
+            #                             dep ,
+            #                             name + "_P_" + dep + ".png")
 
-                    destination = os.listdir( os.path.join(server,
-                                        prod ,
-                                        env.SET_PATH ,
-                                        module,
-                                        env.E_PATH ,
-                                        dep))
+            #         destination = os.listdir( os.path.join(server,
+            #                             prod ,
+            #                             env.SET_PATH ,
+            #                             module,
+            #                             env.E_PATH ,
+            #                             dep))
 
-                    #LAST EDIT
-                    last_path = os.path.join(server,
-                                prod,
-                                env.SET_PATH ,
-                                module,
-                                env.E_PATH ,
-                                dep)
-                    destination = os.listdir( last_path )
-                    try:
-                        destination.remove("_data")
-                    except:
-                        print ( "No data")
-                    last_edit_file = os.path.join(last_path,  destination[-1])
+            #         #LAST EDIT
+            #         last_path = os.path.join(server,
+            #                     prod,
+            #                     env.SET_PATH ,
+            #                     module,
+            #                     env.E_PATH ,
+            #                     dep)
+            #         destination = os.listdir( last_path )
+            #         try:
+            #             destination.remove("_data")
+            #         except:
+            #             print ( "No data")
+            #         last_edit_file = os.path.join(last_path,  destination[-1])
                     
-                    publish_file = os.path.join(server ,
-                                prod ,
-                                env.SET_PATH ,
-                                module,
-                                env.P_PATH ,
-                                dep ,
-                                name + "_P_" + dep + ".ma")
+            #         publish_file = os.path.join(server ,
+            #                     prod ,
+            #                     env.SET_PATH ,
+            #                     module,
+            #                     env.P_PATH ,
+            #                     dep ,
+            #                     name + "_P_" + dep + ".ma")
 
-                    # DATE LAST EDIT
-                    last_edit_modified = os.path.getmtime(last_edit_file)
-                    year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
-                    last_edit_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+            #         # DATE LAST EDIT
+            #         last_edit_modified = os.path.getmtime(last_edit_file)
+            #         year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
+            #         last_edit_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
                     
-                    # DATE LAST EDIT
-                    publish_modified = os.path.getmtime(publish_file)
-                    year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
-                    publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+            #         # # DATE LAST EDIT
+            #         # publish_modified = os.path.getmtime(publish_file)
+            #         # year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
+            #         # publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
                 
                 
                 
                     
 
-                    #SubMenu
-                    items = menu.addMenu(dep)
-                    lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + last_edit_date + " )" )
-                    openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
+            #         #SubMenu
+            #         items = menu.addMenu(dep)
+            #         lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + last_edit_date + " )" )
+            #         openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( "" )")
                     
-                    allEdits = os.listdir(os.path.join( server ,
+            #         allEdits = os.listdir(os.path.join( server ,
                                         
-                                        prod ,
-                                        env.SET_PATH ,
-                                        module,
-                                        env.E_PATH ,
-                                        dep ))
+            #                             prod ,
+            #                             env.SET_PATH ,
+            #                             module,
+            #                             env.E_PATH ,
+            #                             dep ))
 
-                    Edits = items.addAction("All Edits")
-                    #CONNECTIONS
-                    lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, module)) 
-                    openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, module))  
-                    Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, name, dep, module))
+            #         Edits = items.addAction("All Edits")
+            #         #CONNECTIONS
+            #         lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, module)) 
+            #         openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, module))  
+            #         Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, name, dep, module))
                     
 
 
 
-                #MENU ITEMS GLOBAL
-                sculpt = menu.addMenu("sculpt")
-                sculpt_path = os.listdir(os.path.join(server,
+            #     #MENU ITEMS GLOBAL
+            #     sculpt = menu.addMenu("sculpt")
+            #     sculpt_path = os.listdir(os.path.join(server,
                                             
-                                            prod,
-                                            env.SET_PATH ,
-                                            module,
-                                            env.SCULPT_TYPE))
-                for soft in sculpt_path:
-                    actions = sculpt.addMenu(soft)
-                    lastSculpt = actions.addAction(self.last_edit_LBL)
-                    openInFolder_sculpt = actions.addAction(self.open_in_folder_LBL)
+            #                                 prod,
+            #                                 env.SET_PATH ,
+            #                                 module,
+            #                                 env.SCULPT_TYPE))
+            #     for soft in sculpt_path:
+            #         actions = sculpt.addMenu(soft)
+            #         lastSculpt = actions.addAction(self.last_edit_LBL)
+            #         openInFolder_sculpt = actions.addAction(self.open_in_folder_LBL)
 
-                    lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft)) 
-                    openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_item_UI, name, soft, setName)) 
+            #         lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft)) 
+            #         openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_item_UI, name, soft, setName)) 
 
 
-                menu.addSeparator()
-                openInFolder = menu.addAction(self.open_in_folder_LBL)
-                menu.addAction(self.duplicate_asset_LBL)
-                delete = menu.addAction(self.delete_asset_LBL)
-                menu.addAction(self.create_new_task_LBL)
-                #Connections
-                delete.triggered.connect(partial(self.deleteAsset_item_UI, name, setName))
-                openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
+            #     menu.addSeparator()
+            #     openInFolder = menu.addAction(self.open_in_folder_LBL)
+            #     menu.addAction(self.duplicate_asset_LBL)
+            #     delete = menu.addAction(self.delete_asset_LBL)
+            #     menu.addAction(self.create_new_task_LBL)
+            #     #Connections
+            #     delete.triggered.connect(partial(self.deleteAsset_item_UI, name, setName))
+            #     openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
 
                 
 
-                button.setMenu(menu)
-                
+            #     button.setMenu(menu)
+
+            # self.new_item_BTN.clicked.connect(partial(self.create_new_item_UI, module))    
 
         layout.setLayout(n)
 
