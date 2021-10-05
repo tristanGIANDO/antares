@@ -14,7 +14,6 @@ from PyQt5.QtWidgets import * #QApplication, QWidget, QPushButton, QHBoxLayout
 from PyQt5.QtCore import *
 from PyQt5.QtGui import * #QPixmap
 from PyQt5 import QtGui
-
 from functools import partial
 
 
@@ -30,14 +29,9 @@ class MainWindow(QWidget) :
         self.setWindowTitle(self.title)
         self.setWindowIcon(QtGui.QIcon(self.icon))
         
-
-        
-
         self.createWidget()
         self.createLayout()
    
-
-
     def createWidget(self):
 
         # SET PREFERENCES #######################################################
@@ -135,9 +129,9 @@ class MainWindow(QWidget) :
         self.delete_asset_LBL = "Delete Asset"
         self.create_new_task_LBL = "Create New Task (to do)"
         
-        self.progress = QProgressBar(self)
-        self.progress.setGeometry(830,10,150,20)
-        self.progress.setValue(0)
+        # self.progress = QProgressBar(self)
+        # self.progress.setGeometry(830,10,150,20)
+        # self.progress.setValue(0)
 
        
         '''
@@ -161,8 +155,6 @@ class MainWindow(QWidget) :
 
         self.userPic.setPixmap(self.pixmap)
         self.prodTitle.setFont(QFont('Times', 30))
-
-
 
     def createLayout(self):
         server = self.serverName.text()
@@ -292,6 +284,7 @@ class MainWindow(QWidget) :
         self.show()
     
     #############
+
     '''
     # ASSETS ------------------------------------------------------------------------------------------------------------------------------------------------------------------
     '''
@@ -589,7 +582,7 @@ class MainWindow(QWidget) :
 
                 editImage = os.path.join(path ,
                                     "_data",
-                                    editProject[-2])
+                                    editProject[-1])
 
                 publishImage = os.path.join(prop_path ,
                                     name ,
@@ -810,12 +803,17 @@ class MainWindow(QWidget) :
         module_path = os.listdir(os.path.join(server,
                                         prod,
                                         env.SET_PATH))
-        
         #LAYOUTS
         main_layout = QWidget()
         layout_to_set = QVBoxLayout()
         tabs = QTabWidget()
         for module in module_path:
+            item_name = os.listdir(os.path.join(server,
+                                    prod,
+                                    env.SET_PATH,
+                                    module,
+                                    env.E_PATH,
+                                    "geoLo"))
             tabs.addTab(self.module_tab_UI(), module)
         layout_to_set.addWidget(tabs)
         main_layout.setLayout(layout_to_set)
