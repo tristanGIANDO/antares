@@ -857,7 +857,7 @@ class MainWindow(QWidget) :
 
             #SET ITEM GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
             item_layout = FlowLayout()
-            layout_grid.addLayout(item_layout)
+            layout_for_combo.addLayout(item_layout)
             #New Chara Button
             self.new_item_BTN.setFixedSize(100, 100)
             layout_grid.addWidget(self.new_item_BTN)
@@ -881,7 +881,7 @@ class MainWindow(QWidget) :
                 path = os.path.join(server,
                                         prod)
 
-                grid.addWidget(button)
+                layout_grid.addWidget(button)
                 # CREER LISTE DE TOUS LES DEPARTEMENTS
                 departmentList = os.listdir( os.path.join(server ,
                                                             prod,
