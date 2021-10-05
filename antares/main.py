@@ -817,39 +817,31 @@ class MainWindow(QWidget) :
         layout_for_text = QHBoxLayout()
         layout_for_buttons = QHBoxLayout()
         
-        #SET COMBO BOX
-        setDIR = os.listdir(os.path.join(server,
+        module_path = os.listdir(os.path.join(server,
                                         prod,
                                         env.SET_PATH))
-        self.model_set = QStandardItemModel()
-        self.combo_set = QComboBox()
-        self.combo_set.setModel(self.model_set)
+
+        #SET COMBO BOX qui permet de choisir les divers modules
+        self.model_module = QStandardItemModel()
+        self.combo_module = QComboBox()
+        self.combo_module.setModel(self.model_module)
         # add data
-        for module in setDIR:
-            set = QStandardItem(module)
-            self.model_set.appendRow(set)
+        for module in module_path:
+            enviro = QStandardItem(module)
+            self.model_module.appendRow(enviro)
             for item in module:
                 QStandardItem(item)
 
-        item = QPushButton()
-        
-        
-        #MODULE PATH
-        module_path = os.listdir(os.path.join(server,
-                                    prod,
-                                    env.SET_PATH))
-        
-        # ITEM PATH
-        for module in module_path:
-            item = os.listdir(os.path.join(server,
+            enviro = str(self.combo_module.currentText())
+            #Trouver le folder avec le nom des items
+            item_name = os.listdir(os.path.join(server,
                                     prod,
                                     env.SET_PATH,
-                                    module,
+                                    enviro,
                                     env.E_PATH,
                                     "geoLo"))
-            
             try:
-                item.remove("_data")
+                item_name.remove("_data")
             except:
                 print ( "No data" )
             
@@ -858,14 +850,14 @@ class MainWindow(QWidget) :
             #SET ITEM GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
             item_layout = FlowLayout()
             layout_for_combo.addLayout(item_layout)
-            #New Chara Button
+            #New Item Button
             self.new_item_BTN.setFixedSize(100, 100)
             layout_grid.addWidget(self.new_item_BTN)
 
 
             #Create Button items 
-            positions = [(i, j) for i in range(5) for j in range(50)]
-            for position, name in zip(positions, item):
+            positions = [(i, j) for i in range(5) for j in range(5)]
+            for positions, name in zip(positions, item_name):
                 if name == '':
                     continue
                 
@@ -874,7 +866,10 @@ class MainWindow(QWidget) :
                                         env.IMAGES_PATH,
                                         "items",
                                         name + ".png")
+                
+                
 
+                #LE BOUTON EN QUESTION
                 button = ImagePushButton(name, path = imageDir)
                 button.setFixedSize(100, 100)
                 
@@ -882,6 +877,7 @@ class MainWindow(QWidget) :
                                         prod)
 
                 layout_grid.addWidget(button)
+
                 # CREER LISTE DE TOUS LES DEPARTEMENTS
                 departmentList = os.listdir( os.path.join(server ,
                                                             prod,
@@ -933,19 +929,19 @@ class MainWindow(QWidget) :
                                         env.E_PATH ,
                                         dep))
 
-                    #LAST EDIT
-                    last_path = os.path.join(server,
-                                prod,
-                                env.SET_PATH ,
-                                module,
-                                env.E_PATH ,
-                                dep)
-                    destination = os.listdir( last_path )
-                    try:
-                        destination.remove("_data")
-                    except:
-                        print ( "No data")
-                    last_edit_file = os.path.join(last_path,  destination[-1])
+                    # #LAST EDIT
+                    # last_path = os.path.join(server,
+                    #             prod,
+                    #             env.SET_PATH ,
+                    #             module,
+                    #             env.E_PATH ,
+                    #             dep)
+                    # destination = os.listdir( last_path )
+                    # try:
+                    #     destination.remove("_data")
+                    # except:
+                    #     print ( "No data")
+                    # last_edit_file = os.path.join(last_path,  destination[-1])
                     
                     publish_file = os.path.join(server ,
                                 prod ,
@@ -956,9 +952,9 @@ class MainWindow(QWidget) :
                                 name + "_P_" + dep + ".ma")
 
                     # DATE LAST EDIT
-                    last_edit_modified = os.path.getmtime(last_edit_file)
-                    year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
-                    last_edit_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                    # last_edit_modified = os.path.getmtime(last_edit_file)
+                    # year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
+                    # last_edit_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
                     
                     # # DATE LAST EDIT
                     # publish_modified = os.path.getmtime(publish_file)
@@ -971,7 +967,7 @@ class MainWindow(QWidget) :
 
                     #SubMenu
                     items = menu.addMenu(dep)
-                    lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + last_edit_date + " )" )
+                    lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " " )" )
                     openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( "" )")
                     
                     allEdits = os.listdir(os.path.join( server ,
@@ -1016,9 +1012,10 @@ class MainWindow(QWidget) :
                 
 
                 button.setMenu(menu)
+
             self.new_item_BTN.clicked.connect(partial(self.create_new_item_UI, module))    
 
-        layout_for_combo.addWidget(self.combo_set)
+        layout_for_combo.addWidget(self.combo_module)
         layout_for_text.addWidget(self.set_name)
         layout_for_text.addWidget(self.arrow_01)
         layout_for_text.addWidget(self.module_name)
