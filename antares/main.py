@@ -986,7 +986,6 @@ class MainWindow(QWidget) :
             #MENU ITEMS GLOBAL
             sculpt = menu.addMenu(env.SCULPT_TYPE)
             sculpt_path = os.listdir(os.path.join(server,
-                                        
                                         prod,
                                         env.SET_PATH ,
                                         module,
@@ -1007,8 +1006,6 @@ class MainWindow(QWidget) :
             #Connections
             delete.triggered.connect(partial(self.deleteAsset_item_UI, name))
             openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
-
-            
 
             button.setMenu(menu)
 
@@ -1066,8 +1063,10 @@ class MainWindow(QWidget) :
         n.addWidget(tabs)
         layout.setLayout(n)
         return layout
-  
-    ## CONNECTIONS UI ##
+    
+    '''  
+    ## CONNECTIONS UI ## ------------------------------------------------------------------------------------------------------------------------------------------------
+    '''
     #CHARACTER
     def createNewChara_UI(self):
         prod = self.prodName.text()
