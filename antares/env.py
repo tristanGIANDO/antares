@@ -7,7 +7,7 @@ prefs_json = prefs_file.read()
 prefs = json.loads(prefs_json)
 
 
-VERSION = "1.4"
+VERSION = "1.5"
 
 #Set Templates
 server = r"\\gandalf\3D4_21_22"
@@ -17,16 +17,13 @@ TMP_SERVER = os.path.join(prefs['tmp_server'],
                                 prefs['tmp_version'],
                                 prefs['tmp_appli'],
                                 prefs['tmp_resources'])
-
 RESOURCES = os.path.join(prefs['tmp_server'],
                                 prefs['tmp_package'],
                                 prefs['tmp_appli'],
                                 prefs['tmp_version'],
                                 prefs['tmp_appli'],
                                 prefs['tmp_resources'])
-
 TMP_PROD = prefs['tmp_prod']
-
 ICON = os.path.join(server,
                                 "_partage",
                                 "ANTARES",
@@ -67,6 +64,15 @@ SCN_TYPE = "scenes"
 EDIT_TYPE = "edit"
 PUBLISH_TYPE = "publish"
 LIBRARY = "_library"
+#DEPARTEMENTS
+P_TXT = "_P_"
+E_TXT = "_E_"
+DATA = "_data"
+GEO_LO = "geoLo"
+GEO_HI = "geoHi"
+#FORMAT
+PNG = ".png"
+ASCII = ".ma"
 # Path
 IMAGES_PATH = os.path.join("_library", "Images")
 TMP_ASSET_PATH = os.path.join(ASSET_TYPE,TMP_ASSET)
