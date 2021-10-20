@@ -128,6 +128,7 @@ class MainWindow(QWidget) :
         self.duplicate_asset_LBL = "Duplicate Asset (to do)"
         self.delete_asset_LBL = "Delete Asset"
         self.create_new_task_LBL = "Create New Task (to do)"
+        self.new_item_LBL = "Create New Item"
         
         # self.progress = QProgressBar(self)
         # self.progress.setGeometry(830,10,150,20)
@@ -792,96 +793,81 @@ class MainWindow(QWidget) :
         houdini_Tab.setLayout(base)
         return houdini_Tab
 
+
     '''
     # SETS ------------------------------------------------------------------------------------------------------------------------------------------------------------------
     '''
-
     def setTabUI(self):
-
         server = self.serverName.text()
         prod = self.prodName.text()
         module_path = os.listdir(os.path.join(server,
                                         prod,
                                         env.SET_PATH))
-        #LAYOUTS
-        main_layout = QWidget()
-        layout_to_set = QVBoxLayout()
-        tabs = QTabWidget()
-        for module in module_path:
-            item_name = os.listdir(os.path.join(server,
-                                    prod,
-                                    env.SET_PATH,
-                                    module,
-                                    env.E_PATH,
-                                    env.GEO_LO))
-            tabs.addTab(self.module_tab_UI(), module)
-        layout_to_set.addWidget(tabs)
-        main_layout.setLayout(layout_to_set)
-        return main_layout
-        
-    def module_tab_UI(self):    
-        server = self.serverName.text()
-        prod = self.prodName.text()
-        module_path = os.listdir(os.path.join(server,
-                                        prod,
-                                        env.SET_PATH))
-        
-        mayaTab = QWidget() 
-        base = QVBoxLayout()
-        # group_item = QGroupBox("ITEMS")
-        # base.addWidget(group_item)
-        
-
-        #SET ITEM GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
-        layout_item = FlowLayout()
-        base.addLayout(layout_item)
-        #New Item Button
-        self.new_item_BTN.setFixedSize(100, 100)
-        base.addWidget(self.new_item_BTN)
-        #Create Button items 
-        positions = [(i, j) for i in range(5) for j in range(5)]
-        for module in module_path:
-            #Trouver le folder avec le nom des items
-            item_name = os.listdir(os.path.join(server,
-                                    prod,
-                                    env.SET_PATH,
-                                    module,
-                                    env.E_PATH,
-                                    env.GEO_LO))
-            try:
-                item_name.remove(env.DATA)
-            except:
-                print ( "No data" )
+    
+        if os.path.exists(server):
+            server = self.serverName.text()
             
-            print (module_path)
-            print (module)
-            print (item_name)
+            if os.path.exists(os.path.join(server,
+                                        self.prodName.text())):
+                prod = self.prodName.text()
+                
+                print ( "production set on", server, " >>>> ", prod)
+            else:
+                server = env.TMP_SERVER
+                print ( server )
+                prod = env.TMP_PROD
+                print ( prod )
+                print ( "error prod")
 
-        for positions, name in zip(positions, item_name):
+        else:
+            server = env.TMP_SERVER
+            print ( server )
+            prod = env.TMP_PROD
+            print ( prod )
+            print ( "error server")
+        
+
+        mayaTab = QWidget() 
+        base = QGridLayout()
+        groupModules = QGroupBox("MODULES")
+        base.addWidget(groupModules)
+
+        
+
+        #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
+        layoutChar = FlowLayout()
+        groupModules.setLayout(layoutChar)
+        #Variable
+        module_path = os.path.join(server,
+                                    prod,
+                                    env.SET_PATH)
+        asset_module = os.listdir( module_path )
+        
+
+        #New Chara Button
+        self.newCharBTN.setFixedSize(90, 100)
+        layoutChar.addWidget(self.newCharBTN)
+
+        #Create Button characters 
+        positions = [(i, j) for i in range(50) for j in range(5)]
+        for position, name in zip(positions, asset_module):
             if name == '':
                 continue
-            
             imageDir = os.path.join(server,
                                     prod,
                                     env.IMAGES_PATH,
-                                    env.ITEM_TYPE,
+                                    env.SET_TYPE,
                                     name + env.PNG)
-            
-            
-            #LE BOUTON EN QUESTION
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(100, 100)
             
             path = os.path.join(server,
-                                    prod)
-
-            base.addWidget(button)
+                                prod)
+            layoutChar.addWidget(button)
 
             # CREER LISTE DE TOUS LES DEPARTEMENTS
-            departmentList = os.listdir( os.path.join(server ,
-                                                        prod,
-                                                        env.SET_PATH,
-                                                        module,
+            departmentList = os.listdir( os.path.join(module_path ,
+                                                        name ,
                                                         env.E_PATH))
             #CREER MENU
             menu = QMenu(parent = self)
@@ -889,131 +875,130 @@ class MainWindow(QWidget) :
             menu.addSeparator()
             for dep in departmentList:
                 #VARIABLES
-                path = os.path.join(server ,
-                                    prod,
-                                    env.SET_PATH,
-                                    module,
+                path = os.path.join(module_path ,
+                                    name ,
                                     env.E_PATH ,
                                     dep)
-                try:
-                    editProject = os.listdir( os.path.join(path ,
+                editProject = os.listdir( os.path.join(path ,
                                                     env.DATA ))
-                    
-                    editImage = os.path.join(path ,
+
+                editImage = os.path.join(path ,
                                     env.DATA,
                                     editProject[-1])
 
-                except:
-                    editProject = os.listdir( os.path.join(path ,
-                                                    env.DATA ))
-
-                    editImage = os.path.join(path ,
-                                    env.DATA,
-                                    editProject[-1])
-
-                
-
-                publishImage = os.path.join(server ,
-                                    prod,
-                                    env.SET_PATH,
-                                    module,
-                                    env.P_PATH,
+                publishImage = os.path.join(module_path ,
+                                    name ,
+                                    env.P_PATH ,
                                     dep ,
                                     name + env.P_TXT + dep + env.PNG)
 
                 destination = os.listdir( os.path.join(server,
                                     prod ,
                                     env.SET_PATH ,
-                                    module,
+                                    name ,
                                     env.E_PATH ,
-                                    dep))
-
-                # #LAST EDIT
-                # last_path = os.path.join(server,
-                #             prod,
-                #             env.SET_PATH ,
-                #             module,
-                #             env.E_PATH ,
-                #             dep)
-                # destination = os.listdir( last_path )
-                # try:
-                #     destination.remove(env.DATA)
-                # except:
-                #     print ( "No data")
+                                    dep ))
+                #LAST EDIT
+                last_path = os.path.join(server,
+                            prod,
+                            env.SET_PATH ,
+                            name ,
+                            env.E_PATH ,
+                            dep)
+                destination = os.listdir( last_path )
+                try:
+                    destination.remove(env.DATA)
+                except:
+                    print ( "No data")
                 # last_edit_file = os.path.join(last_path,  destination[-1])
                 
                 publish_file = os.path.join(server ,
                             prod ,
                             env.SET_PATH ,
-                            module,
+                            name ,
                             env.P_PATH ,
                             dep ,
                             name + env.P_TXT + dep + env.ASCII)
 
-                # DATE LAST EDIT
+                # # DATE LAST EDIT
                 # last_edit_modified = os.path.getmtime(last_edit_file)
                 # year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
-                # last_edit_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                # date_last_edit = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
                 
-                # # DATE LAST EDIT
-                # publish_modified = os.path.getmtime(publish_file)
-                # year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
-                # publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
-            
-            
-            
-                
+                # DATE LAST EDIT
+                publish_modified = os.path.getmtime(publish_file)
+                year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
+                publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
 
-                #SubMenu
-                items = menu.addMenu(dep)
-                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " " )" )
-                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( "" )")
-                
                 allEdits = os.listdir(os.path.join( server ,
-                                    
+                                     
                                     prod ,
                                     env.SET_PATH ,
-                                    module,
+                                    name ,
                                     env.E_PATH ,
                                     dep ))
 
-                Edits = items.addAction("All Edits")
-                #CONNECTIONS
-                # lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, name, dep, module)) 
-                # openPublish.triggered.connect(partial(self.openPublish_item_UI, name, dep, module))  
-                # Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, name, dep, module))
+                #SubMenu
+                items = menu.addMenu(dep)
+                lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( "" )" )
+                openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
                 
+                Edits = items.addAction("All Edits")
+                # for i in allEdits:
+                #     Edits.addAction(i + " (" + date + ") (To Do)")  
+                refPublish = items.addAction(self.ref_publish_LBL)
+                importPublish = items.addAction(self.import_publish_LBL)
+
+                #CONNECTIONS
+                lastEdit.triggered.connect(partial(self.openLastEdit_UI, name, dep)) 
+                openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
+                refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
+                importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
+                Edits.triggered.connect(partial(self.open_in_folder_edits_char_UI, name, dep))
+                
+
+
+
             #MENU ITEMS GLOBAL
-            sculpt = menu.addMenu(env.SCULPT_TYPE)
+            sculpt = menu.addMenu("sculpt")
             sculpt_path = os.listdir(os.path.join(server,
+                                         
                                         prod,
-                                        env.SET_PATH ,
-                                        module,
+                                        env.SET_PATH,
+                                        name,
                                         env.SCULPT_TYPE))
             for soft in sculpt_path:
                 actions = sculpt.addMenu(soft)
                 lastSculpt = actions.addAction(self.last_edit_LBL)
                 openInFolder_sculpt = actions.addAction(self.open_in_folder_LBL)
 
-                lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft)) 
-                openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_item_UI, name, soft)) 
+                lastSculpt.triggered.connect(partial(self.openLastSculpt_UI, name, soft))
+                openInFolder_sculpt.triggered.connect(partial(self.open_in_folder_sculpt_char_UI, name, soft)) 
+
 
             menu.addSeparator()
             openInFolder = menu.addAction(self.open_in_folder_LBL)
             menu.addAction(self.duplicate_asset_LBL)
             delete = menu.addAction(self.delete_asset_LBL)
             menu.addAction(self.create_new_task_LBL)
+            menu.addAction(self.new_item_LBL)
             #Connections
-            delete.triggered.connect(partial(self.deleteAsset_item_UI, name))
+            delete.triggered.connect(partial(self.deleteAsset_UI, name))
             openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
 
-            button.setMenu(menu)
+            
 
-        # self.new_item_BTN.clicked.connect(partial(self.create_new_item_UI, module))    
+            button.setMenu(menu)
         
+        
+        
+
         mayaTab.setLayout(base)
         return mayaTab
-            
+
+
+    
+
 
 
     '''
