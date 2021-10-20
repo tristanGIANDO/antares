@@ -1,4 +1,4 @@
-import os, shutil, socket, json
+import os, shutil, socket
 import env
 
 
