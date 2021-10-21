@@ -888,9 +888,9 @@ class MainWindow(QWidget) :
             menu.addSeparator()
 
             # CREER SUBMENU AVEC LE NOM DES ITEMS
-            for item in item_list:
-                item_menu = menu.addMenu(item)
-                print (item)
+            for item_name in item_list:
+                item_menu = menu.addMenu(item_name)
+                
 
                 # CREER SUBMENU POUR LES DEPARTEMENTS
                 for dep in departmentList:
@@ -959,19 +959,19 @@ class MainWindow(QWidget) :
                                         dep ))
 
                     #SubMenu
-                    items = item_menu.addMenu(dep)
-                    lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( "" )" )
-                    openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
+                    item_dep = item_menu.addMenu(dep)
+                    lastEdit = item_dep.addAction(QIcon(editImage), self.last_edit_LBL + "( "" )" )
+                    openPublish = item_dep.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
                     
-                    Edits = items.addAction("All Edits")
+                    Edits = item_dep.addAction("All Edits")
                     # for i in allEdits:
                     #     Edits.addAction(i + " (" + date + ") (To Do)")  
-                    refPublish = items.addAction(self.ref_publish_LBL)
-                    importPublish = items.addAction(self.import_publish_LBL)
-
+                    refPublish = item_dep.addAction(self.ref_publish_LBL)
+                    importPublish = item_dep.addAction(self.import_publish_LBL)
+                    
                     #CONNECTIONS
-                    lastEdit.triggered.connect(partial(self.openLastEdit_UI, name, dep)) 
-                    openPublish.triggered.connect(partial(self.openPublish_UI, name, dep))  
+                    lastEdit.triggered.connect(partial(self.openLastEdit_UI, item, name, dep)) 
+                    openPublish.triggered.connect(partial(self.openPublish_item_UI, item_name, name, dep))  
                     refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
                     importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
                     Edits.triggered.connect(partial(self.open_in_folder_edits_char_UI, name, dep))
@@ -980,7 +980,7 @@ class MainWindow(QWidget) :
 
 
                 #MENU ITEMS GLOBAL
-                sculpt = item_menu.addMenu("sculpt")
+                sculpt = item_dep.addMenu("sculpt")
                 sculpt_path = os.listdir(os.path.join(server,
                                             
                                             prod,
@@ -1007,7 +1007,7 @@ class MainWindow(QWidget) :
                 openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
 
                 
-
+                
                 button.setMenu(menu)
         
         
@@ -1276,12 +1276,15 @@ class MainWindow(QWidget) :
             return
         item.openLastEdit_FN (  name, dep, server, module, prod = prod)
 
-    def openPublish_item_UI(self, name, dep, setName, modName):
+    def openPublish_item_UI(self, item_name, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
         if not server:
             return
-        item.openPublish_FN (  name, dep, server, setName, modName, prod = prod)
+        print ( item_name )
+        print ( name )
+        print ( dep )
+        item.openPublish_FN (  item_name, name, dep, server, prod = prod)
 
     def openLastSculpt_item_UI(self, name, soft, setName, modName):
         prod = self.prodName.text()

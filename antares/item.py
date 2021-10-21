@@ -215,16 +215,14 @@ def create_new_item_FN(server, dep, module, assetName, prod):
 
 #ITEMS
 
-def openPublish_FN(name, dep, server, setName, modName, prod):
+def openPublish_FN(item_name, name, dep, server, prod):
      project = os.path.join(server ,
                             prod ,
                             env.SET_PATH ,
-                            setName,
-                            modName,
                             name,
                             env.P_PATH ,
                             dep ,
-                            name + "_P_" + dep + ".ma")
+                            item_name + "_P_" + dep + ".ma")
      print ( project )
      print ("Publish Path")
      os.startfile(project)
