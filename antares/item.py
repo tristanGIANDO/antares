@@ -142,7 +142,6 @@ def create_new_module_FN(server, prod, assetName):
             print ( "There is no profile picture, sorry... ...")
             print ( "Try again, it will work better")
 
-
 def create_new_item_FN(server, dep, module, assetName, prod):
     directory = os.makedirs(os.path.join(server,
                                     prod,

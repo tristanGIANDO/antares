@@ -1001,9 +1001,7 @@ class MainWindow(QWidget) :
 
                 item_menu.addSeparator()
                 openInFolder = item_menu.addAction(self.open_in_folder_LBL)
-                item_menu.addAction(self.duplicate_asset_LBL)
                 delete = item_menu.addAction(self.delete_asset_LBL)
-                item_menu.addAction(self.create_new_task_LBL)
                 
                 #Connections
                 delete.triggered.connect(partial(self.deleteAsset_UI, name))
