@@ -970,10 +970,10 @@ class MainWindow(QWidget) :
                     importPublish = item_dep.addAction(self.import_publish_LBL)
                     
                     #CONNECTIONS
-                    lastEdit.triggered.connect(partial(self.openLastEdit_UI, item, name, dep)) 
+                    lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, item_name, name, dep)) 
                     openPublish.triggered.connect(partial(self.openPublish_item_UI, item_name, name, dep))  
-                    refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
-                    importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
+                    # refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
+                    # importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
                     Edits.triggered.connect(partial(self.open_in_folder_edits_char_UI, name, dep))
                     
 
@@ -1267,14 +1267,14 @@ class MainWindow(QWidget) :
         item.create_new_item_FN ( server, dep, module, assetName, prod = prod)
         self.reload()
 
-    def openLastEdit_item_UI(self, name, dep, module):
+    def openLastEdit_item_UI(self, item_name, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
         print ( prod )
         print ( server )
         if not server:
             return
-        item.openLastEdit_FN (  name, dep, server, module, prod = prod)
+        item.openLastEdit_FN (  item_name, name, dep, server, prod = prod)
 
     def openPublish_item_UI(self, item_name, name, dep):
         prod = self.prodName.text()

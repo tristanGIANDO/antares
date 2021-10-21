@@ -227,14 +227,14 @@ def openPublish_FN(item_name, name, dep, server, prod):
      print ("Publish Path")
      os.startfile(project)
 
-def openLastEdit_FN(name, dep, server, module, prod):
+def openLastEdit_FN(item_name, name, dep, server, prod):
     path = os.path.join(server  ,
                             prod ,
                             env.SET_PATH ,
-                            module,
+                            name,
                             env.E_PATH ,
                             dep,
-                            name)
+                            item_name)
     print ( path )
     destination = os.listdir( path )
     print ( destination )
