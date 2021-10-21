@@ -129,6 +129,7 @@ class MainWindow(QWidget) :
         self.delete_asset_LBL = "Delete Asset"
         self.create_new_task_LBL = "Create New Task (to do)"
         self.new_item_LBL = "Create New Item"
+        self.dressing_LBL = "DRESSING"
         
         # self.progress = QProgressBar(self)
         # self.progress.setGeometry(830,10,150,20)
@@ -149,7 +150,6 @@ class MainWindow(QWidget) :
         self.resources_BTN.clicked.connect(self.open_resources_UI)
         self.user_BTN.clicked.connect(self.open_user_picture_UI)
         self.antares_for_maya_BTN.clicked.connect(self.open_prefs_UI)
-        self.new_set_BTN.clicked.connect(self.create_new_set_UI)
         self.new_module_BTN.clicked.connect(self.create_new_module_UI)
         self.new_item_BTN.clicked.connect(self.create_new_item_UI)
         self.lightTheme_BTN.clicked.connect(self.lightTheme_FN)
@@ -847,8 +847,8 @@ class MainWindow(QWidget) :
         
 
         #New Module Button
-        self.newCharBTN.setFixedSize(90, 100)
-        layoutChar.addWidget(self.newCharBTN)
+        self.new_module_BTN.setFixedSize(90, 100)
+        layoutChar.addWidget(self.new_module_BTN)
 
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
@@ -882,12 +882,20 @@ class MainWindow(QWidget) :
             except:
                 print ( "No data")
 
+            
+            
+
             #CREER MENU
             menu = QMenu(parent = self)
             menu.addAction( "Name = " + name )
             menu.addSeparator()
+            #DRESSING
+            dress_menu = menu.addMenu(self.dressing_LBL)
+            dress_menu.addAction(self.last_edit_LBL)
+            dress_menu.addAction(self.open_publish_LBL)
 
             # CREER SUBMENU AVEC LE NOM DES ITEMS
+            
             for item_name in item_list:
                 item_menu = menu.addMenu(item_name)
                 
@@ -902,9 +910,9 @@ class MainWindow(QWidget) :
                     editProject = os.listdir( os.path.join(path ,
                                                         env.DATA ))
 
-                    editImage = os.path.join(path ,
-                                        env.DATA,
-                                        editProject[-1])
+                    # editImage = os.path.join(path ,
+                    #                     env.DATA,
+                    #                     editProject[-1])
 
                     publishImage = os.path.join(module_path ,
                                         name ,
@@ -925,6 +933,7 @@ class MainWindow(QWidget) :
                                 name ,
                                 env.E_PATH ,
                                 dep)
+                    
                     destination = os.listdir( last_path )
                     try:
                         destination.remove(env.DATA)
@@ -940,15 +949,15 @@ class MainWindow(QWidget) :
                                 dep ,
                                 name + env.P_TXT + dep + env.ASCII)
 
-                    # # DATE LAST EDIT
+                    # DATE LAST EDIT
                     # last_edit_modified = os.path.getmtime(last_edit_file)
                     # year,month,day,hour,minute,second=time.localtime(last_edit_modified)[:-3]
                     # date_last_edit = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
                     
-                    # DATE LAST EDIT
-                    publish_modified = os.path.getmtime(publish_file)
-                    year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
-                    publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
+                    # # DATE LAST EDIT
+                    # publish_modified = os.path.getmtime(publish_file)
+                    # year,month,day,hour,minute,second=time.localtime(publish_modified)[:-3]
+                    # publish_date = "%02d/%02d/%d %02d:%02d:%02d"%(day,month,year,hour,minute,second)
 
                     allEdits = os.listdir(os.path.join( server ,
                                         
@@ -960,20 +969,15 @@ class MainWindow(QWidget) :
 
                     #SubMenu
                     item_dep = item_menu.addMenu(dep)
-                    lastEdit = item_dep.addAction(QIcon(editImage), self.last_edit_LBL + "( "" )" )
-                    openPublish = item_dep.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
+                    lastEdit = item_dep.addAction(QIcon(), self.last_edit_LBL + "( "" )" )
+                    openPublish = item_dep.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( "  " )")
                     
                     Edits = item_dep.addAction("All Edits")
-                    # for i in allEdits:
-                    #     Edits.addAction(i + " (" + date + ") (To Do)")  
-                    refPublish = item_dep.addAction(self.ref_publish_LBL)
-                    importPublish = item_dep.addAction(self.import_publish_LBL)
+
                     
                     #CONNECTIONS
                     lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, item_name, name, dep)) 
                     openPublish.triggered.connect(partial(self.openPublish_item_UI, item_name, name, dep))  
-                    # refPublish.triggered.connect(partial(self.refPublish_UI, name, dep)) 
-                    # importPublish.triggered.connect(partial(self.importPublish_Char_UI, name, dep)) 
                     Edits.triggered.connect(partial(self.open_in_folder_edits_char_UI, name, dep))
                     
 
@@ -982,7 +986,6 @@ class MainWindow(QWidget) :
                 #MENU ITEMS GLOBAL
                 sculpt = item_dep.addMenu("sculpt")
                 sculpt_path = os.listdir(os.path.join(server,
-                                            
                                             prod,
                                             env.SET_PATH,
                                             name,
@@ -1001,7 +1004,7 @@ class MainWindow(QWidget) :
                 item_menu.addAction(self.duplicate_asset_LBL)
                 delete = item_menu.addAction(self.delete_asset_LBL)
                 item_menu.addAction(self.create_new_task_LBL)
-                item_menu.addAction(self.new_item_LBL)
+                
                 #Connections
                 delete.triggered.connect(partial(self.deleteAsset_UI, name))
                 openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
@@ -1009,7 +1012,12 @@ class MainWindow(QWidget) :
                 
                 
                 button.setMenu(menu)
-        
+
+            
+                
+            #NEW ITEM
+            menu.addSeparator()
+            menu.addAction(self.new_item_LBL)
         
         
 
@@ -1237,25 +1245,14 @@ class MainWindow(QWidget) :
         self.reload()
 
     # ITEMS
-    def create_new_set_UI(self):
-        prod = self.prodName.text()
-        server = self.serverName.text()
-        name = self.set_name.text()
-        print ( prod )
-        print ( server )
-        if not server:
-            return
-        item.create_new_set_FN (  name, server, prod = prod)
-        self.reload()
 
-    def create_new_module_UI(self, set):
+    def create_new_module_UI(self):
         prod = self.prodName.text()
         server = self.serverName.text()
-        set = self.set_name.text()
-        module = self.module_name.text()
+        assetName = self.assetName.text()
         if not server:
             return
-        item.create_new_module_FN (  server, set, module, prod = prod)
+        item.create_new_module_FN (  server = server, prod = prod, assetName = assetName )
         self.reload()
 
     def create_new_item_UI(self, dep, module):

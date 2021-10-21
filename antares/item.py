@@ -3,22 +3,145 @@ import env
 
 #GLOBAL
 
-def create_new_set_FN(name, server,prod):
-    directory = os.path.join(server,
-                                    prod,
-                                    env.SET_PATH ,
-                                    name)
-    
-    os.makedirs(directory)
+def create_new_module_FN(server, prod, assetName):
+    check = os.listdir(os.path.join(server , prod, env.SET_PATH))
+    if assetName in check :
+        print ("Sorry, can't do this ! " + assetName + " already exists !")
+	    
+    else:
+        departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
+        source = os.path.join(server,
+                            prod ,
+                            env.TMP_ASSET_PATH)
 
-def create_new_module_FN(server, set, module, prod):
-    directory = os.path.join(server,
+        destination = os.path.join(server ,
+                            prod ,
+                            env.SET_PATH,
+                            env.TMP_ASSET)
+
+        path = os.path.join(server ,
+                            prod,
+                            env.SET_PATH ,
+                            assetName)
+
+        #   Copy template
+        if os.path.isdir(destination):
+            print ("_Template_asset is already there")
+        else:
+            shutil.copytree(source, destination)
+            print ( "Template copied")
+            
+        try:
+            os.rename(destination, path)
+            print (" Template renamed, it works well")
+        except:
+            print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
+
+        #Rename Scenes
+        for dpt in departments:
+            editToRename = os.path.join(path ,
+                                        env.E_PATH ,
+                                        dpt ,
+                                        env.TMP_SCN_TYPE_E + ".ma")
+
+            publishToRename = os.path.join(path ,
+                                        env.P_PATH ,
+                                        dpt ,
+                                        env.TMP_SCN_TYPE_P + ".ma")
+
+
+            try:
+                os.remove(editToRename )
+                os.remove(publishToRename)
+                print ( dpt + " removed correctly (scenes)")
+            except:
+                print ( dpt + " isn't removed correctly (scenes)... ...")
+
+        #Rename EDIT_TYPE data
+        for n in [".jpg", ".png", ".txt"]:
+            for dpt in departments:
+                editToRename = os.path.join(path ,
+                                        env.E_PATH ,
+                                        dpt ,
+                                        "_data" , env.TMP_SCN_TYPE_E + n)
+
+                editRenamed = os.path.join(path ,
+                                        env.E_PATH ,
+                                        dpt ,
+                                        "_data" ,
+                                        assetName + "_E_" + dpt + "_001" + n)
+
+
+                try :
+                    os.remove(editToRename)
+                    os.remove(publishToRename)
+                    print ( dpt + " removed correctly (data)")
+                except:
+                    print ( dpt + " isn't removed correctly (data)... ...")
+
+        #Rename Sculpt
+        mudbox_to_rename = os.path.join(server,
+                                        prod,
+                                        env.SET_PATH,
+                                        assetName,
+                                        env.MUDBOX_PATH,
+                                        env.TMP_SCN_TYPE_SCULPT + ".mud")
+
+
+        zbrush_to_rename = os.path.join(server,
+                                        prod,
+                                        env.SET_PATH,
+                                        assetName,
+                                        env.ZBRUSH_PATH,
+                                        env.TMP_SCN_TYPE_SCULPT + ".ZPR")
+
+
+        try:
+            os.remove(mudbox_to_rename)
+            print ( "mudbox file removed correctly")
+        except:
+            print ( "mudbox file isn't removed correctly")
+
+        try:
+            os.remove(zbrush_to_rename)
+            print ( "zbrush file removed correctly")
+        except:
+            print ( "zbrush file isn't removed correctly")
+
+        directory = os.makedirs(os.path.join(server,
                                     prod,
-                                    env.SET_PATH ,
-                                    set,
-                                    module)
-    
-    os.makedirs(directory)
+                                    env.SET_PATH,
+                                    assetName,
+                                    env.E_PATH,
+                                    env.GEO_LO,
+                                    "temp to delete"))
+
+        # PROFILE PICTURE
+        picTMP_ASSET_PATH = os.path.join(server ,
+                                        prod,
+                                        env.IMAGES_PATH,
+                                        env.TMP_IMAGE)
+
+        picDst = os.path.join(server,
+                                        prod,
+                                        env.IMAGES_PATH,
+                                        env.SET_TYPE,
+                                        env.TMP_IMAGE)
+
+        picRenamed = os.path.join(server,
+                                        prod,
+                                        env.IMAGES_PATH,
+                                        env.SET_TYPE ,
+                                        assetName + ".png")
+        try:
+            shutil.copyfile( picTMP_ASSET_PATH, picDst)
+            os.rename(picDst, picRenamed)
+            print ( "Image renamed correctly")
+            print ("New module created with success")
+        except:
+            print ( "There is no profile picture, sorry... ...")
+            print ( "Try again, it will work better")
+
 
 def create_new_item_FN(server, dep, module, assetName, prod):
     directory = os.makedirs(os.path.join(server,
