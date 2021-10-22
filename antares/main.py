@@ -1594,7 +1594,8 @@ if __name__ == "__main__":
 
     # application.setStyle('Fusion')
 
-    file = QFile("./darkTheme.qss")
+    #file = QFile("./darkTheme.qss")
+    file = QFile("./pinkTheme.qss")
     file.open(QFile.ReadOnly | QFile.Text)
     stream = QTextStream(file)
     application.setStyleSheet(stream.readAll())

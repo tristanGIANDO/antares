@@ -23,8 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 /*-----QWidget-----*/
 QWidget
 {
-	background-color: #ebb8f2;
-	color: #fff;
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(123, 66, 194, 255),stop:1 rgba(242, 174, 252, 255));
+	color: #000000;
 	selection-background-color: #7bb4e9;
 	selection-color: #000;
 
@@ -35,7 +35,7 @@ QWidget
 QLabel
 {
 	background-color: transparent;
-	color: #fff;
+	color: #000000;
 	font: Times;
 
 }
@@ -180,7 +180,7 @@ QToolButton:checked
 /*-----QPushButton-----*/
 QPushButton
 {
-	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(84, 84, 84, 255),stop:1 rgba(59, 59, 59, 255));
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(166, 0, 191, 255),stop:1 rgba(221, 0, 255, 255));
 	color: #ffffff;
 	min-width: 80px;
 	border-style: solid;
@@ -204,7 +204,7 @@ QPushButton::flat
 
 QPushButton::disabled
 {
-	background-color: #404040;
+	background-color: #cd5cd1;
 	color: #656565;
 	border-color: #051a39;
 
@@ -238,7 +238,7 @@ QPushButton::checked
 /*-----QLineEdit-----*/
 QLineEdit
 {
-	background-color: #131313;
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(200, 0, 255, 255),stop:1 rgba(200, 0, 255, 255));
 	color : #eee;
 	border: 1px solid #343434;
 	border-radius: 2px;
