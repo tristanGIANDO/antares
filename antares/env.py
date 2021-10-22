@@ -57,6 +57,7 @@ SET_TYPE = "set"
 ITEM_TYPE = "items"
 FX_TYPE = "FX"
 MAYA_TYPE= "maya"
+SRC_IMG_TYPE = "sourceimages"
 MUDBOX_TYPE = "mudbox"
 ZBRUSH_TYPE = "zBrush"
 SCULPT_TYPE = "sculpt"
@@ -86,5 +87,6 @@ SET_PATH = os.path.join(ASSET_TYPE, SET_TYPE )
 FX_PATH = os.path.join(ASSET_TYPE, FX_TYPE )
 MUDBOX_PATH = os.path.join(SCULPT_TYPE, MUDBOX_TYPE)
 ZBRUSH_PATH = os.path.join(SCULPT_TYPE, ZBRUSH_TYPE)
+SRC_IMG_PATH = os.path.join(MAYA_TYPE, SRC_IMG_TYPE)
 
 PORT = 1789

@@ -201,6 +201,16 @@ def create_new_item_FN(name, server, prod, assetName):
     except:
         print ( "No dressing folder")
 
+
+    #CREATE FOLDER IN SOURCEIMAGES
+    os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
+                                        env.SRC_IMG_PATH,
+                                        assetName))
+
+    #CREATE FOLDER IN DEPARTMENTS
     for dep in departments:
 
         os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
