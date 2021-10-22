@@ -70,6 +70,7 @@ E_TXT = "_E_"
 DATA = "_data"
 GEO_LO = "geoLo"
 GEO_HI = "geoHi"
+DRESSING = "dressing"
 #FORMAT
 PNG = ".png"
 ASCII = ".ma"

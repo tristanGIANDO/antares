@@ -872,6 +872,11 @@ class MainWindow(QWidget) :
                                                         name ,
                                                         env.E_PATH))
             
+            try :
+                departmentList.remove(env.DRESSING)
+            except:
+                print ( "No dressing folder")
+            
             item_list = os.listdir( os.path.join(module_path,
                                                         name,
                                                         env.E_PATH,
@@ -881,6 +886,7 @@ class MainWindow(QWidget) :
                 item_list.remove(env.DATA)
             except:
                 print ( "No data")
+
 
             
             
@@ -1015,7 +1021,9 @@ class MainWindow(QWidget) :
                 
             #NEW ITEM
             menu.addSeparator()
-            menu.addAction(self.new_item_LBL)
+            create_new_item = menu.addAction(self.new_item_LBL)
+            create_new_item.triggered.connect(partial(self.create_new_item_UI, name))
+            
         
         
 
@@ -1253,13 +1261,13 @@ class MainWindow(QWidget) :
         item.create_new_module_FN (  server = server, prod = prod, assetName = assetName )
         self.reload()
 
-    def create_new_item_UI(self, dep, module):
+    def create_new_item_UI(self, name):
         prod = self.prodName.text()
         server = self.serverName.text()
         assetName = self.assetName.text()
         if not server:
             return
-        item.create_new_item_FN ( server, dep, module, assetName, prod = prod)
+        item.create_new_item_FN ( name, server = server, prod = prod, assetName = assetName)
         self.reload()
 
     def openLastEdit_item_UI(self, item_name, name, dep):

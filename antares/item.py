@@ -142,89 +142,145 @@ def create_new_module_FN(server, prod, assetName):
             print ( "There is no profile picture, sorry... ...")
             print ( "Try again, it will work better")
 
-def create_new_item_FN(server, dep, module, assetName, prod):
-    directory = os.makedirs(os.path.join(server,
-                                    prod,
-                                    env.SET_PATH,
-                                    module,
-                                    env.E_PATH,
-                                    assetName))
-    
-    check = os.listdir(os.path.join(server ,
-                                    prod,
-                                    env.SET_PATH,
-                                    module,
-                                    env.E_PATH,
-                                    assetName))
-    if assetName in check :
-        # raise RuntimeError("Sorry, can't do this ! " + items + " already exists !")
-        print ("Sorry, can't do this ! " + assetName + " already exists !")
-	    
-    else:
-        departments = ["geoLo", "cloth", "dressing", "groom", "lookdev", "geoHi", "rig" ]
-        source = os.path.join(server,
-                            prod ,
-                            env.TMP_ASSET_PATH,
-                            env.E_PATH,
-                            dep,
-                            env.TMP_SCN_TYPE_E)
+def old_create_new_item_FN(name, server, prod, assetName):
 
-        destination = os.path.join(server ,
-                            prod ,
-                            env.SET_PATH ,
-                            module,
-                            env.E_PATH,
-                            dep,
-                            directory,
-                            env.TMP_SCN_TYPE_E)
+    server_slash = r"\\gandalf/3D4_21_22"
 
-        path = os.path.join(server ,
-                            prod,
-                            env.SET_PATH,
-                            module,
-                            env.E_PATH,
-                            dep,
-                            directory,
-                            assetName)
+    departments = os.listdir( os.path.join(r"\\gandalf",
+                                        "3D4_21_22",
+                                        prod,
+                                        env.SET_PATH,
+                                        name ,
+                                        env.E_PATH))
 
-        #   Copy template
-        if os.path.isdir(destination):
-            print ("_Template_asset is already there")
-        else:
-            shutil.copytree(source, destination)
-            print ( "Template copied")
+
+    for dpt in departments:
+        
+        directory = os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
+                                        env.E_PATH,
+                                        dpt,
+                                        assetName))
+        
+        check = os.listdir(os.path.join(r"\\gandalf/3D4_21_22",
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
+                                        env.E_PATH,
+                                        dpt,
+                                        assetName))
+        if assetName in check :
+            # raise RuntimeError("Sorry, can't do this ! " + items + " already exists !")
+            print ("Sorry, can't do this ! " + assetName + " already exists !")
             
-        try:
-            os.rename(destination, path)
-            print (" Template renamed, it works well")
-        except:
-            print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
+        else:
+            
+
+            source = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod ,
+                                env.TMP_ASSET_PATH,
+                                env.E_PATH,
+                                env.GEO_LO,
+                                env.TMP_SCN_TYPE_E + env.ASCII)
+
+            destination_edit = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod ,
+                                env.SET_PATH ,
+                                name,
+                                env.E_PATH,
+                                dpt,
+                                assetName,
+                                env.TMP_SCN_TYPE_E + env.ASCII)
+
+            path_edit = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod,
+                                env.SET_PATH,
+                                name,
+                                env.E_PATH,
+                                dpt,
+                                assetName,
+                                assetName + env.ASCII)
+
+            # COPY FILE IN PUBLISH
+
+            destination_publish = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod ,
+                                env.SET_PATH ,
+                                name,
+                                env.P_PATH,
+                                dpt,
+                                env.TMP_SCN_TYPE_E + env.ASCII)
+
+            path_publish = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod,
+                                env.SET_PATH,
+                                name,
+                                env.P_PATH,
+                                dpt,
+                                assetName + env.ASCII)
+
+            #   Copy template
+            if os.path.isdir(destination_edit):
+                print ("_Template_asset is already there")
+            else:
+                shutil.copytree(source, destination_edit)
+                print ( "Template copied")
+
+            #   Copy template
+            if os.path.isdir(destination_publish):
+                print ("_Template_asset is already there")
+            else:
+                shutil.copytree(source, destination_publish)
+                print ( "Template copied")
+
+            try:
+                os.rename(destination_edit, path_edit)
+                os.rename(destination_publish, path_publish)
+                print (" Template renamed, it works well")
+            except:
+                print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
 
         #Rename Scenes
-        for dpt in departments:
-            editToRename = os.path.join(path ,
-                                        env.E_PATH ,
-                                        dpt ,
+        
+            editToRename = os.path.join(server ,
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
+                                        env.E_PATH,
+                                        dpt,
+                                        directory,
+                                        assetName,
                                         env.TMP_SCN_TYPE_E + ".ma")
 
-            publishToRename = os.path.join(path ,
+            publishToRename = os.path.join(server,
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
                                         env.P_PATH ,
                                         dpt ,
                                         env.TMP_SCN_TYPE_P + ".ma")
 
-            editRenamed = os.path.join(path ,
+            editRenamed = os.path.join(server,
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
                                         env.E_PATH ,
-                                        dpt ,
+                                        dpt,
                                         assetName + "_E_" + dpt + "_001.ma")
 
-            publishRenamed = os.path.join(path ,
+            publishRenamed = os.path.join(server ,
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
                                         env.P_PATH ,
-                                        dpt ,
+                                        dpt,
                                         assetName + "_P_" + dpt + ".ma")
 
             try:
                 os.rename(editToRename, editRenamed )
-                os.rename(publishToRename, publishRenamed)
+                # os.rename(publishToRename, publishRenamed)
                 print ( dpt + " renamed correctly (scenes)")
             except:
                 print ( dpt + " isn't renamed correctly (scenes)... ...")
@@ -335,6 +391,74 @@ def create_new_item_FN(server, dep, module, assetName, prod):
             print ( "There is no profile picture, sorry... ...")
             print ( "Try again, it will work better")
 
+def create_new_item_FN(name, server, prod, assetName):
+
+    departments = ["geoLo", "cloth", "groom", "lookdev", "geoHi", "rig" ]
+
+    for dep in departments:
+        os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
+                                        env.E_PATH,
+                                        dep,
+                                        assetName))
+
+        check = os.listdir(os.path.join(server ,
+                                        prod,
+                                        env.SET_PATH,
+                                        name,
+                                        env.E_PATH,
+                                        dep))
+
+        if assetName in check :
+            print ("Sorry, can't do this ! " + assetName + " already exists !")
+	    
+        # else:
+            
+        #     source = os.path.join(server,
+        #                             prod ,
+        #                             env.TMP_ASSET_PATH,
+        #                             env.E_PATH,
+        #                             env.GEO_LO,
+        #                             env.TMP_SCN_TYPE_E + env.ASCII)
+
+        #     destination = os.path.join(server ,
+        #                         prod ,
+        #                         env.SET_PATH,
+        #                         env.TMP_ASSET)
+
+        #     path = os.path.join(server ,
+        #                         prod,
+        #                         env.SET_PATH ,
+        #                         assetName)
+
+        #     #   Copy template
+        #     if os.path.isdir(destination):
+        #         print ("_Template_asset is already there")
+        #     else:
+        #         shutil.copytree(source, destination)
+        #         print ( "Template copied")
+                
+        #     try:
+        #         os.rename(destination, path)
+        #         print (" Template renamed, it works well")
+        #     except:
+        #         print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
+
+        #     #Rename Scenes
+        #     for dpt in departments:
+        #         editToRename = os.path.join(path ,
+        #                                     env.E_PATH ,
+        #                                     dpt ,
+        #                                     env.TMP_SCN_TYPE_E + ".ma")
+
+        #         publishToRename = os.path.join(path ,
+        #                                     env.P_PATH ,
+        #                                     dpt ,
+        #                                     env.TMP_SCN_TYPE_P + ".ma")
+
+    print ( "done" )
 #ITEMS
 
 def openPublish_FN(item_name, name, dep, server, prod):
