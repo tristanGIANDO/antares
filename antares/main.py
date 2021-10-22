@@ -890,6 +890,8 @@ class MainWindow(QWidget) :
             dress_menu = menu.addMenu(self.dressing_LBL)
             last_dress = dress_menu.addAction(self.last_edit_LBL)
             publish_dress = dress_menu.addAction(self.open_publish_LBL)
+            dress_menu.addSeparator()
+            open_in_folder_dress = dress_menu.addAction(self.open_in_folder_LBL)
 
             menu.addSeparator()
 
@@ -1024,6 +1026,7 @@ class MainWindow(QWidget) :
             create_new_item.triggered.connect(partial(self.create_new_item_UI, name))
             delete_module.triggered.connect(partial(self.delete_module_UI, name))
             openInFolder.triggered.connect(partial(self.open_in_folder_module_UI, name)) 
+            open_in_folder_dress.triggered.connect(partial(self.open_in_folder_dress_UI, name)) 
             
         
         
@@ -1331,6 +1334,14 @@ class MainWindow(QWidget) :
         if not server:
             return
         item.open_in_folder_module_FN(  name, server, prod = prod)
+
+    def open_in_folder_dress_UI(self, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        folder = self.serverName.text()
+        if not server:
+            return
+        item.open_in_folder_dress_FN(  name, server, prod = prod)
 
     def delete_item_UI(self, item_name, name, dep):
         prod = self.prodName.text()

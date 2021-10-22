@@ -494,3 +494,12 @@ def open_in_folder_module_FN(name, server, prod):
                             env.MAYA_TYPE,
                             env.SCN_TYPE)
     os.startfile(path)
+
+def open_in_folder_dress_FN(name, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SET_PATH ,
+                            name,
+                            env.E_PATH,
+                            env.DRESSING)
+    os.startfile(path)
