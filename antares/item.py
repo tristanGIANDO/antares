@@ -328,14 +328,13 @@ def openLastSculpt_FN(name, soft, server, setName, modName, prod):
     print ( project )
     os.startfile(project)
 
-def open_in_folder_edits_FN(name, dep, server, setName, modName, prod):
+def open_in_folder_edits_FN(item_name, name, dep, server, prod):
     path = os.path.join(server  ,
                             prod,
                             env.SET_PATH ,
-                            setName,
-                            modName,
                             name,
-                            env.E_PATH ,
+                            env.E_PATH,
+                            item_name,
                             dep)
     os.startfile(path)
 

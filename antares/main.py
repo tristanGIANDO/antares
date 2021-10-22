@@ -29,8 +29,17 @@ class MainWindow(QWidget) :
         self.setWindowTitle(self.title)
         self.setWindowIcon(QtGui.QIcon(self.icon))
         
+        print ( ">>  Welcome on ANTARES v" + env.VERSION + "  <<")
+        print ("")
+        print ( "Created by Tristan Giandoriggio")
+        print ( "tel = +33651839815" )
+        print ( "mail = giando.tristan@gmail.com")
+        print ("")
+
         self.createWidget()
         self.createLayout()
+
+        
    
     def createWidget(self):
 
@@ -291,6 +300,9 @@ class MainWindow(QWidget) :
     '''
 
     def assetTabUI(self):
+
+        
+
         Separador = QFrame()
         Separador.setFrameShape(QFrame.HLine)
         Separador.setLineWidth(1)
@@ -804,28 +816,6 @@ class MainWindow(QWidget) :
                                         prod,
                                         env.SET_PATH))
     
-        if os.path.exists(server):
-            server = self.serverName.text()
-            
-            if os.path.exists(os.path.join(server,
-                                        self.prodName.text())):
-                prod = self.prodName.text()
-                
-                print ( "production set on", server, " >>>> ", prod)
-            else:
-                server = env.TMP_SERVER
-                print ( server )
-                prod = env.TMP_PROD
-                print ( prod )
-                print ( "error prod")
-
-        else:
-            server = env.TMP_SERVER
-            print ( server )
-            prod = env.TMP_PROD
-            print ( prod )
-            print ( "error server")
-        
 
         mayaTab = QWidget() 
         base = QGridLayout()
@@ -984,7 +974,7 @@ class MainWindow(QWidget) :
                     #CONNECTIONS
                     lastEdit.triggered.connect(partial(self.openLastEdit_item_UI, item_name, name, dep)) 
                     openPublish.triggered.connect(partial(self.openPublish_item_UI, item_name, name, dep))  
-                    Edits.triggered.connect(partial(self.open_in_folder_edits_char_UI, name, dep))
+                    Edits.triggered.connect(partial(self.open_in_folder_edits_item_UI, item_name, name, dep))
                     
 
 
@@ -1032,9 +1022,6 @@ class MainWindow(QWidget) :
 
 
     
-
-
-
     '''
     # SHOTS ------------------------------------------------------------------------------------------------------------------------------------------------------------------
     '''
@@ -1304,12 +1291,12 @@ class MainWindow(QWidget) :
             return
         item.open_in_folder_sculpt_FN(  name, soft, server, setName, modName, prod = prod)
    
-    def open_in_folder_edits_item_UI(self, name, dep, setName, modName):
+    def open_in_folder_edits_item_UI(self, item_name, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
         if not server:
             return
-        item.open_in_folder_edits_FN (  name, dep, server, setName, modName, prod)
+        item.open_in_folder_edits_FN (  item_name, name, dep, server, prod)
     
     def deleteAsset_item_UI(self, name, server, setName, modName):
         
