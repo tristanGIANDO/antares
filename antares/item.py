@@ -116,6 +116,52 @@ def create_new_module_FN(server, prod, assetName):
                                     env.GEO_LO,
                                     "temp to delete"))
 
+
+        #DRESSING
+        source_dress = os.path.join(server,
+                                    prod,
+                                    env.TMP_ASSET_PATH,
+                                    env.E_PATH,
+                                    env.GEO_LO,
+                                    env.TMP_SCN_TYPE_E + env.ASCII)
+
+        dest_dress_edit = os.path.join(server,
+                                    prod,
+                                    env.SET_PATH,
+                                    assetName,
+                                    env.E_PATH,
+                                    env.DRESSING,
+                                    env.TMP_SCN_TYPE_E + env.ASCII)
+
+        dest_dress_publish = os.path.join(server,
+                                    prod,
+                                    env.SET_PATH,
+                                    assetName,
+                                    env.P_PATH,
+                                    env.DRESSING,
+                                    env.TMP_SCN_TYPE_E + env.ASCII)
+
+        new_dress_edit = os.path.join(server,
+                                    prod,
+                                    env.SET_PATH,
+                                    assetName,
+                                    env.E_PATH,
+                                    env.DRESSING,
+                                    assetName + env.E_TXT + env.DRESSING + "_001" + env.ASCII)
+
+        new_dress_publish = os.path.join(server,
+                                    prod,
+                                    env.SET_PATH,
+                                    assetName,
+                                    env.P_PATH,
+                                    env.DRESSING,
+                                    assetName + env.P_TXT + env.DRESSING + env.ASCII)
+
+        shutil.copyfile(source_dress, dest_dress_edit)
+        shutil.copyfile(source_dress, dest_dress_publish)
+        os.rename(dest_dress_edit, new_dress_edit)
+        os.rename(dest_dress_publish, new_dress_publish)
+
         # PROFILE PICTURE
         picTMP_ASSET_PATH = os.path.join(server ,
                                         prod,
