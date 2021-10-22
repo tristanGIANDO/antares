@@ -888,7 +888,7 @@ class MainWindow(QWidget) :
             #DRESSING
             dress_menu = menu.addMenu(self.dressing_LBL)
             last_dress = dress_menu.addAction(self.last_edit_LBL)
-            publish = dress_menu.addAction(self.open_publish_LBL)
+            publish_dress = dress_menu.addAction(self.open_publish_LBL)
 
             # CREER SUBMENU AVEC LE NOM DES ITEMS
             
@@ -1014,7 +1014,8 @@ class MainWindow(QWidget) :
             create_new_item = menu.addAction(self.new_item_LBL)
 
             #CONNECTIONS
-            last_dress = last_dress.triggered.connect(partial(self.open_last_dress_item_UI, name))
+            last_dress.triggered.connect(partial(self.open_last_dress_item_UI, name))
+            publish_dress.triggered.connect(partial(self.open_publish_dress_item_UI, name))
             create_new_item.triggered.connect(partial(self.create_new_item_UI, name))
             
         
@@ -1274,9 +1275,6 @@ class MainWindow(QWidget) :
         server = self.serverName.text()
         if not server:
             return
-        print ( item_name )
-        print ( name )
-        print ( dep )
         item.openPublish_FN (  item_name, name, dep, server, prod = prod)
 
     def open_last_dress_item_UI(self, name):
@@ -1287,6 +1285,15 @@ class MainWindow(QWidget) :
         if not server:
             return
         item.open_last_dress_FN (  name, server, prod = prod)
+
+    def open_publish_dress_item_UI(self, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        print ( prod )
+        print ( server )
+        if not server:
+            return
+        item.open_publish_dress_FN (  name, server, prod = prod)
 
     def openLastSculpt_item_UI(self, name, soft, setName, modName):
         prod = self.prodName.text()

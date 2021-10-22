@@ -330,6 +330,25 @@ def open_last_dress_FN(name, server, prod):
     print ("Edit Path is a file")
     os.startfile(project)
 
+def open_publish_dress_FN(name, server, prod):
+    path = os.path.join(server  ,
+                            prod ,
+                            env.SET_PATH ,
+                            name,
+                            env.P_PATH ,
+                            env.DRESSING)
+    print ( path )
+    destination = os.listdir( path )
+    print ( destination )
+    try:
+        destination.remove("_data")
+    except:
+        print ( "No data")
+    project = os.path.join(path,  destination[-1])
+    print ( project )
+    print ("Edit Path is a file")
+    os.startfile(project)
+
 def openAllEdits_FN(name, dep, prod):
     print ("Edit Path")
 
