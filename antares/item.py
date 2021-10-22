@@ -393,10 +393,15 @@ def old_create_new_item_FN(name, server, prod, assetName):
 
 def create_new_item_FN(name, server, prod, assetName):
 
+    departments = os.listdir( os.path.join(r"\\gandalf/3D4_21_22",
+                                        prod,
+                                        env.SET_PATH,
+                                        name ,
+                                        env.E_PATH))
 
-    for dep in ["geoLo", "cloth", "groom", "lookdev", "geoHi", "rig" ]:
+    for dep in departments:
 
-        path_to_folder = os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
+        os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
                                         prod,
                                         env.SET_PATH,
                                         name,
