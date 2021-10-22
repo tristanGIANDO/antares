@@ -142,255 +142,6 @@ def create_new_module_FN(server, prod, assetName):
             print ( "There is no profile picture, sorry... ...")
             print ( "Try again, it will work better")
 
-def old_create_new_item_FN(name, server, prod, assetName):
-
-    server_slash = r"\\gandalf/3D4_21_22"
-
-    departments = os.listdir( os.path.join(r"\\gandalf",
-                                        "3D4_21_22",
-                                        prod,
-                                        env.SET_PATH,
-                                        name ,
-                                        env.E_PATH))
-
-
-    for dpt in departments:
-        
-        directory = os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
-                                        prod,
-                                        env.SET_PATH,
-                                        name,
-                                        env.E_PATH,
-                                        dpt,
-                                        assetName))
-        
-        check = os.listdir(os.path.join(r"\\gandalf/3D4_21_22",
-                                        prod,
-                                        env.SET_PATH,
-                                        name,
-                                        env.E_PATH,
-                                        dpt,
-                                        assetName))
-        if assetName in check :
-            # raise RuntimeError("Sorry, can't do this ! " + items + " already exists !")
-            print ("Sorry, can't do this ! " + assetName + " already exists !")
-            
-        else:
-            
-
-            source = os.path.join(r"\\gandalf/3D4_21_22",
-                                prod ,
-                                env.TMP_ASSET_PATH,
-                                env.E_PATH,
-                                env.GEO_LO,
-                                env.TMP_SCN_TYPE_E + env.ASCII)
-
-            destination_edit = os.path.join(r"\\gandalf/3D4_21_22",
-                                prod ,
-                                env.SET_PATH ,
-                                name,
-                                env.E_PATH,
-                                dpt,
-                                assetName,
-                                env.TMP_SCN_TYPE_E + env.ASCII)
-
-            path_edit = os.path.join(r"\\gandalf/3D4_21_22",
-                                prod,
-                                env.SET_PATH,
-                                name,
-                                env.E_PATH,
-                                dpt,
-                                assetName,
-                                assetName + env.ASCII)
-
-            # COPY FILE IN PUBLISH
-
-            destination_publish = os.path.join(r"\\gandalf/3D4_21_22",
-                                prod ,
-                                env.SET_PATH ,
-                                name,
-                                env.P_PATH,
-                                dpt,
-                                env.TMP_SCN_TYPE_E + env.ASCII)
-
-            path_publish = os.path.join(r"\\gandalf/3D4_21_22",
-                                prod,
-                                env.SET_PATH,
-                                name,
-                                env.P_PATH,
-                                dpt,
-                                assetName + env.ASCII)
-
-            #   Copy template
-            if os.path.isdir(destination_edit):
-                print ("_Template_asset is already there")
-            else:
-                shutil.copytree(source, destination_edit)
-                print ( "Template copied")
-
-            #   Copy template
-            if os.path.isdir(destination_publish):
-                print ("_Template_asset is already there")
-            else:
-                shutil.copytree(source, destination_publish)
-                print ( "Template copied")
-
-            try:
-                os.rename(destination_edit, path_edit)
-                os.rename(destination_publish, path_publish)
-                print (" Template renamed, it works well")
-            except:
-                print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
-
-        #Rename Scenes
-        
-            editToRename = os.path.join(server ,
-                                        prod,
-                                        env.SET_PATH,
-                                        name,
-                                        env.E_PATH,
-                                        dpt,
-                                        directory,
-                                        assetName,
-                                        env.TMP_SCN_TYPE_E + ".ma")
-
-            publishToRename = os.path.join(server,
-                                        prod,
-                                        env.SET_PATH,
-                                        name,
-                                        env.P_PATH ,
-                                        dpt ,
-                                        env.TMP_SCN_TYPE_P + ".ma")
-
-            editRenamed = os.path.join(server,
-                                        prod,
-                                        env.SET_PATH,
-                                        name,
-                                        env.E_PATH ,
-                                        dpt,
-                                        assetName + "_E_" + dpt + "_001.ma")
-
-            publishRenamed = os.path.join(server ,
-                                        prod,
-                                        env.SET_PATH,
-                                        name,
-                                        env.P_PATH ,
-                                        dpt,
-                                        assetName + "_P_" + dpt + ".ma")
-
-            try:
-                os.rename(editToRename, editRenamed )
-                # os.rename(publishToRename, publishRenamed)
-                print ( dpt + " renamed correctly (scenes)")
-            except:
-                print ( dpt + " isn't renamed correctly (scenes)... ...")
-
-        #Rename EDIT_TYPE data
-        for n in [".jpg", ".png", ".txt"]:
-            for dpt in departments:
-                editToRename = os.path.join(path ,
-                                        env.E_PATH ,
-                                        dpt ,
-                                        "_data" , env.TMP_SCN_TYPE_E + n)
-
-                editRenamed = os.path.join(path ,
-                                        env.E_PATH ,
-                                        dpt ,
-                                        "_data" ,
-                                        assetName + "_E_" + dpt + "_001" + n)
-
-                publishToRename = os.path.join(path ,
-                                        env.P_PATH ,
-                                        dpt ,
-                                        env.TMP_SCN_TYPE_P + n)
-
-                publishRenamed = os.path.join(path ,
-                                        env.P_PATH ,
-                                        dpt ,
-                                        assetName + "_P_" + dpt + n)
-
-                try :
-                    os.rename(editToRename, editRenamed)
-                    os.rename(publishToRename, publishRenamed)
-                    print ( dpt + " renamed correctly (data)")
-                except:
-                    print ( dpt + " isn't renamed correctly (data)... ...")
-
-        #Rename Sculpt
-        mudbox_to_rename = os.path.join(server,
-                                        prod,
-                                        env.SET_PATH ,
-                                        set,
-                                        module,
-                                        assetName,
-                                        env.MUDBOX_PATH,
-                                        env.TMP_SCN_TYPE_SCULPT + ".mud")
-
-        mudbox_renamed = os.path.join(server,
-                                        prod,
-                                        env.SET_PATH ,
-                                        set,
-                                        module,
-                                        assetName,
-                                        env.MUDBOX_PATH,
-                                        assetName + "_E_sculpt_001.mud")
-
-        zbrush_to_rename = os.path.join(server,
-                                        prod,
-                                        env.SET_PATH ,
-                                        set,
-                                        module,
-                                        assetName,
-                                        env.ZBRUSH_PATH,
-                                        env.TMP_SCN_TYPE_SCULPT + ".ZPR")
-
-        zbrush_renamed = os.path.join(server,
-                                        prod,
-                                        env.SET_PATH ,
-                                        set,
-                                        module,
-                                        assetName,
-                                        env.ZBRUSH_PATH,
-                                        assetName + "_E_sculpt_001.ZPR")
-
-        try:
-            os.rename(mudbox_to_rename, mudbox_renamed)
-            print ( "mudbox file renamed correctly")
-        except:
-            print ( "mudbox file isn't renamed correctly")
-
-        try:
-            os.rename(zbrush_to_rename, zbrush_renamed)
-            print ( "zbrush file renamed correctly")
-        except:
-            print ( "zbrush file isn't renamed correctly")
-
-        # PROFILE PICTURE
-        picTMP_ASSET_PATH = os.path.join(server ,
-                                        prod,
-                                        env.IMAGES_PATH,
-                                        env.TMP_IMAGE)
-
-        picDst = os.path.join(server,
-                                        prod,
-                                        env.IMAGES_PATH,
-                                        env.ITEM_TYPE,
-                                        env.TMP_IMAGE)
-
-        picRenamed = os.path.join(server,
-                                        prod,
-                                        env.IMAGES_PATH,
-                                        env.ITEM_TYPE ,
-                                        assetName + ".png")
-        try:
-            shutil.copyfile( picTMP_ASSET_PATH, picDst)
-            os.rename(picDst, picRenamed)
-            print ( "Image renamed correctly")
-            print ("New Character created with success")
-        except:
-            print ( "There is no profile picture, sorry... ...")
-            print ( "Try again, it will work better")
-
 def create_new_item_FN(name, server, prod, assetName):
 
     departments = os.listdir( os.path.join(r"\\gandalf/3D4_21_22",
@@ -398,6 +149,11 @@ def create_new_item_FN(name, server, prod, assetName):
                                         env.SET_PATH,
                                         name ,
                                         env.E_PATH))
+
+    try:
+        departments.remove(env.DRESSING)
+    except:
+        print ( "No dressing folder")
 
     for dep in departments:
 
@@ -417,7 +173,7 @@ def create_new_item_FN(name, server, prod, assetName):
                                 dep,
                                 env.TMP_SCN_TYPE_E + env.ASCII)
 
-        destination = os.path.join(r"\\gandalf/3D4_21_22",
+        dest_edit = os.path.join(r"\\gandalf/3D4_21_22",
                                 prod,
                                 env.SET_PATH,
                                 name,
@@ -426,7 +182,15 @@ def create_new_item_FN(name, server, prod, assetName):
                                 assetName,
                                 env.TMP_SCN_TYPE_E + env.ASCII)
         
-        new_name = os.path.join(r"\\gandalf/3D4_21_22",
+        dest_publish = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod,
+                                env.SET_PATH,
+                                name,
+                                env.P_PATH,
+                                dep,
+                                env.TMP_SCN_TYPE_E + env.ASCII)
+
+        new_name_edit = os.path.join(r"\\gandalf/3D4_21_22",
                                 prod,
                                 env.SET_PATH,
                                 name,
@@ -435,13 +199,22 @@ def create_new_item_FN(name, server, prod, assetName):
                                 assetName,
                                 assetName + env.E_TXT + dep + "_001" + env.ASCII)
 
+        new_name_publish = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod,
+                                env.SET_PATH,
+                                name,
+                                env.P_PATH,
+                                dep,
+                                assetName + env.P_TXT + dep + env.ASCII)
 
         #   Copy template
-        shutil.copyfile(source, destination)
+        shutil.copyfile(source, dest_edit)
+        shutil.copyfile(source, dest_publish)
         print ( "Template copied")
             
         try:
-            os.rename(destination, new_name)
+            os.rename(dest_edit, new_name_edit)
+            os.rename(dest_publish, new_name_publish)
             print (" Template renamed, it works well")
         except:
             print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
