@@ -393,10 +393,10 @@ def old_create_new_item_FN(name, server, prod, assetName):
 
 def create_new_item_FN(name, server, prod, assetName):
 
-    departments = ["geoLo", "cloth", "groom", "lookdev", "geoHi", "rig" ]
 
-    for dep in departments:
-        os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
+    for dep in ["geoLo", "cloth", "groom", "lookdev", "geoHi", "rig" ]:
+
+        path_to_folder = os.makedirs(os.path.join(r"\\gandalf/3D4_21_22",
                                         prod,
                                         env.SET_PATH,
                                         name,
@@ -404,59 +404,43 @@ def create_new_item_FN(name, server, prod, assetName):
                                         dep,
                                         assetName))
 
-        check = os.listdir(os.path.join(server ,
-                                        prod,
-                                        env.SET_PATH,
-                                        name,
-                                        env.E_PATH,
-                                        dep))
+        
+        source = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod ,
+                                env.TMP_ASSET_PATH,
+                                env.E_PATH,
+                                dep,
+                                env.TMP_SCN_TYPE_E + env.ASCII)
 
-        if assetName in check :
-            print ("Sorry, can't do this ! " + assetName + " already exists !")
-	    
-        # else:
+        destination = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod,
+                                env.SET_PATH,
+                                name,
+                                env.E_PATH,
+                                dep,
+                                assetName,
+                                env.TMP_SCN_TYPE_E + env.ASCII)
+        
+        new_name = os.path.join(r"\\gandalf/3D4_21_22",
+                                prod,
+                                env.SET_PATH,
+                                name,
+                                env.E_PATH,
+                                dep,
+                                assetName,
+                                assetName + env.E_TXT + dep + "_001" + env.ASCII)
+
+
+        #   Copy template
+        shutil.copyfile(source, destination)
+        print ( "Template copied")
             
-        #     source = os.path.join(server,
-        #                             prod ,
-        #                             env.TMP_ASSET_PATH,
-        #                             env.E_PATH,
-        #                             env.GEO_LO,
-        #                             env.TMP_SCN_TYPE_E + env.ASCII)
+        try:
+            os.rename(destination, new_name)
+            print (" Template renamed, it works well")
+        except:
+            print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
 
-        #     destination = os.path.join(server ,
-        #                         prod ,
-        #                         env.SET_PATH,
-        #                         env.TMP_ASSET)
-
-        #     path = os.path.join(server ,
-        #                         prod,
-        #                         env.SET_PATH ,
-        #                         assetName)
-
-        #     #   Copy template
-        #     if os.path.isdir(destination):
-        #         print ("_Template_asset is already there")
-        #     else:
-        #         shutil.copytree(source, destination)
-        #         print ( "Template copied")
-                
-        #     try:
-        #         os.rename(destination, path)
-        #         print (" Template renamed, it works well")
-        #     except:
-        #         print ( "I couldn't rename " + assetName + " correctly ! Please do it by hand !")
-
-        #     #Rename Scenes
-        #     for dpt in departments:
-        #         editToRename = os.path.join(path ,
-        #                                     env.E_PATH ,
-        #                                     dpt ,
-        #                                     env.TMP_SCN_TYPE_E + ".ma")
-
-        #         publishToRename = os.path.join(path ,
-        #                                     env.P_PATH ,
-        #                                     dpt ,
-        #                                     env.TMP_SCN_TYPE_P + ".ma")
 
     print ( "done" )
 #ITEMS
