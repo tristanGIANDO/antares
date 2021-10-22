@@ -485,3 +485,11 @@ def open_in_folder_sculpt_FN(name, soft, server, setName, modName, prod):
                             env.SCULPT_TYPE,
                             soft)
     os.startfile(path)
+
+def open_in_folder_module_FN(name, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SET_PATH ,
+                            name,
+                            env.E_PATH)
+    os.startfile(path)

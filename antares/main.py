@@ -998,12 +998,12 @@ class MainWindow(QWidget) :
 
 
                 item_menu.addSeparator()
-                openInFolder = item_menu.addAction(self.open_in_folder_LBL)
+                
                 delete = item_menu.addAction(self.delete_asset_LBL)
                 
                 #Connections
                 delete.triggered.connect(partial(self.delete_item_UI, item_name, name, dep))
-                openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
+                
 
                 
                 
@@ -1014,6 +1014,7 @@ class MainWindow(QWidget) :
             #NEW ITEM
             menu.addSeparator()
             create_new_item = menu.addAction(self.new_item_LBL)
+            openInFolder = menu.addAction(self.open_in_folder_LBL)
             menu.addSeparator()
             delete_module = menu.addAction(self.delete_module_LBL)
 
@@ -1022,6 +1023,7 @@ class MainWindow(QWidget) :
             publish_dress.triggered.connect(partial(self.open_publish_dress_item_UI, name))
             create_new_item.triggered.connect(partial(self.create_new_item_UI, name))
             delete_module.triggered.connect(partial(self.delete_module_UI, name))
+            openInFolder.triggered.connect(partial(self.open_in_folder_module_UI, name)) 
             
         
         
@@ -1322,6 +1324,14 @@ class MainWindow(QWidget) :
             return
         item.open_in_folder_edits_FN (  item_name, name, dep, server, prod)
     
+    def open_in_folder_module_UI(self, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        folder = self.serverName.text()
+        if not server:
+            return
+        item.open_in_folder_module_FN(  name, server, prod = prod)
+
     def delete_item_UI(self, item_name, name, dep):
         prod = self.prodName.text()
         server = self.serverName.text()
