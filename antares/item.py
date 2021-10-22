@@ -376,24 +376,45 @@ def open_in_folder_edits_FN(item_name, name, dep, server, prod):
                             dep)
     os.startfile(path)
 
-def deleteAsset_FN (name, server, setName, modName, prod ):
-    try :
-        shutil.rmtree(os.path.join(server,
+def delete_item_FN (item_name, name, dep, server, prod ):
+    
+
+    departments = os.listdir( os.path.join(r"\\gandalf/3D4_21_22",
+                                        prod,
+                                        env.SET_PATH,
+                                        name ,
+                                        env.E_PATH))
+
+    try:
+        departments.remove(env.DRESSING)
+    except:
+        print ( "No dressing folder")
+    
+
+    for dpt in departments:
+        path = os.path.join(server,
                                     prod,
                                     env.SET_PATH ,
-                                    setName,
-                                    modName,
-                                    name,))
-    except:
-        print ("You already removed the folder.")
-    try:
-        os.remove(os.path.join(server,
-                                    prod,
-                                    env.IMAGES_PATH,
-                                    env.ITEM_TYPE,
-                                    name + ".png"))
-    except:
-        print ("You already removed the asset picture.")
+                                    name,
+                                    env.E_PATH,
+                                    dpt,
+                                    item_name)
+        try :
+            shutil.rmtree(path)
+        except:
+            print ("You already removed the folder.")
+
+        print ( path )
+
+
+    # try:
+    #     os.remove(os.path.join(server,
+    #                                 prod,
+    #                                 env.IMAGES_PATH,
+    #                                 env.ITEM_TYPE,
+    #                                 name + ".png"))
+    # except:
+    #     print ("You already removed the asset picture.")
     
     print ( name + " deleted with success.")
     

@@ -890,12 +890,13 @@ class MainWindow(QWidget) :
             last_dress = dress_menu.addAction(self.last_edit_LBL)
             publish_dress = dress_menu.addAction(self.open_publish_LBL)
 
+            menu.addSeparator()
+
             # CREER SUBMENU AVEC LE NOM DES ITEMS
             
             for item_name in item_list:
                 item_menu = menu.addMenu(item_name)
                 
-
                 # CREER SUBMENU POUR LES DEPARTEMENTS
                 for dep in departmentList:
                     #VARIABLES
@@ -1000,7 +1001,7 @@ class MainWindow(QWidget) :
                 delete = item_menu.addAction(self.delete_asset_LBL)
                 
                 #Connections
-                delete.triggered.connect(partial(self.deleteAsset_UI, name))
+                delete.triggered.connect(partial(self.delete_item_UI, item_name, name, dep))
                 openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
 
                 
@@ -1317,12 +1318,12 @@ class MainWindow(QWidget) :
             return
         item.open_in_folder_edits_FN (  item_name, name, dep, server, prod)
     
-    def deleteAsset_item_UI(self, name, server, setName, modName):
+    def delete_item_UI(self, item_name, name, dep):
         
         prod = self.prodName.text()
         server = self.serverName.text()
 
-        item.deleteAsset_FN(  name, server, setName, modName, prod = prod)
+        item.delete_item_FN(  item_name, name, dep, server, prod)
         self.reload()
     
     # FX
