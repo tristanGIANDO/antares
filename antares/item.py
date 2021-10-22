@@ -378,7 +378,6 @@ def open_in_folder_edits_FN(item_name, name, dep, server, prod):
 
 def delete_item_FN (item_name, name, dep, server, prod ):
     
-
     departments = os.listdir( os.path.join(r"\\gandalf/3D4_21_22",
                                         prod,
                                         env.SET_PATH,
@@ -390,7 +389,6 @@ def delete_item_FN (item_name, name, dep, server, prod ):
     except:
         print ( "No dressing folder")
     
-
     for dpt in departments:
         path = os.path.join(server,
                                     prod,
@@ -402,10 +400,9 @@ def delete_item_FN (item_name, name, dep, server, prod ):
         try :
             shutil.rmtree(path)
         except:
-            print ("You already removed the folder.")
+            print ("You already removed " + dpt )
 
         print ( path )
-
 
     # try:
     #     os.remove(os.path.join(server,
@@ -415,9 +412,32 @@ def delete_item_FN (item_name, name, dep, server, prod ):
     #                                 name + ".png"))
     # except:
     #     print ("You already removed the asset picture.")
-    
     print ( name + " deleted with success.")
+
+def delete_module_FN (name, server, prod ):
     
+    path = os.path.join(server,
+                                prod,
+                                env.SET_PATH ,
+                                name)
+    try :
+        shutil.rmtree(path)
+    except:
+        print ("You already removed " + path )
+
+    print ( path )
+
+    try:
+        os.remove(os.path.join(server,
+                                    prod,
+                                    env.IMAGES_PATH,
+                                    env.SET_TYPE,
+                                    name + ".png"))
+    except:
+        print ("You already removed the asset picture.")
+
+    print ( name + " deleted with success.")
+
 def renameAsset_FN(server, prod, oldName, newName):
     oldPath = os.path.join(server , prod , env.CHAR_PATH , oldName)
     newPath = os.path.join(server , prod , env.CHAR_PATH , newName)

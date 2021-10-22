@@ -135,7 +135,8 @@ class MainWindow(QWidget) :
         self.import_publish_LBL = "Import Publish (open socket)"
         self.open_in_folder_LBL = "Open In Folder"
         self.duplicate_asset_LBL = "Duplicate Asset (to do)"
-        self.delete_asset_LBL = "Delete Asset"
+        self.delete_asset_LBL = "Delete Asset !!"
+        self.delete_module_LBL = "Delete Module !!"
         self.create_new_task_LBL = "Create New Task (to do)"
         self.new_item_LBL = "Create New Item"
         self.dressing_LBL = "DRESSING"
@@ -1013,11 +1014,14 @@ class MainWindow(QWidget) :
             #NEW ITEM
             menu.addSeparator()
             create_new_item = menu.addAction(self.new_item_LBL)
+            menu.addSeparator()
+            delete_module = menu.addAction(self.delete_module_LBL)
 
             #CONNECTIONS
             last_dress.triggered.connect(partial(self.open_last_dress_item_UI, name))
             publish_dress.triggered.connect(partial(self.open_publish_dress_item_UI, name))
             create_new_item.triggered.connect(partial(self.create_new_item_UI, name))
+            delete_module.triggered.connect(partial(self.delete_module_UI, name))
             
         
         
@@ -1319,13 +1323,17 @@ class MainWindow(QWidget) :
         item.open_in_folder_edits_FN (  item_name, name, dep, server, prod)
     
     def delete_item_UI(self, item_name, name, dep):
-        
         prod = self.prodName.text()
         server = self.serverName.text()
-
         item.delete_item_FN(  item_name, name, dep, server, prod)
         self.reload()
     
+    def delete_module_UI(self, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        item.delete_module_FN (  name, server, prod)
+        self.reload()
+
     # FX
 
     def create_new_FX_UI(self):
