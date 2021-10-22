@@ -1248,8 +1248,8 @@ class MainWindow(QWidget) :
         prop.deleteAsset_FN(  name, server,  prod = prod)
         self.reload()
 
-    # ITEMS
 
+    # ITEMS
     def create_new_module_UI(self):
         prod = self.prodName.text()
         server = self.serverName.text()

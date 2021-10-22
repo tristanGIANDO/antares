@@ -372,8 +372,8 @@ def open_in_folder_edits_FN(item_name, name, dep, server, prod):
                             env.SET_PATH ,
                             name,
                             env.E_PATH,
-                            item_name,
-                            dep)
+                            dep,
+                            item_name)
     os.startfile(path)
 
 def delete_item_FN (item_name, name, dep, server, prod ):
@@ -491,5 +491,6 @@ def open_in_folder_module_FN(name, server, prod):
                             prod,
                             env.SET_PATH ,
                             name,
-                            env.E_PATH)
+                            env.MAYA_TYPE,
+                            env.SCN_TYPE)
     os.startfile(path)
