@@ -304,20 +304,6 @@ def substance_FN(name, server, prod):
                             name ,
                             env.SRC_IMG_PATH)
 
-    listOfStr = ["author",
-                    "description",
-                    "name",
-                    "protected",
-                    "rendererVersion",
-                    "version",
-                    "versionControl"]
-    listOfTxt = ["felixou",
-                    "",
-                    name,
-                    "",
-                    "24.1",
-                    "1.0",
-                    "none"]
 
     os.makedirs(os.path.join(srcImg_path,
                     env.RMAN_LIB,
@@ -335,21 +321,20 @@ def substance_FN(name, server, prod):
 
     ####
 
-    a_file = open(dst, "r")
-    json_object = json.load(a_file)
-    a_file.close()
-    print(json_object)
+    dictionary = {
+    "RenderManAssetLibrary": {
+        "author" : env.USER,
+        "description": "",
+        "name": name,
+        "protected": "",
+        "rendererVersion": "24.1",
+        "version": "1.0",
+        "versionControl": "none"
+        }
+    }
     
-    my_list = []
-    temp_dict = {}
-    temp_dict['id'] = id
-    temp_dict['iscategorical'] = iscat.replace('$home', id)
-    my_list.append(temp_dict)
-    json_object["name"] = name
-
-    a_file = open(dst, "w")
-    json.dump(json_object, a_file, indent=4)
-    a_file.close()
+    with open(dst, "w") as outfile:
+        json.dump(dictionary, outfile)
 
     print ( "Substance Library created" )
 
