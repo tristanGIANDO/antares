@@ -254,42 +254,75 @@ def deleteAsset_FN (name, server, prod ):
     
     print ( name + " deleted with success.")
     
-def renameAsset_FN(server, prod, oldName, newName):
-    oldPath = os.path.join(server , prod , env.CHAR_PATH , oldName)
-    newPath = os.path.join(server , prod , env.CHAR_PATH , newName)
-    IMAGES_PATHPath = os.path.join(server , prod, env.IMAGES_PATH_IMG, env.CHAR_TYPE)
-      
-    os.rename(oldPath, newPath)
-
-    departmentList = os.listdir( os.path.join(newPath , env.EDIT_TYPE))
-    for dpt in departmentList:
-        editPath = os.path.join(newPath , env.EDIT_TYPE , dpt )
-        publishPath = os.path.join(newPath , env.PUBLISH_TYPE , dpt)
-
-        editToRename = os.path.join(editPath , oldName + "_E_" + dpt + "_001.ma")
-        editRenamed = os.path.join(editPath , newName + "_E_" + dpt + "_001.ma")
-        publishToRename = os.path.join(publishPath , oldName + "_P_" + dpt + ".ma")
-        publishRenamed = os.path.join(publishPath, newName + "_P_" + dpt + ".ma")
-        os.rename(editToRename, editRenamed )
-        os.rename(publishToRename, publishRenamed)
+def rename_FN(name, server, prod, assetName):
+    old_path = os.path.join(r"\\gandalf/3D4_21_22",
+                            prod,
+                            env.CHAR_PATH,
+                            name)  
     
-    for n in [".jpg", ".png", ".txt"]:
-        for dpt in departmentList:
-            editPath = os.path.join(newPath , env.EDIT_TYPE , dpt, "_data" )
-            publishPath = os.path.join(newPath , env.PUBLISH_TYPE , dpt)
+    new_path = os.path.join(r"\\gandalf/3D4_21_22",
+                            prod,
+                            env.CHAR_PATH,
+                            assetName) 
+    
+    os.rename(old_path, new_path)
 
-            editToRename = os.path.join(editPath , oldName + "_E_" + dpt + "_001" + n)
-            editRenamed = os.path.join(editPath , newName + "_E_" + dpt + "_001" + n)
-            publishToRename = os.path.join(publishPath, oldName + "_P_" + dpt + n)
-            publishRenamed = os.path.join(publishPath, newName + "_P_" + dpt + n)
-            os.rename(editToRename, editRenamed)
+    edit_department = os.listdir( os.path.join(new_path ,
+                            env.E_PATH))
+
+    publish_department = os.listdir( os.path.join(new_path ,
+                            env.P_PATH))
+
+    for dpt in edit_department:
+        edit_path = os.path.join(new_path ,
+                            env.E_PATH ,
+                            dpt )
+
+        publish_path = os.path.join(new_path ,
+                            env.P_PATH ,
+                            dpt)
+
+        
+
+    for dpt in publish_department:
+        editToRename = os.path.join(edit_path ,
+                            name + env.E_TXT + dpt + "_001" + env.ASCII)
+        editRenamed = os.path.join(edit_path , 
+                            assetName + env.E_TXT + dpt + "_001" + env.ASCII)
+
+        publishToRename = os.path.join(publish_path ,
+                            name + env.P_TXT + dpt + env.ASCII)
+
+        publishRenamed = os.path.join(publish_path,
+                            assetName + env.P_TXT + dpt + env.ASCII)
+
+        try:
+            os.rename(editToRename, editRenamed )
+        except:
+            print ( "Edit not renamed" )
+
+        try:    
             os.rename(publishToRename, publishRenamed)
+        except:
+            print ( "Publish not renamed")
 
-    picDst = os.path.join(IMAGES_PATHPath, oldName + ".png")
-    picRenamed = os.path.join(IMAGES_PATHPath, newName + ".png")
-    os.rename(picDst, picRenamed)
+    # for n in [".jpg", ".png", ".txt"]:
+    #     for dpt in departmentList:
+    #         editPath = os.path.join(newPath , env.EDIT_TYPE , dpt, "_data" )
+    #         publishPath = os.path.join(newPath , env.PUBLISH_TYPE , dpt)
+
+    #         editToRename = os.path.join(editPath , oldName + "_E_" + dpt + "_001" + n)
+    #         editRenamed = os.path.join(editPath , newName + "_E_" + dpt + "_001" + n)
+    #         publishToRename = os.path.join(publishPath, oldName + "_P_" + dpt + n)
+    #         publishRenamed = os.path.join(publishPath, newName + "_P_" + dpt + n)
+    #         os.rename(editToRename, editRenamed)
+    #         os.rename(publishToRename, publishRenamed)
+
+    # picDst = os.path.join(IMAGES_PATHPath, oldName + ".png")
+    # picRenamed = os.path.join(IMAGES_PATHPath, newName + ".png")
+    # os.rename(picDst, picRenamed)
     
-    print ( "'", oldName , "' renamed '", newName, "' with success")
+    # print ( "'", oldName , "' renamed '", newName, "' with success")
 
 def substance_FN(name, server, prod):
     src = os.path.join(r"\\gandalf/3D4_21_22",
@@ -335,7 +368,7 @@ def substance_FN(name, server, prod):
             json.dump(dictionary, outfile)
 
         print ( "Substance Library created" )
-        
+
     except:
         print ( "Substance Library already created" )
 

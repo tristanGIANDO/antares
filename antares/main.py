@@ -137,6 +137,7 @@ class MainWindow(QWidget) :
         self.duplicate_asset_LBL = "Duplicate Asset (to do)"
         self.delete_asset_LBL = "Delete Asset !!"
         self.delete_module_LBL = "Delete Module !!"
+        self.rename_asset_LBL = "Rename Asset"
         self.create_new_task_LBL = "Create New Task (to do)"
         self.new_item_LBL = "Create New Item"
         self.substance_LBL = "Create Substance Library"
@@ -154,7 +155,7 @@ class MainWindow(QWidget) :
         self.newCharBTN.clicked.connect(self.createNewChara_UI)
         self.newPropBTN.clicked.connect(self.createNewProp_UI)
         self.newFX_BTN.clicked.connect(self.create_new_FX_UI)
-        self.renameButton.clicked.connect(self.renameAsset_UI)
+        self.renameButton.clicked.connect(self.rename_char_UI)
         self.reloadBTN.clicked.connect(self.reload)
         self.setProd.clicked.connect(self.setProd_FN)
         self.library_BTN.clicked.connect(self.open_library_UI)
@@ -204,39 +205,32 @@ class MainWindow(QWidget) :
         up_tab01_Layout_L.addWidget(self.prodLabel)
         mid_tab01_Layout_L.addWidget(self.serverName, 0,1)
         mid_tab01_Layout_L.addWidget(self.prodName, 1,1)
-        mid_tab01_Layout_L.addWidget(self.assetDirName, 2,1)
-        mid_tab01_Layout_L.addWidget(self.shotDirName, 3,1)
-        mid_tab01_Layout_L.addWidget(self.char_type_name, 4,1)
-        mid_tab01_Layout_L.addWidget(self.prop_type_name, 5,1)
-        mid_tab01_Layout_L.addWidget(self.fx_type_name, 6,1)
-        mid_tab01_Layout_L.addWidget(self.maya_type_name, 7,1)
-        mid_tab01_Layout_L.addWidget(self.sculpt_type_name, 8,1)
-        mid_tab01_Layout_L.addWidget(self.scn_type_name, 9,1)
-        mid_tab01_Layout_L.addWidget(self.edit_type_name, 10,1)
-        mid_tab01_Layout_L.addWidget(self.publish_type_name, 11,1)
+        # mid_tab01_Layout_L.addWidget(self.assetDirName, 2,1)
+        # mid_tab01_Layout_L.addWidget(self.shotDirName, 3,1)
+        # mid_tab01_Layout_L.addWidget(self.char_type_name, 4,1)
+        # mid_tab01_Layout_L.addWidget(self.prop_type_name, 5,1)
+        # mid_tab01_Layout_L.addWidget(self.fx_type_name, 6,1)
+        # mid_tab01_Layout_L.addWidget(self.maya_type_name, 7,1)
+        # mid_tab01_Layout_L.addWidget(self.sculpt_type_name, 8,1)
+        # mid_tab01_Layout_L.addWidget(self.scn_type_name, 9,1)
+        # mid_tab01_Layout_L.addWidget(self.edit_type_name, 10,1)
+        # mid_tab01_Layout_L.addWidget(self.publish_type_name, 11,1)
         
         mid_tab01_Layout_L.addWidget(self.server_LBL, 0,0)
         mid_tab01_Layout_L.addWidget(self.prod_LBL, 1,0)
-        mid_tab01_Layout_L.addWidget(self.assetDir_LBL, 2,0)
-        mid_tab01_Layout_L.addWidget(self.shotDir_LBL, 3,0)
-        mid_tab01_Layout_L.addWidget(self.char_type_LBL, 4,0)
-        mid_tab01_Layout_L.addWidget(self.prop_type_LBL, 5,0)
-        mid_tab01_Layout_L.addWidget(self.fx_type_LBL, 6,0)
-        mid_tab01_Layout_L.addWidget(self.maya_type_LBL, 7,0)
-        mid_tab01_Layout_L.addWidget(self.sculpt_type_LBL, 8,0)
-        mid_tab01_Layout_L.addWidget(self.scn_type_LBL, 9,0)
-        mid_tab01_Layout_L.addWidget(self.edit_type_LBL, 10,0)
-        mid_tab01_Layout_L.addWidget(self.publish_type_LBL, 11,0)
+        # mid_tab01_Layout_L.addWidget(self.assetDir_LBL, 2,0)
+        # mid_tab01_Layout_L.addWidget(self.shotDir_LBL, 3,0)
+        # mid_tab01_Layout_L.addWidget(self.char_type_LBL, 4,0)
+        # mid_tab01_Layout_L.addWidget(self.prop_type_LBL, 5,0)
+        # mid_tab01_Layout_L.addWidget(self.fx_type_LBL, 6,0)
+        # mid_tab01_Layout_L.addWidget(self.maya_type_LBL, 7,0)
+        # mid_tab01_Layout_L.addWidget(self.sculpt_type_LBL, 8,0)
+        # mid_tab01_Layout_L.addWidget(self.scn_type_LBL, 9,0)
+        # mid_tab01_Layout_L.addWidget(self.edit_type_LBL, 10,0)
+        # mid_tab01_Layout_L.addWidget(self.publish_type_LBL, 11,0)
 
         mid_tab01_Layout_L.addWidget(Separador, 12,0)
         
-
-        # mid_tab01_Layout_L.addWidget( self.oldNameLabel, 13,0 )
-        # mid_tab01_Layout_L.addWidget( self.oldName, 13, 1 )
-        # mid_tab01_Layout_L.addWidget( self.newNameLabel , 14,0)
-        # mid_tab01_Layout_L.addWidget( self.newName , 14,1)
-        # mid_tab01_Layout_L.addWidget(self.renameButton, 15,0)
-
         for widget in [#self.createProd,
                         self.setProd]:
             dwn_tab01_Layout_L.addWidget(widget)
@@ -255,10 +249,10 @@ class MainWindow(QWidget) :
                         self.resources_BTN,
                         self.library_LBL,
                         self.library_BTN,
-                        self.user_BTN]:
+                        self.user_BTN,
                         # self.theme_LBL,
-                        # self.lightTheme_BTN,
-                        # self.darkTheme_BTN,
+                        self.lightTheme_BTN,
+                        self.darkTheme_BTN]:
                         # self.tmp_server_Name]:
             main_tab02_Layout_L.addWidget(widget)
 
@@ -465,9 +459,7 @@ class MainWindow(QWidget) :
                 lastEdit = items.addAction(QIcon(editImage), self.last_edit_LBL + "( " + date_last_edit + " )" )
                 openPublish = items.addAction(QIcon(publishImage), self.open_publish_LBL +  " ( " + publish_date + " )")
                 
-                Edits = items.addAction("All Edits")
-                # for i in allEdits:
-                #     Edits.addAction(i + " (" + date + ") (To Do)")  
+                Edits = items.addAction("All Edits")  
                 refPublish = items.addAction(self.ref_publish_LBL)
                 importPublish = items.addAction(self.import_publish_LBL)
 
@@ -501,13 +493,16 @@ class MainWindow(QWidget) :
             menu.addSeparator()
             openInFolder = menu.addAction(self.open_in_folder_LBL)
             # menu.addAction(self.duplicate_asset_LBL)
+            # renamer = menu.addAction(self.rename_asset_LBL)
+            substance = menu.addAction(self.substance_LBL)
+            menu.addSeparator()
             delete = menu.addAction(self.delete_asset_LBL)
             # menu.addAction(self.create_new_task_LBL)
             
             #Connections
             delete.triggered.connect(partial(self.deleteAsset_UI, name))
             openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
-            substance = menu.addAction(self.substance_LBL)
+            # renamer.triggered.connect(partial(self.rename_char_UI, name)) 
             substance.triggered.connect(partial(self.substance_char_UI, name))
 
             
@@ -1100,7 +1095,6 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         assetName = self.assetName.text()
         server = self.serverName.text()
-        folder = self.serverName.text()
         if not server:
             return
         if not prod:
@@ -1145,16 +1139,13 @@ class MainWindow(QWidget) :
         fn.deleteAsset_FN(  name, server,  prod = prod)
         self.reload()
 
-    def renameAsset_UI(self):
+    def rename_char_UI(self, name):
         prod = self.prodName.text()
-        oldName = self.oldName.text()
-        newName = self.newName.text()
         server = self.serverName.text()
-        folder = self.serverName.text()
+        assetName = self.assetName.text()
         if not server:
             return
-        print ( newName )
-        fn.renameAsset_FN (   server, prod = prod, oldName = oldName, newName = newName)
+        fn.rename_FN (   name, server = server, prod = prod, assetName = assetName )
         self.reload()
 
     def refPublish_UI(self, name, dep):
@@ -1515,6 +1506,25 @@ class MainWindow(QWidget) :
 
         self.reload()
 
+    def toggle_stylesheet(path):
+        '''
+        Toggle the stylesheet to use the desired path in the Qt resource
+        system (prefixed by `:/`) or generically (a path to a file on
+        system).
+
+        :path:      A full path to a resource or file on system
+        '''
+
+        # get the QApplication instance,  or crash if not set
+        app = QApplication.instance()
+        if app is None:
+            raise RuntimeError("No Qt Application found.")
+
+        file = QFile(path)
+        file.open(QFile.ReadOnly | QFile.Text)
+        stream = QTextStream(file)
+        app.setStyleSheet(stream.readAll())
+
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=-1, spacing=-1):
@@ -1623,7 +1633,7 @@ if __name__ == "__main__":
     application = QApplication(sys.argv)
 
     # application.setStyle('Fusion')
-
+    
     file = QFile("./darkTheme.qss")
     # file = QFile("./pinkTheme.qss")
     file.open(QFile.ReadOnly | QFile.Text)
