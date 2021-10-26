@@ -1,4 +1,4 @@
-import os, shutil, socket
+import os, shutil, socket, json
 import env
 
 
@@ -194,16 +194,14 @@ def openLastEdit_FN(name, dep, server, prod):
                             name ,
                             env.E_PATH ,
                             dep)
-    print ( path )
     destination = os.listdir( path )
-    print ( destination )
     try:
         destination.remove("_data")
     except:
         print ( "No data")
     project = os.path.join(path,  destination[-1])
     print ( project )
-    print ("Edit Path is a file")
+    print ("Let's open this scene !!")
     os.startfile(project)
 
 def open_in_folder_edits_FN(name, dep, server, prod):
@@ -293,6 +291,67 @@ def renameAsset_FN(server, prod, oldName, newName):
     
     print ( "'", oldName , "' renamed '", newName, "' with success")
 
+def substance_FN(name, server, prod):
+    src = os.path.join(r"\\gandalf/3D4_21_22",
+                            prod,
+                            env.LIBRARY,
+                            env.RMAN_LIB,
+                            "library.json")
+
+    srcImg_path = os.path.join(server  ,
+                            prod,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.SRC_IMG_PATH)
+
+    listOfStr = ["author",
+                    "description",
+                    "name",
+                    "protected",
+                    "rendererVersion",
+                    "version",
+                    "versionControl"]
+    listOfTxt = ["felixou",
+                    "",
+                    name,
+                    "",
+                    "24.1",
+                    "1.0",
+                    "none"]
+
+    os.makedirs(os.path.join(srcImg_path,
+                    env.RMAN_LIB,
+                    env.RMAN_MAT))
+
+    dst = os.path.join(r"\\gandalf/3D4_21_22" ,
+                            prod,
+                            env.CHAR_PATH ,
+                            name ,
+                            env.SRC_IMG_PATH,
+                            env.RMAN_LIB,
+                            "library.json")
+    
+    shutil.copyfile(src, dst)
+
+    ####
+
+    a_file = open(dst, "r")
+    json_object = json.load(a_file)
+    a_file.close()
+    print(json_object)
+    
+    my_list = []
+    temp_dict = {}
+    temp_dict['id'] = id
+    temp_dict['iscategorical'] = iscat.replace('$home', id)
+    my_list.append(temp_dict)
+    json_object["name"] = name
+
+    a_file = open(dst, "w")
+    json.dump(json_object, a_file, indent=4)
+    a_file.close()
+
+    print ( "Substance Library created" )
 
 # FUNCTIONS SOCKETS
 
