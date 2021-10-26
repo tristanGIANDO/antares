@@ -64,6 +64,8 @@ SCN_TYPE = "scenes"
 EDIT_TYPE = "edit"
 PUBLISH_TYPE = "publish"
 LIBRARY = "_library"
+RMAN_LIB = "RenderManAssetLibrary"
+RMAN_MAT = "Materials"
 #DEPARTEMENTS
 P_TXT = "_P_"
 E_TXT = "_E_"

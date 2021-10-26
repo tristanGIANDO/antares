@@ -139,6 +139,7 @@ class MainWindow(QWidget) :
         self.delete_module_LBL = "Delete Module !!"
         self.create_new_task_LBL = "Create New Task (to do)"
         self.new_item_LBL = "Create New Item"
+        self.substance_LBL = "Create Substance Library"
         self.dressing_LBL = "DRESSING"
         
         # self.progress = QProgressBar(self)
@@ -502,9 +503,11 @@ class MainWindow(QWidget) :
             menu.addAction(self.duplicate_asset_LBL)
             delete = menu.addAction(self.delete_asset_LBL)
             menu.addAction(self.create_new_task_LBL)
+            substance = menu.addAction(self.substance_LBL)
             #Connections
             delete.triggered.connect(partial(self.deleteAsset_UI, name))
             openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
+            substance.triggered.connect(partial(self.substance_char_UI, name))
 
             
 
@@ -1187,6 +1190,15 @@ class MainWindow(QWidget) :
             return
         fn.open_in_folder_edits_FN (  name, dep, server, prod)
 
+    def substance_char_UI(self, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        fn.substance_FN (  name, server, prod)
+        
+
+
     # PROPS
     def createNewProp_UI(self):
         prod = self.prodName.text()
@@ -1594,8 +1606,8 @@ if __name__ == "__main__":
 
     # application.setStyle('Fusion')
 
-    #file = QFile("./darkTheme.qss")
-    file = QFile("./pinkTheme.qss")
+    file = QFile("./darkTheme.qss")
+    # file = QFile("./pinkTheme.qss")
     file.open(QFile.ReadOnly | QFile.Text)
     stream = QTextStream(file)
     application.setStyleSheet(stream.readAll())

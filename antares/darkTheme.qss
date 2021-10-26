@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 /*-----QWidget-----*/
 QWidget
 {
-	background-color: #ebb8f2;
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(95, 138, 207, 255),stop:1 rgba(57, 58, 102, 255));
 	color: #fff;
 	selection-background-color: #7bb4e9;
 	selection-color: #000;
@@ -180,7 +180,7 @@ QToolButton:checked
 /*-----QPushButton-----*/
 QPushButton
 {
-	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(84, 84, 84, 255),stop:1 rgba(59, 59, 59, 255));
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(84, 84, 84, 255),stop:1 rgba(16, 44, 84, 255));
 	color: #ffffff;
 	min-width: 80px;
 	border-style: solid;
