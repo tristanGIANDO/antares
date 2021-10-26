@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 /*-----QWidget-----*/
 QWidget
 {
-	background-color: #2a2a2a;
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(77, 165, 209, 255),stop:1 rgba(21, 61, 81, 255));
 	color: #fff;
 	selection-background-color: #7bb4e9;
 	selection-color: #000;
@@ -180,7 +180,7 @@ QToolButton:checked
 /*-----QPushButton-----*/
 QPushButton
 {
-	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(84, 84, 84, 255),stop:1 rgba(59, 59, 59, 255));
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(174, 214, 234, 255),stop:1 rgba(17, 49, 65, 255));
 	color: #ffffff;
 	min-width: 80px;
 	border-style: solid;
@@ -264,7 +264,7 @@ QPlainTextEdit
 /*-----QTabBar-----*/
 QTabBar::tab
 {
-	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(84, 84, 84, 255),stop:1 rgba(59, 59, 59, 255));
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(174, 214, 234, 255),stop:1 rgba(17, 49, 65, 255));
 	color: #ffffff;
 	border-style: solid;
 	border-width: 1px;
@@ -279,7 +279,7 @@ QTabBar::tab
 
 QTabWidget::pane 
 {
-	background-color: #7bb4e9;
+	background-color: #216282;
 	border: 1px solid #666;
 	top: 1px;
 

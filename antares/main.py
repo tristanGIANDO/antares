@@ -24,7 +24,7 @@ class MainWindow(QWidget) :
         self.title = f"ANTARES_v" + env.VERSION
         self.icon = env.ICON
         
-        self.resize(1000, 500)
+        self.resize(1000, 600)
         self.move(100, 100)
         self.setWindowTitle(self.title)
         self.setWindowIcon(QtGui.QIcon(self.icon))
@@ -164,7 +164,6 @@ class MainWindow(QWidget) :
         self.antares_for_maya_BTN.clicked.connect(self.open_prefs_UI)
         self.new_module_BTN.clicked.connect(self.create_new_module_UI)
         self.new_item_BTN.clicked.connect(self.create_new_item_UI)
-        self.lightTheme_BTN.clicked.connect(self.lightTheme_FN)
 
         self.userPic.setPixmap(self.pixmap)
         self.prodTitle.setFont(QFont('Times', 30))
@@ -249,10 +248,10 @@ class MainWindow(QWidget) :
                         self.resources_BTN,
                         self.library_LBL,
                         self.library_BTN,
-                        self.user_BTN,
+                        self.user_BTN]:
                         # self.theme_LBL,
-                        self.lightTheme_BTN,
-                        self.darkTheme_BTN]:
+                        # self.lightTheme_BTN,
+                        # self.darkTheme_BTN]:
                         # self.tmp_server_Name]:
             main_tab02_Layout_L.addWidget(widget)
 
@@ -1506,24 +1505,6 @@ class MainWindow(QWidget) :
 
         self.reload()
 
-    def toggle_stylesheet(path):
-        '''
-        Toggle the stylesheet to use the desired path in the Qt resource
-        system (prefixed by `:/`) or generically (a path to a file on
-        system).
-
-        :path:      A full path to a resource or file on system
-        '''
-
-        # get the QApplication instance,  or crash if not set
-        app = QApplication.instance()
-        if app is None:
-            raise RuntimeError("No Qt Application found.")
-
-        file = QFile(path)
-        file.open(QFile.ReadOnly | QFile.Text)
-        stream = QTextStream(file)
-        app.setStyleSheet(stream.readAll())
 
 
 class FlowLayout(QLayout):
@@ -1634,8 +1615,10 @@ if __name__ == "__main__":
 
     # application.setStyle('Fusion')
     
-    file = QFile("./darkTheme.qss")
+    # file = QFile("./darkTheme.qss")
+    file = QFile("./blueTheme.qss")
     # file = QFile("./pinkTheme.qss")
+
     file.open(QFile.ReadOnly | QFile.Text)
     stream = QTextStream(file)
     application.setStyleSheet(stream.readAll())
