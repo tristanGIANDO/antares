@@ -1,4 +1,4 @@
-import os, shutil
+import os, shutil, json
 import env
 
 def newProp_FN(server, prod, assetName):
@@ -254,3 +254,50 @@ def deleteAsset_FN (name, server, prod ):
     
     print ( name + " deleted with success.")
     
+def substance_FN(name, server, prod):
+    src = os.path.join(r"\\gandalf/3D4_21_22",
+                            prod,
+                            env.LIBRARY,
+                            env.RMAN_LIB,
+                            "library.json")
+
+    srcImg_path = os.path.join(server  ,
+                            prod,
+                            env.PROP_PATH ,
+                            name ,
+                            env.SRC_IMG_PATH)
+
+    dst = os.path.join(r"\\gandalf/3D4_21_22" ,
+                            prod,
+                            env.PROP_PATH ,
+                            name ,
+                            env.SRC_IMG_PATH,
+                            env.RMAN_LIB,
+                            "library.json")
+
+    dictionary = {
+    "RenderManAssetLibrary": {
+        "author" : env.USER,
+        "description": "",
+        "name": name,
+        "protected": "",
+        "rendererVersion": "24.1",
+        "version": "1.0",
+        "versionControl": "none"
+        }
+    }
+
+    try:
+        os.makedirs(os.path.join(srcImg_path,
+                        env.RMAN_LIB,
+                        env.RMAN_MAT))
+
+        shutil.copyfile(src, dst)
+
+        with open(dst, "w") as outfile:
+            json.dump(dictionary, outfile)
+
+        print ( "Substance Library created" )
+        
+    except:
+        print ( "Substance Library already created" )

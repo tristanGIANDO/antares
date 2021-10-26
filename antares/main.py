@@ -500,13 +500,14 @@ class MainWindow(QWidget) :
 
             menu.addSeparator()
             openInFolder = menu.addAction(self.open_in_folder_LBL)
-            menu.addAction(self.duplicate_asset_LBL)
+            # menu.addAction(self.duplicate_asset_LBL)
             delete = menu.addAction(self.delete_asset_LBL)
-            menu.addAction(self.create_new_task_LBL)
-            substance = menu.addAction(self.substance_LBL)
+            # menu.addAction(self.create_new_task_LBL)
+            
             #Connections
             delete.triggered.connect(partial(self.deleteAsset_UI, name))
             openInFolder.triggered.connect(partial(self.openInFolder_Char_UI, name)) 
+            substance = menu.addAction(self.substance_LBL)
             substance.triggered.connect(partial(self.substance_char_UI, name))
 
             
@@ -698,6 +699,8 @@ class MainWindow(QWidget) :
             menu.addAction(self.create_new_task_LBL)
             menu.addSeparator()
             delete = menu.addAction(self.delete_asset_LBL)
+            substance = menu.addAction(self.substance_LBL)
+            substance.triggered.connect(partial(self.substance_prop_UI, name))
             #Connections
             delete.triggered.connect(partial(self.deleteAsset_prop_UI, name))
             openInFolder.triggered.connect(partial(self.openInFolder_prop_UI, name)) 
@@ -1020,6 +1023,7 @@ class MainWindow(QWidget) :
             menu.addSeparator()
             create_new_item = menu.addAction(self.new_item_LBL)
             openInFolder = menu.addAction(self.open_in_folder_LBL)
+            substance = menu.addAction(self.substance_LBL)
             menu.addSeparator()
             delete_module = menu.addAction(self.delete_module_LBL)
 
@@ -1029,7 +1033,8 @@ class MainWindow(QWidget) :
             create_new_item.triggered.connect(partial(self.create_new_item_UI, name))
             delete_module.triggered.connect(partial(self.delete_module_UI, name))
             openInFolder.triggered.connect(partial(self.open_in_folder_module_UI, name)) 
-            open_in_folder_dress.triggered.connect(partial(self.open_in_folder_dress_UI, name)) 
+            open_in_folder_dress.triggered.connect(partial(self.open_in_folder_dress_UI, name))
+            substance.triggered.connect(partial(self.substance_item_UI, item_name, name)) 
             
         
         
@@ -1263,6 +1268,12 @@ class MainWindow(QWidget) :
         prop.deleteAsset_FN(  name, server,  prod = prod)
         self.reload()
 
+    def substance_prop_UI(self, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        prop.substance_FN (  name, server, prod)
 
     # ITEMS
     def create_new_module_UI(self):
@@ -1366,6 +1377,13 @@ class MainWindow(QWidget) :
         server = self.serverName.text()
         item.delete_module_FN (  name, server, prod)
         self.reload()
+
+    def substance_item_UI(self, item_name, name):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        item.substance_FN (  item_name, name, server, prod)
 
     # FX
 

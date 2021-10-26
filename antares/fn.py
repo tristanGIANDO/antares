@@ -304,11 +304,6 @@ def substance_FN(name, server, prod):
                             name ,
                             env.SRC_IMG_PATH)
 
-
-    os.makedirs(os.path.join(srcImg_path,
-                    env.RMAN_LIB,
-                    env.RMAN_MAT))
-
     dst = os.path.join(r"\\gandalf/3D4_21_22" ,
                             prod,
                             env.CHAR_PATH ,
@@ -316,10 +311,6 @@ def substance_FN(name, server, prod):
                             env.SRC_IMG_PATH,
                             env.RMAN_LIB,
                             "library.json")
-    
-    shutil.copyfile(src, dst)
-
-    ####
 
     dictionary = {
     "RenderManAssetLibrary": {
@@ -332,11 +323,23 @@ def substance_FN(name, server, prod):
         "versionControl": "none"
         }
     }
-    
-    with open(dst, "w") as outfile:
-        json.dump(dictionary, outfile)
 
-    print ( "Substance Library created" )
+    try:
+        os.makedirs(os.path.join(srcImg_path,
+                        env.RMAN_LIB,
+                        env.RMAN_MAT))
+
+        shutil.copyfile(src, dst)
+
+        with open(dst, "w") as outfile:
+            json.dump(dictionary, outfile)
+
+        print ( "Substance Library created" )
+        
+    except:
+        print ( "Substance Library already created" )
+
+    
 
 # FUNCTIONS SOCKETS
 
