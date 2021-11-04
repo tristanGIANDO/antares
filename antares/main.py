@@ -1047,6 +1047,7 @@ class MainWindow(QWidget) :
         layout = QWidget()
         n = QVBoxLayout()
         tabs = QTabWidget()
+
         seqDIR = os.listdir(os.path.join(server,
                                          
                                         prod,
@@ -1056,50 +1057,45 @@ class MainWindow(QWidget) :
             seqDIR.remove("Infos.odt")
         except:
             print ( "no info file")
-
         try:
             seqDIR.remove("_backup")
         except:
             print ("no backup folder")
-
         try:
             seqDIR.remove("_camera_published")
         except:
             print ("no camera published ")
-
         try:
             seqDIR.remove("_credits")
         except:
             print ("no credits ")
-
         try:
             seqDIR.remove("_master_previz")
         except:
             print ("no master previz")
-
         try:
             seqDIR.remove("shotTest")
         except:
             print ("no shot test")
-
         try:
             seqDIR.remove("Thumbs.db")
         except:
             print ("no thumbs")
            
         for seq in seqDIR :
-            tabs.addTab(self.insideShotTabUI(), seq)
+            tabs.addTab(self.insideShotTabUI(seq), seq)
+
         n.addWidget(tabs)
         layout.setLayout(n)
         return layout
   
-    def insideShotTabUI(self):
+    def insideShotTabUI(self, seq):
         server = self.serverName.text()
         prod = self.prodName.text()
 
         mayaTab = QWidget() 
         base = QGridLayout()
-        groupChara = QGroupBox("CHARACTERS")
+        groupChara = QGroupBox("SHOTS")
         base.addWidget(groupChara)
 
         
@@ -1110,14 +1106,15 @@ class MainWindow(QWidget) :
 
         shot_path = os.listdir(os.path.join(server,
                                         prod,
-                                        env.SHOT_TYPE))
+                                        env.SHOT_TYPE,
+                                        seq))
 
         for shot in shot_path:
-            layoutChar.addWidget(QPushButton("seq0010_sh0010"))
-            self.cb = QComboBox()
-            self.cb.addItem("Tractor On")
-            self.cb.addItem("Tractor Off")
-            layoutChar.addWidget(self.cb)
+            layoutChar.addWidget(QPushButton(shot))
+            # self.cb = QComboBox()
+            # self.cb.addItem("Tractor On")
+            # self.cb.addItem("Tractor Off")
+            # layoutChar.addWidget(self.cb)
 
         mayaTab.setLayout(base)
         return mayaTab
