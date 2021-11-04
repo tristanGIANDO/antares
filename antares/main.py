@@ -1205,6 +1205,7 @@ class MainWindow(QWidget) :
 
             #CONNECTIONS
             anim_last_edit.triggered.connect(partial(self.anim_open_last_edit_UI, name, seq))
+            anim_open_in_folder.triggered.connect(partial(self.anim_open_in_folder_UI, name, seq))
 
             button.setMenu(menu)
             
@@ -1578,7 +1579,14 @@ class MainWindow(QWidget) :
         server = self.serverName.text()
         if not server:
             return
-        shot.open_last_edit_FN (  name, seq, server, prod = prod)    
+        shot.anim_open_last_edit_FN (  name, seq, server, prod = prod)    
+
+    def anim_open_in_folder_UI(self, name, seq):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.anim_open_in_folder_FN (  name, seq, server, prod = prod) 
 
     def create_new_seq_UI(self):
         prod = self.prodName.text()

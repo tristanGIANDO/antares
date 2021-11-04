@@ -142,7 +142,7 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
         print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " already created")
 
 
-def open_last_edit_FN(name, seq, server, prod):
+def anim_open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,
                             prod,
                             env.SHOT_TYPE ,
@@ -159,3 +159,15 @@ def open_last_edit_FN(name, seq, server, prod):
     print ( project )
     print ("Let's open this scene !!")
     os.startfile(project)
+
+def anim_open_in_folder_FN(name, seq, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SHOT_TYPE ,
+                            seq,
+                            name ,
+                            env.ANIM_PATH
+                            )
+    print (path)
+
+    os.startfile(path)
