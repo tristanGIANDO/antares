@@ -54,7 +54,8 @@ class MainWindow(QWidget) :
         self.pixmap = QPixmap(env.USER_PIC)
         self.reloadBTN = QPushButton("RELOAD")
         #Set production
-        self.serverName = QLineEdit(r"\\gandalf/3D4_21_22")
+        # self.serverName = QLineEdit(r"\\gandalf/3D4_21_22")
+        self.serverName = QLineEdit(r"D:\\")
         self.tmp_server_Name = QLineEdit(prefs['tmp_server'])
         self.prodName = QLineEdit(prefs['prod'])
         self.assetDirName = QLineEdit(env.ASSET_TYPE)
@@ -91,9 +92,14 @@ class MainWindow(QWidget) :
         self.new_set_BTN = QPushButton("NEW SET")
         self.newFX_BTN = QPushButton("NEW HIP")
         self.newFX_BTN = QPushButton("NEW HIP")
+
         self.new_seq_BTN = QPushButton("NEW SEQ")
-        self.arrow_01_LBL = QLabel ( ">>" )
         self.new_shot_BTN = QPushButton("NEW SHOT")
+        self.new_seq_LBL = QLabel ( "N°SEQ >> seq" )
+        self.new_seq_TXT = QLineEdit("XXXX")
+        self.new_shot_LBL = QLabel ( "N°SHOT >> sh")
+        self.new_shot_TXT = QLineEdit("XXXX")
+
         
 
 
@@ -162,6 +168,7 @@ class MainWindow(QWidget) :
         self.antares_for_maya_BTN.clicked.connect(self.open_prefs_UI)
         self.new_module_BTN.clicked.connect(self.create_new_module_UI)
         self.new_item_BTN.clicked.connect(self.create_new_item_UI)
+        self.new_seq_BTN.clicked.connect(self.create_new_seq_UI)
 
         self.userPic.setPixmap(self.pixmap)
         self.prodTitle.setFont(QFont('Times', 30))
@@ -1085,13 +1092,35 @@ class MainWindow(QWidget) :
 
         n.addWidget(tabs)
         n.addLayout(buttons)
+        # buttons.addWidget(self.new_seq_BTN)
+        # buttons.addWidget(self.arrow_01_LBL)
+        # buttons.addWidget(self.new_shot_BTN)
+
+        # self.cb = QComboBox()
+        # self.cb_shot = QComboBox()
+
+        # for combo_seq in seqDIR :
+        #     shot_path = os.listdir(os.path.join(server,
+        #                                 prod,
+        #                                 env.SHOT_TYPE,
+        #                                 combo_seq))
+
+        #     self.cb.addItem(combo_seq)
+
+        #     for combo_shot in shot_path:
+        #         self.cb_shot.addItem(combo_shot)
+
+        # self.cb.addItem("NEW SEQ")
+
+        # buttons.addWidget(self.cb)
+        # buttons.addWidget(self.cb_shot)
+
+        buttons.addWidget(self.new_seq_LBL)
+        buttons.addWidget(self.new_seq_TXT)
+        buttons.addWidget(self.new_shot_LBL)
+        buttons.addWidget(self.new_shot_TXT)
         buttons.addWidget(self.new_seq_BTN)
-        buttons.addWidget(self.arrow_01_LBL)
         buttons.addWidget(self.new_shot_BTN)
-        self.cb = QComboBox()
-        for seq in seqDIR :
-            self.cb.addItem(seq)
-        buttons.addWidget(self.cb)
 
         layout.setLayout(n)
         return layout
@@ -1543,12 +1572,16 @@ class MainWindow(QWidget) :
     def anim_open_last_edit_UI(self, name, seq):
         prod = self.prodName.text()
         server = self.serverName.text()
-        folder = self.serverName.text()
-        print ( prod )
-        print ( server )
         if not server:
             return
         shot.open_last_edit_FN (  name, seq, server, prod = prod)    
+
+    def create_new_seq_UI(self):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.create_new_seq_FN ( server, prod = prod)   
 
     ## UI CUSTOMIZE ##
 

@@ -1,6 +1,9 @@
 import os, json, env
 
-def create_new_shot(assetName, seq, server, prod):
+def create_new_seq_FN(server, prod):
+    print ( "CREER le template")
+
+def create_new_shot_FN(assetName, seq, server, prod):
     print ( "CREER le template")
 
 def open_last_edit_FN(name, seq, server, prod):
