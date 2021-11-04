@@ -1523,6 +1523,8 @@ class MainWindow(QWidget) :
         fx.delete_FX_FN(  name, server,  prod = prod)
         self.reload()
 
+    #  SHOTS
+    
 
     ## UI CUSTOMIZE ##
 
