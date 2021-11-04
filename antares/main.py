@@ -1579,9 +1579,10 @@ class MainWindow(QWidget) :
     def create_new_seq_UI(self):
         prod = self.prodName.text()
         server = self.serverName.text()
+        nb_seq = self.new_seq_TXT.text()
         if not server:
             return
-        shot.create_new_seq_FN ( server, prod = prod)   
+        shot.create_new_seq_FN ( nb_seq, server, prod = prod)   
 
     ## UI CUSTOMIZE ##
 
