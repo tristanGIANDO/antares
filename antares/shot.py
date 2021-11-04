@@ -28,10 +28,37 @@ def create_new_seq_FN(nb_seq, server, prod):
     except:
         print ( "seq" + nb_seq + " in " + env.COMPO_TYPE + " already created")
 
-    
+def create_new_shot_FN(nb_seq, nb_shot, server, prod):
+    print ( nb_seq )
+    print ( nb_shot )
+    print ( server )
+    print ( prod )   
 
-def create_new_shot_FN(assetName, seq, server, prod):
-    print ( "CREER le template")
+    seq_path_main = os.path.join(server,
+                            prod,
+                            env.SHOT_TYPE,
+                            "seq" + nb_seq,
+                            "seq" + nb_seq + "_sh" + nb_shot
+                            )
+
+    seq_path_compo = os.path.join(server,
+                            prod,
+                            env.COMPO_TYPE,
+                            "seq" + nb_seq,
+                            "seq" + nb_seq + "_sh" + nb_shot
+                            )
+
+    try:
+        os.makedirs(seq_path_main)
+        print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.SHOT_TYPE + " created with success !!")
+    except:
+        print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.SHOT_TYPE + " already created")
+    try:   
+        os.makedirs(seq_path_compo)
+        print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " created with success !!")
+    except:
+        print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " already created")
+
 
 def open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,

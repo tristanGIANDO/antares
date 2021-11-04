@@ -169,6 +169,7 @@ class MainWindow(QWidget) :
         self.new_module_BTN.clicked.connect(self.create_new_module_UI)
         self.new_item_BTN.clicked.connect(self.create_new_item_UI)
         self.new_seq_BTN.clicked.connect(self.create_new_seq_UI)
+        self.new_shot_BTN.clicked.connect(self.create_new_shot_UI)
 
         self.userPic.setPixmap(self.pixmap)
         self.prodTitle.setFont(QFont('Times', 30))
@@ -1584,6 +1585,15 @@ class MainWindow(QWidget) :
             return
         shot.create_new_seq_FN ( nb_seq, server, prod = prod)   
 
+    def create_new_shot_UI(self):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        nb_seq = self.new_seq_TXT.text()
+        nb_shot = self.new_shot_TXT.text()
+        if not server:
+            return
+        shot.create_new_shot_FN ( nb_seq, nb_shot, server, prod = prod)   
+        
     ## UI CUSTOMIZE ##
 
     def openTab(self, tab01_Lay_L, up_tab01_Layout_L):
