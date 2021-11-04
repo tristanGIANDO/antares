@@ -7,7 +7,7 @@ prefs_json = prefs_file.read()
 prefs = json.loads(prefs_json)
 
 
-VERSION = "1.7"
+VERSION = "2.0"
 
 #Set Templates
 server = r"\\gandalf\3D4_21_22"

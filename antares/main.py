@@ -90,12 +90,10 @@ class MainWindow(QWidget) :
         self.new_module_BTN = QPushButton("NEW MODULE")
         self.new_set_BTN = QPushButton("NEW SET")
         self.newFX_BTN = QPushButton("NEW HIP")
-        self.incrementSave = QPushButton("INCREMENT AND SAVE")
-        self.set_name = QLineEdit("set_name")
-        self.module_name = QLineEdit("module_name")
-        self.item_name = QLineEdit("item_name")
-        self.arrow_01 = QLabel(">")
-        self.arrow_02 = QLabel(">")
+        self.newFX_BTN = QPushButton("NEW HIP")
+        self.new_seq_BTN = QPushButton("NEW SEQ")
+        self.arrow_01_LBL = QLabel ( ">>" )
+        self.new_shot_BTN = QPushButton("NEW SHOT")
         
 
 
@@ -259,7 +257,7 @@ class MainWindow(QWidget) :
         tabsLayout_L.addTab(tab02_Lay_L, "PREFS")
         tabs_Lay_R.addTab(self.assetTabUI(), "ASSETS")
         tabs_Lay_R.addTab(self.shotTabUI(), "SHOTS")
-        tabs_Lay_R.addTab(self.editTabUI(), "EDITING")
+        # tabs_Lay_R.addTab(self.editTabUI(), "EDITING")
 
 
         #ADD LAYOUTS
@@ -1046,10 +1044,10 @@ class MainWindow(QWidget) :
         prod = self.prodName.text()
         layout = QWidget()
         n = QVBoxLayout()
+        buttons = QHBoxLayout()
         tabs = QTabWidget()
 
         seqDIR = os.listdir(os.path.join(server,
-                                         
                                         prod,
                                         env.SHOT_TYPE))
 
@@ -1086,6 +1084,15 @@ class MainWindow(QWidget) :
             tabs.addTab(self.insideShotTabUI(seq), seq)
 
         n.addWidget(tabs)
+        n.addLayout(buttons)
+        buttons.addWidget(self.new_seq_BTN)
+        buttons.addWidget(self.arrow_01_LBL)
+        buttons.addWidget(self.new_shot_BTN)
+        self.cb = QComboBox()
+        for seq in seqDIR :
+            self.cb.addItem(seq)
+        buttons.addWidget(self.cb)
+
         layout.setLayout(n)
         return layout
   
@@ -1109,12 +1116,15 @@ class MainWindow(QWidget) :
                                         env.SHOT_TYPE,
                                         seq))
 
-        # for shot in shot_path:
-        #     layoutChar.addWidget(QPushButton(shot))
-            # self.cb = QComboBox()
-            # self.cb.addItem("Tractor On")
-            # self.cb.addItem("Tractor Off")
-            # layoutChar.addWidget(self.cb)
+        # for name in shot_path:
+        #     layout_for_shot = QHBoxLayout()
+        #     layout_for_shot.addWidget(QPushButton(name))
+        #     self.cb = QComboBox()
+        #     self.cb.addItem("Tractor On")
+        #     self.cb.addItem("Tractor Off")
+        #     layout_for_shot.addWidget(self.cb)
+            
+        #     group_shot.setLayout(layout_for_shot)
 
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
@@ -1125,9 +1135,10 @@ class MainWindow(QWidget) :
                                     prod,
                                     env.IMAGES_PATH,
                                     env.SHOT_LIB,
+
                                     name + env.PNG)
             button = ImagePushButton(name, path = imageDir)
-            button.setFixedSize(205, 86)
+            button.setFixedSize(10000, 100)
             
             path = os.path.join(server,
                                 prod)
@@ -1163,6 +1174,7 @@ class MainWindow(QWidget) :
             anim_last_edit.triggered.connect(partial(self.anim_open_last_edit_UI, name, seq))
 
             button.setMenu(menu)
+            
 
         shot_tab.setLayout(base)
         return shot_tab
@@ -1172,17 +1184,17 @@ class MainWindow(QWidget) :
     '''
     # EDITING ------------------------------------------------------------------------------------------------------------------------------------------------------------------
     '''
-    def editTabUI(self):
-        server = self.serverName.text()
-        prod = self.prodName.text()
-        layout = QWidget()
-        n = QVBoxLayout()
-        n.addWidget(self.edit_Label)
-        tabs = QTabWidget()
+    # def editTabUI(self):
+    #     server = self.serverName.text()
+    #     prod = self.prodName.text()
+    #     layout = QWidget()
+    #     n = QVBoxLayout()
+    #     n.addWidget(self.edit_Label)
+    #     tabs = QTabWidget()
 
-        n.addWidget(tabs)
-        layout.setLayout(n)
-        return layout
+    #     n.addWidget(tabs)
+    #     layout.setLayout(n)
+    #     return layout
     
     '''  
     ## CONNECTIONS UI ## ------------------------------------------------------------------------------------------------------------------------------------------------

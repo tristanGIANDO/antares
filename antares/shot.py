@@ -1,5 +1,8 @@
 import os, json, env
 
+def create_new_shot(assetName, seq, server, prod):
+    print ( "CREER le template")
+
 def open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,
                             prod,
