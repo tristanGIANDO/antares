@@ -1093,31 +1093,76 @@ class MainWindow(QWidget) :
         server = self.serverName.text()
         prod = self.prodName.text()
 
-        mayaTab = QWidget() 
-        base = QGridLayout()
-        groupChara = QGroupBox("SHOTS")
-        base.addWidget(groupChara)
+        shot_tab = QWidget() 
+        base = QVBoxLayout()
+        group_shot = QGroupBox("SHOTS")
+        base.addWidget(group_shot)
 
         
 
         #SET CHARACTER GROUP ---------------------------------------------------------------------------------------------------------------------------------------------------
         layoutChar = FlowLayout()
-        groupChara.setLayout(layoutChar)
+        group_shot.setLayout(layoutChar)
 
         shot_path = os.listdir(os.path.join(server,
                                         prod,
                                         env.SHOT_TYPE,
                                         seq))
 
-        for shot in shot_path:
-            layoutChar.addWidget(QPushButton(shot))
+        # for shot in shot_path:
+        #     layoutChar.addWidget(QPushButton(shot))
             # self.cb = QComboBox()
             # self.cb.addItem("Tractor On")
             # self.cb.addItem("Tractor Off")
             # layoutChar.addWidget(self.cb)
 
-        mayaTab.setLayout(base)
-        return mayaTab
+        #Create Button characters 
+        positions = [(i, j) for i in range(50) for j in range(5)]
+        for position, name in zip(positions, shot_path):
+            if name == '':
+                continue
+            imageDir = os.path.join(server,
+                                    prod,
+                                    env.IMAGES_PATH,
+                                    env.SHOT_LIB,
+                                    name + env.PNG)
+            button = ImagePushButton(name, path = imageDir)
+            button.setFixedSize(205, 86)
+            
+            path = os.path.join(server,
+                                prod)
+            layoutChar.addWidget(button)
+
+            #CREER MENU
+            menu = QMenu(parent = self)
+            menu.addAction( "Name = " + name )
+            menu.addSeparator()
+            #CREATE MENUS
+            layout_menu = menu.addMenu("layout")
+            anim_menu = menu.addMenu("animation")
+            render_menu = menu.addMenu("render")
+            cfx_menu = menu.addMenu("cfx")
+            vfx_menu = menu.addMenu("vfx")
+            compo_menu = menu.addMenu("compositing")
+            
+            #CREATE SUBMENUS
+            layout_last_edit = layout_menu.addAction(QIcon(), self.last_edit_LBL)
+            layout_open_in_folder = layout_menu.addAction(QIcon(), self.open_in_folder_LBL)
+            anim_last_edit = anim_menu.addAction(QIcon(), self.last_edit_LBL)
+            anim_open_in_folder = anim_menu.addAction(QIcon(), self.open_in_folder_LBL)
+            render_last_edit = render_menu.addAction(QIcon(), self.last_edit_LBL)
+            render_open_in_folder = render_menu.addAction(QIcon(), self.open_in_folder_LBL)
+            cfx_last_edit = cfx_menu.addAction(QIcon(), self.last_edit_LBL)
+            cfx_open_in_folder = cfx_menu.addAction(QIcon(), self.open_in_folder_LBL)
+            vfx_last_edit = vfx_menu.addAction(QIcon(), self.last_edit_LBL)
+            vfx_open_in_folder = vfx_menu.addAction(QIcon(), self.open_in_folder_LBL)
+            compo_last_edit = compo_menu.addAction(QIcon(), self.last_edit_LBL)
+            compo_open_in_folder = compo_menu.addAction(QIcon(), self.open_in_folder_LBL)
+
+            button.setMenu(menu)
+
+        shot_tab.setLayout(base)
+        return shot_tab
 
 
 
