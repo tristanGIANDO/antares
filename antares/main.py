@@ -58,6 +58,7 @@ class MainWindow(QWidget) :
         self.serverName = QLineEdit(r"D:\\")
         self.tmp_server_Name = QLineEdit(prefs['tmp_server'])
         self.prodName = QLineEdit(prefs['prod'])
+        self.prefixName = QLineEdit(prefs['prefix'])
         self.assetDirName = QLineEdit(env.ASSET_TYPE)
         self.shotDirName = QLineEdit(env.SHOT_TYPE)
         self.char_type_name = QLineEdit(env.CHAR_TYPE)
@@ -70,6 +71,7 @@ class MainWindow(QWidget) :
         self.publish_type_name = QLineEdit(env.PUBLISH_TYPE)
         self.server_LBL = QLabel ( "SERVER" )
         self.prod_LBL = QLabel ( "CURRENT PROD" )
+        self.prefix_LBL = QLabel ( "PREFIX" )
         self.assetDir_LBL = QLabel ( "CURRENT ASSET DIR" ) 
         self.shotDir_LBL = QLabel ( "CURRENT SHOT DIR" )
         self.char_type_LBL = QLabel ( "ASSET TYPE CHARACTER" )
@@ -210,6 +212,7 @@ class MainWindow(QWidget) :
         up_tab01_Layout_L.addWidget(self.prodLabel)
         mid_tab01_Layout_L.addWidget(self.serverName, 0,1)
         mid_tab01_Layout_L.addWidget(self.prodName, 1,1)
+        mid_tab01_Layout_L.addWidget(self.prefixName, 2,1)
         # mid_tab01_Layout_L.addWidget(self.assetDirName, 2,1)
         # mid_tab01_Layout_L.addWidget(self.shotDirName, 3,1)
         # mid_tab01_Layout_L.addWidget(self.char_type_name, 4,1)
@@ -1588,12 +1591,13 @@ class MainWindow(QWidget) :
     def create_new_shot_UI(self):
         prod = self.prodName.text()
         server = self.serverName.text()
+        prefix = self.prefixName.text()
         nb_seq = self.new_seq_TXT.text()
         nb_shot = self.new_shot_TXT.text()
         if not server:
             return
-        shot.create_new_shot_FN ( nb_seq, nb_shot, server, prod = prod)   
-        
+        shot.create_new_shot_FN ( nb_seq, nb_shot, prefix, server, prod = prod)   
+
     ## UI CUSTOMIZE ##
 
     def openTab(self, tab01_Lay_L, up_tab01_Layout_L):
@@ -1607,10 +1611,12 @@ class MainWindow(QWidget) :
     def setProd_FN(self):
         server = self.serverName.text()
         prod = self.prodName.text()
+        prefix = self.prefixName.text()
         tmp_server = self.tmp_server_Name.text()
         
         listOfStr = ["server",
                     "prod",
+                    "prefix",
                     "tmp_server",
                     "tmp_package",
                     "tmp_appli",
@@ -1619,6 +1625,7 @@ class MainWindow(QWidget) :
                     "tmp_prod"]
         listOfTxt = [server,
                     prod,
+                    prefix,
                     tmp_server,
                     "packages",
                     "antares",

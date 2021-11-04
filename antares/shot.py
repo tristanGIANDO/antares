@@ -1,4 +1,4 @@
-import os, json, env
+import os, shutil, env
 
 def create_new_seq_FN(nb_seq, server, prod):
     print ( nb_seq )
@@ -28,7 +28,7 @@ def create_new_seq_FN(nb_seq, server, prod):
     except:
         print ( "seq" + nb_seq + " in " + env.COMPO_TYPE + " already created")
 
-def create_new_shot_FN(nb_seq, nb_shot, server, prod):
+def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
 
     scn_temp = os.path.join(server,
                             prod,
@@ -36,6 +36,13 @@ def create_new_shot_FN(nb_seq, nb_shot, server, prod):
                             env.E_PATH,
                             env.GEO_LO,
                             env.TMP_SCN_TYPE_E + env.ASCII)
+
+    scn_temp_nuke = os.path.join(server,
+                            prod,
+                            env.COMPO_TYPE,
+                            env.TMP_SEQ_TYPE_NUKE,
+                            env.TMP_SCN_TYPE_NUKE)
+
 
     seq_path_main = os.path.join(server,
                             prod,
@@ -70,12 +77,33 @@ def create_new_shot_FN(nb_seq, nb_shot, server, prod):
                             maya_folders))
 
         for category in ["anim", "cfx", "layout", "render"]:
-            os.makedirs(os.path.join(seq_path_main,
+            path = os.makedirs(os.path.join(seq_path_main,
                             "maya",
                             "scenes",
                             category))
 
-        print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.SHOT_TYPE + " created with success !!")
+            dest_scn_tmp = os.path.join ( seq_path_main,
+                            env.MAYA_TYPE,
+                            env.SCN_TYPE,
+                            category,
+                            env.TMP_SCN_TYPE_E + env.ASCII )
+            
+            renamed_file = os.path.join ( seq_path_main,
+                            env.MAYA_TYPE,
+                            env.SCN_TYPE,
+                            category,
+                            prefix + "_seq" + nb_seq + "_sh" + nb_shot + "_" + category + "_001" + env.ASCII )
+
+            
+            try:
+                shutil.copyfile(scn_temp, dest_scn_tmp)
+                os.rename(dest_scn_tmp, renamed_file)
+
+                print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.SHOT_TYPE + " created with success !!")
+            except:
+                print ( "no scenes copied")
+
+        
     except:
         print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.SHOT_TYPE + " already created")
 
@@ -96,6 +124,18 @@ def create_new_shot_FN(nb_seq, nb_shot, server, prod):
             os.makedirs(os.path.join(seq_path_compo,
                             "output",
                             output))
+        
+        dest_scn_tmp = os.path.join ( seq_path_compo,
+                            env.TMP_SCN_TYPE_NUKE)
+    
+        renamed_file = os.path.join ( seq_path_compo,
+                            prefix + "_seq" + nb_seq + "_sh" + nb_shot + "_compo_001.nk")
+
+        try:
+            shutil.copyfile(scn_temp_nuke, dest_scn_tmp)
+            os.rename(dest_scn_tmp, renamed_file)
+        except:
+            print ( "no scene copied")
 
         print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " created with success !!")
     except:
