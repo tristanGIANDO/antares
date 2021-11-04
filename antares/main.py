@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 # import package
-import os, time, fn, env, fx, item, prop, json
+import os, time, fn, env, fx, item, prop, shot, json
 import os.path
 from os import PathLike, path
 '''
@@ -1159,6 +1159,9 @@ class MainWindow(QWidget) :
             compo_last_edit = compo_menu.addAction(QIcon(), self.last_edit_LBL)
             compo_open_in_folder = compo_menu.addAction(QIcon(), self.open_in_folder_LBL)
 
+            #CONNECTIONS
+            anim_last_edit.triggered.connect(partial(self.anim_open_last_edit_UI, name, seq))
+
             button.setMenu(menu)
 
         shot_tab.setLayout(base)
@@ -1524,7 +1527,16 @@ class MainWindow(QWidget) :
         self.reload()
 
     #  SHOTS
-    
+
+    def anim_open_last_edit_UI(self, name, seq):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        folder = self.serverName.text()
+        print ( prod )
+        print ( server )
+        if not server:
+            return
+        shot.open_last_edit_FN (  name, seq, server, prod = prod)    
 
     ## UI CUSTOMIZE ##
 
