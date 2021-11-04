@@ -1048,19 +1048,25 @@ class MainWindow(QWidget) :
         n = QVBoxLayout()
         n.addWidget(self.shot_Label)
         tabs = QTabWidget()
-        # seqDIR = os.listdir(os.path.join(server,
-                                        #  
-                                        # prod,
-                                        # env.SHOT_TYPE))
-        # for seq in seqDIR :
-        #     tabs.addTab(self.insideShotTabUI(), seq)
+        seqDIR = os.listdir(os.path.join(server,
+                                         
+                                        prod,
+                                        env.SHOT_TYPE))
+        for seq in seqDIR :
+            tabs.addTab(self.insideShotTabUI(), seq)
         n.addWidget(tabs)
         layout.setLayout(n)
         return layout
   
     def insideShotTabUI(self):
+        server = self.serverName.text()
+        prod = self.prodName.text()
+        
         houdiniTab = QWidget()
         layout = QHBoxLayout()
+        shot_path = os.listdir(os.path.join(server,
+                                        prod,
+                                        env.SHOT_TYPE))
         layout.addWidget(QPushButton("seq0010_sh0010"))
         self.cb = QComboBox()
         self.cb.addItem("Tractor On")
@@ -1615,6 +1621,7 @@ if __name__ == "__main__":
 
     # application.setStyle('Fusion')
     
+    # file = QFile("./greenTheme.qss")
     # file = QFile("./darkTheme.qss")
     file = QFile("./blueTheme.qss")
     # file = QFile("./pinkTheme.qss")
