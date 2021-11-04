@@ -29,6 +29,14 @@ def create_new_seq_FN(nb_seq, server, prod):
         print ( "seq" + nb_seq + " in " + env.COMPO_TYPE + " already created")
 
 def create_new_shot_FN(nb_seq, nb_shot, server, prod):
+
+    scn_temp = os.path.join(server,
+                            prod,
+                            env.TMP_ASSET_PATH,
+                            env.E_PATH,
+                            env.GEO_LO,
+                            env.TMP_SCN_TYPE_E + env.ASCII)
+
     seq_path_main = os.path.join(server,
                             prod,
                             env.SHOT_TYPE,
@@ -42,7 +50,7 @@ def create_new_shot_FN(nb_seq, nb_shot, server, prod):
                             "seq" + nb_seq,
                             "seq" + nb_seq + "_sh" + nb_shot
                             )
-                            
+
     # MAIN BRANCH
     try:
         os.makedirs(seq_path_main)
