@@ -1710,7 +1710,8 @@ class MainWindow(QWidget) :
         nb_seq = self.new_seq_TXT.text()
         if not server:
             return
-        shot.create_new_seq_FN ( nb_seq, server, prod = prod)   
+        shot.create_new_seq_FN ( nb_seq, server, prod = prod)  
+        self.reload() 
 
     def create_new_shot_UI(self):
         prod = self.prodName.text()
@@ -1721,6 +1722,7 @@ class MainWindow(QWidget) :
         if not server:
             return
         shot.create_new_shot_FN ( nb_seq, nb_shot, prefix, server, prod = prod)   
+        self.reload()
 
     def render_send_to_nuke_UI(self, name, seq, rendu):
         prod = self.prodName.text()

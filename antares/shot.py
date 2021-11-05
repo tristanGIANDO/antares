@@ -78,6 +78,8 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
             os.makedirs(os.path.join(seq_path_main,
                             soft))
 
+        
+
         for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", env.RENDER_TYPE, "scripts", "sim", env.SCN_TYPE, "tex", "video"]:
             os.makedirs(os.path.join(seq_path_main,
                             "houdini",
@@ -153,6 +155,27 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
             os.rename(dest_scn_tmp, renamed_file)
 
         print ( env.SEQ + nb_seq + env.SHOT_ + nb_shot + " in " + env.COMPO_TYPE + " created with success !!")
+    
+        
+        src_tmp_frame = os.path.join(server,
+                        prod,
+                        env.LIBRARY,
+                        env.TMP_FRAME)
+        
+        dst_tmp_frame = os.path.join(server,
+                        prod,
+                        env.SHOT_TYPE,
+                        env.SEQ + nb_seq,
+                        env.SEQ + nb_seq + env.SHOT_ + nb_shot,
+                        env.TMP_FRAME)
+        print ( src_tmp_frame )
+        print (dst_tmp_frame)
+
+        try:
+            shutil.copyfile(src_tmp_frame, dst_tmp_frame)
+        except:
+            print ( "no template frame file")
+
     except:
         print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " already created")
 

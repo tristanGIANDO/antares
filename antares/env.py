@@ -52,6 +52,7 @@ TMP_SCN_TYPE_NUKE = "comp.nk"
 TMP_SCN_TYPE_NUKE_TRUE = "template_comp.nk"
 TMP_SCN_TYPE_SHOT = "template_shot.ma"
 TMP_IMAGE = "template.png"
+TMP_FRAME = "XXXX-XXXX.txt"
 
 # Set Directories"
 ASSET_TYPE = "04_asset"
