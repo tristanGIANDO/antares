@@ -411,7 +411,7 @@ def compo_open_in_folder_FN(name, seq, server, prod):
         print ( "I can't see any folder")
 
 def render_send_to_nuke_FN(name, seq, rendu, server, prod):
-    path = os.path.join(server  ,
+    path = os.path.join(server,
                             prod,
                             env.SHOT_TYPE ,
                             seq,
@@ -426,12 +426,14 @@ def render_send_to_nuke_FN(name, seq, rendu, server, prod):
                             env.COMPO_TYPE,
                             seq,
                             name,
-                            env.INPUT_TYPE
+                            env.INPUT_TYPE,
+                            rendu
                             )
-    print (path)
+    print ( path )
+    print ( compo_path )
 
     try:
         shutil.copytree(path, compo_path)
-        print ( "")
+        print ( "It's copied")
     except:
         print ( "I can't see any folder to send")
