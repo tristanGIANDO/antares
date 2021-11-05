@@ -1212,6 +1212,7 @@ class MainWindow(QWidget) :
             render_last_edit = render_menu.addAction(QIcon(), self.last_edit_LBL)
             render_open_in_folder = render_menu.addAction(QIcon(), self.open_in_folder_LBL)
             render_menu.addSeparator()
+            anim_menu.addSeparator()
             
             cfx_last_edit = cfx_menu.addAction(QIcon(), self.last_edit_LBL)
             cfx_open_in_folder = cfx_menu.addAction(QIcon(), self.open_in_folder_LBL)
@@ -1220,7 +1221,7 @@ class MainWindow(QWidget) :
             compo_last_edit = compo_menu.addAction(QIcon(), self.last_edit_LBL)
             compo_open_in_folder = compo_menu.addAction(QIcon(), self.open_in_folder_LBL)
 
-            
+            #SEND TO NUKE
             try:
                 images_render = os.listdir(os.path.join(server,
                                                     prod,
@@ -1233,6 +1234,22 @@ class MainWindow(QWidget) :
                     render_images_menu = render_menu.addMenu(QIcon(), rendu)
                     render_send_to_nuke = render_images_menu.addAction(QIcon(), "Send Images to Nuke")
                     render_send_to_nuke.triggered.connect(partial(self.render_send_to_nuke_UI, name, seq, rendu))
+            except:
+                print ( "no images")
+
+            # SEND TO DELIVERY
+            try:
+                movies = os.listdir(os.path.join(server,
+                                                    prod,
+                                                    env.SHOT_TYPE,
+                                                    seq,
+                                                    name,
+                                                    env.MAYA_TYPE,
+                                                    "movies"))
+                for playblast in movies:
+                    movies_menu = anim_menu.addMenu(QIcon(), playblast)
+                    playblast_to_delivery = movies_menu.addAction(QIcon(), "Send Playblast To Delivery")
+                    playblast_to_delivery.triggered.connect(partial(self.anim_send_to_delivery_UI, name, seq, playblast))
             except:
                 print ( "no images")
 
@@ -1648,6 +1665,13 @@ class MainWindow(QWidget) :
             return
         shot.anim_open_in_folder_FN (  name, seq, server, prod = prod) 
 
+    def anim_send_to_delivery_UI(self, name, seq, playblast):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.anim_send_to_delivery_FN (  name, seq, playblast, server, prod = prod)
+
     def render_open_last_edit_UI(self, name, seq):
         prod = self.prodName.text()
         server = self.serverName.text()
@@ -1661,6 +1685,13 @@ class MainWindow(QWidget) :
         if not server:
             return
         shot.render_open_in_folder_FN (  name, seq, server, prod = prod) 
+
+    def render_send_to_nuke_UI(self, name, seq, rendu):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.render_send_to_nuke_FN (  name, seq, rendu, server, prod = prod)
 
     def cfx_open_last_edit_UI(self, name, seq):
         prod = self.prodName.text()
@@ -1724,12 +1755,7 @@ class MainWindow(QWidget) :
         shot.create_new_shot_FN ( nb_seq, nb_shot, prefix, server, prod = prod)   
         self.reload()
 
-    def render_send_to_nuke_UI(self, name, seq, rendu):
-        prod = self.prodName.text()
-        server = self.serverName.text()
-        if not server:
-            return
-        shot.render_send_to_nuke_FN (  name, seq, rendu, server, prod = prod)
+
 
     ## UI CUSTOMIZE ##
 

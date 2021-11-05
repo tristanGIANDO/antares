@@ -1,4 +1,4 @@
-import os, shutil, env
+import os, shutil, env, datetime
 
 def create_new_seq_FN(nb_seq, server, prod):
     print ( nb_seq )
@@ -469,6 +469,33 @@ def render_send_to_nuke_FN(name, seq, rendu, server, prod):
         print ( "I can't see any folder to send")
 
 def anim_send_to_delivery_FN(name, seq, playblast, server, prod):
+
+    date = datetime.datetime.now()
+    str(date)
+    year = date.year
+    month = date.month
+    day = date.day
+    print ( year, month, day )
+    converted_year = "{}".format(year)
+    print(type(converted_year))
+    converted_month = "{}".format(month)
+    print(type(converted_month))
+    converted_day = "{}".format(day)
+    print(type(converted_day))
+    annemojr = converted_year + converted_month + converted_day
+
+    try:
+        os.makedirs(os.path.join(server,
+                            prod,
+                            env.EDITING_TYPE,
+                            "IN",
+                            "published",
+                            env.DELIVERY_TYPE,
+                            annemojr))
+                        
+    except:
+        print ( "Delivery folder of the day already exists." )
+
     path = os.path.join(server,
                             prod,
                             env.SHOT_TYPE ,
@@ -485,14 +512,26 @@ def anim_send_to_delivery_FN(name, seq, playblast, server, prod):
                             "IN",
                             "published",
                             env.DELIVERY_TYPE,
-                            "20211103",
+                            annemojr,
                             playblast
                             )
+
+    renamed_delivery_path = os.path.join(server,
+                            prod,
+                            env.EDITING_TYPE,
+                            "IN",
+                            "published",
+                            env.DELIVERY_TYPE,
+                            annemojr,
+                            env.ANIM_TYPE + "_" + playblast
+                            )
+
     print ( path )
     print ( delivery_path )
 
     try:
         shutil.copyfile(path, delivery_path)
+        os.rename(delivery_path, renamed_delivery_path)
         print ( "It's copied")
     except:
         print ( "I can't see any playblast to send")
