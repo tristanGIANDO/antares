@@ -35,7 +35,6 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
                             env.LIBRARY,
                             env.TMP_SCN_TYPE_SHOT)
                             
-    
     scn_temp = os.path.join(server,
                             prod,
                             env.TMP_ASSET_PATH,
@@ -179,6 +178,36 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
     except:
         print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " already created")
 
+    # LIBRARY
+    try:
+        src_img = os.path.join(server,
+                            prod,
+                            env.IMAGES_PATH,
+                            env.TMP_IMAGE)
+
+        dst_img = os.path.join(server,
+                            prod,
+                            env.IMAGES_PATH,
+                            env.SHOT_LIB,
+                            env.TMP_IMAGE)
+
+        renamed_dst_img = os.path.join(server,
+                            prod,
+                            env.IMAGES_PATH,
+                            env.SHOT_LIB,
+                            env.SEQ + nb_seq + env.SHOT_ + nb_shot + env.PNG)
+
+        print ( src_img )
+        print ( dst_img )
+
+        shutil.copyfile(src_img, dst_img)
+    except:
+        print ( "no image profile ")
+
+    try:
+        os.rename(dst_img, renamed_dst_img)
+    except:
+        print ( "profile picture not renamed")
 
 def layout_open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,
