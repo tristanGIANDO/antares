@@ -387,7 +387,7 @@ def vfx_open_last_edit_FN(name, seq, server, prod):
                             env.SHOT_TYPE ,
                             seq,
                             name ,
-                            env.VFX_PATH
+                            env.HOUDINI_TYPE
                             )
 
     try:
@@ -415,7 +415,7 @@ def vfx_open_in_folder_FN(name, seq, server, prod):
                             env.SHOT_TYPE ,
                             seq,
                             name ,
-                            env.VFX_PATH
+                            env.HOUDINI_TYPE
                             )
     print (path)
 
