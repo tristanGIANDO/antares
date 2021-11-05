@@ -62,24 +62,24 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
     try:
         os.makedirs(seq_path_main)
         
-        for soft in ["camera", "houdini", "maya", "unreal"]:
+        for soft in ["camera", env.HOUDINI_TYPE, env.MAYA_TYPE, env.UNREAL_TYPE]:
             os.makedirs(os.path.join(seq_path_main,
                             soft))
 
-        for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "scenes", "tex", "video"]:
+        for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", env.SCN_TYPE, "tex", "video"]:
             os.makedirs(os.path.join(seq_path_main,
                             "houdini",
                             dep))
 
-        for maya_folders in ["cache", "images", "movies", "scenes", "sourceimages"]:
+        for maya_folders in ["cache", "images", "movies", env.SCN_TYPE, env.SRC_IMG_TYPE]:
             os.makedirs(os.path.join(seq_path_main,
                             "maya",
                             maya_folders))
 
-        for category in ["anim", "cfx", "layout", "render"]:
+        for category in [env.ANIM_TYPE, env.CFX_TYPE, env.VFX_TYPE, env.RENDER_TYPE]:
             path = os.makedirs(os.path.join(seq_path_main,
-                            "maya",
-                            "scenes",
+                            env.MAYA_TYPE,
+                            env.SCN_TYPE,
                             category))
 
             dest_scn_tmp = os.path.join ( seq_path_main,
@@ -141,6 +141,49 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
     except:
         print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " already created")
 
+
+def layout_open_last_edit_FN(name, seq, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SHOT_TYPE ,
+                            seq,
+                            name ,
+                            env.LAYOUT_PATH
+                            )
+
+    try:
+        destination = os.listdir( path )
+    except:
+        print ( "Or there is no folder in " + env.LAYOUT_PATH + " yet, or the layout is on another server")
+    
+    try:
+        destination.remove("_data")
+    except:
+        print ( "No data")
+
+    try:
+        project = os.path.join(path,  destination[-1])
+        print ( project )
+        os.startfile(project)
+        print ("Let's open this scene !!")
+    except:
+        print ( "no file created yet")
+
+def layout_open_in_folder_FN(name, seq, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SHOT_TYPE ,
+                            seq,
+                            name ,
+                            env.LAYOUT_PATH
+                            )
+    print (path)
+
+    try:
+        os.startfile(path)
+        print ("Let's open this folder !!")
+    except:
+        print ( "I can't see any folder")
 
 def anim_open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,
@@ -357,3 +400,4 @@ def compo_open_in_folder_FN(name, seq, server, prod):
         print ("Let's open this folder !!")
     except:
         print ( "I can't see any folder")
+

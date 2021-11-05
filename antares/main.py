@@ -1204,6 +1204,8 @@ class MainWindow(QWidget) :
             compo_open_in_folder = compo_menu.addAction(QIcon(), self.open_in_folder_LBL)
 
             #CONNECTIONS
+            layout_last_edit.triggered.connect(partial(self.layout_open_last_edit_UI, name, seq))
+            layout_open_in_folder.triggered.connect(partial(self.layout_open_in_folder_UI, name, seq))
             anim_last_edit.triggered.connect(partial(self.anim_open_last_edit_UI, name, seq))
             anim_open_in_folder.triggered.connect(partial(self.anim_open_in_folder_UI, name, seq))
             render_last_edit.triggered.connect(partial(self.render_open_last_edit_UI, name, seq))
@@ -1582,6 +1584,20 @@ class MainWindow(QWidget) :
         self.reload()
 
     #  SHOTS
+
+    def layout_open_last_edit_UI(self, name, seq):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.layout_open_last_edit_FN (  name, seq, server, prod = prod)    
+
+    def layout_open_in_folder_UI(self, name, seq):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.layout_open_in_folder_FN (  name, seq, server, prod = prod) 
 
     def anim_open_last_edit_UI(self, name, seq):
         prod = self.prodName.text()
