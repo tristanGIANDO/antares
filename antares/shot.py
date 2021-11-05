@@ -50,6 +50,11 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
                             env.TMP_SEQ_TYPE_NUKE,
                             env.TMP_SCN_TYPE_NUKE)
 
+    true_scn_temp_nuke = os.path.join(server,
+                            prod,
+                            env.COMPO_TYPE,
+                            env.TMP_SEQ_TYPE_NUKE,
+                            env.TMP_SCN_TYPE_NUKE_TRUE)
 
     seq_path_main = os.path.join(server,
                             prod,
@@ -144,7 +149,8 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
             shutil.copyfile(scn_temp_nuke, dest_scn_tmp)
             os.rename(dest_scn_tmp, renamed_file)
         except:
-            print ( "no scene copied")
+            shutil.copyfile(scn_temp_nuke, dest_scn_tmp)
+            os.rename(dest_scn_tmp, renamed_file)
 
         print ( env.SEQ + nb_seq + env.SHOT_ + nb_shot + " in " + env.COMPO_TYPE + " created with success !!")
     except:
@@ -427,6 +433,7 @@ def render_send_to_nuke_FN(name, seq, rendu, server, prod):
                             seq,
                             name,
                             env.INPUT_TYPE,
+                            env.NON_FILTERED,
                             rendu
                             )
     print ( path )

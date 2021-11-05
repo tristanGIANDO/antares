@@ -1149,15 +1149,7 @@ class MainWindow(QWidget) :
                                         env.SHOT_TYPE,
                                         seq))
 
-        # for name in shot_path:
-        #     layout_for_shot = QHBoxLayout()
-        #     layout_for_shot.addWidget(QPushButton(name))
-        #     self.cb = QComboBox()
-        #     self.cb.addItem("Tractor On")
-        #     self.cb.addItem("Tractor Off")
-        #     layout_for_shot.addWidget(self.cb)
-            
-        #     group_shot.setLayout(layout_for_shot)
+        
 
         #Create Button characters 
         positions = [(i, j) for i in range(50) for j in range(5)]
@@ -1168,8 +1160,23 @@ class MainWindow(QWidget) :
                                     prod,
                                     env.IMAGES_PATH,
                                     env.SHOT_LIB,
-
                                     name + env.PNG)
+
+            nb_frame = os.listdir(os.path.join(server,
+                                        prod,
+                                        env.SHOT_TYPE,
+                                        seq,
+                                        name
+                                        ))
+            try:
+                nb_frame.remove("camera")
+                nb_frame.remove(env.HOUDINI_TYPE)
+                nb_frame.remove(env.MAYA_TYPE)
+                nb_frame.remove(env.UNREAL_TYPE)
+                print (nb_frame)
+            except:
+                print ( "nothing")
+
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(10000, 100)
             
@@ -1180,6 +1187,10 @@ class MainWindow(QWidget) :
             #CREER MENU
             menu = QMenu(parent = self)
             menu.addAction( "Name = " + name )
+            try:
+                menu.addAction( nb_frame )
+            except:
+                print ( " no frame file ")
             menu.addSeparator()
             #CREATE MENUS
             layout_menu = menu.addMenu("layout")
