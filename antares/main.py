@@ -1212,6 +1212,8 @@ class MainWindow(QWidget) :
             cfx_open_in_folder.triggered.connect(partial(self.cfx_open_in_folder_UI, name, seq))
             vfx_last_edit.triggered.connect(partial(self.vfx_open_last_edit_UI, name, seq))
             vfx_open_in_folder.triggered.connect(partial(self.vfx_open_in_folder_UI, name, seq))
+            compo_last_edit.triggered.connect(partial(self.compo_open_last_edit_UI, name, seq))
+            compo_open_in_folder.triggered.connect(partial(self.compo_open_in_folder_UI, name, seq))
             
 
             button.setMenu(menu)
@@ -1636,6 +1638,20 @@ class MainWindow(QWidget) :
         if not server:
             return
         shot.vfx_open_in_folder_FN (  name, seq, server, prod = prod) 
+
+    def compo_open_last_edit_UI(self, name, seq):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.compo_open_last_edit_FN (  name, seq, server, prod = prod)    
+
+    def compo_open_in_folder_UI(self, name, seq):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.compo_open_in_folder_FN (  name, seq, server, prod = prod) 
 
     def create_new_seq_UI(self):
         prod = self.prodName.text()

@@ -278,3 +278,37 @@ def vfx_open_in_folder_FN(name, seq, server, prod):
     print (path)
 
     os.startfile(path)
+
+def compo_open_last_edit_FN(name, seq, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.COMPO_TYPE ,
+                            seq,
+                            name ,
+                            )
+    destination = os.listdir( path )
+    try:
+        destination.remove("input")
+        destination.remove("output")
+    except:
+        print ( "No input, no output")
+    
+    
+    try:
+        project = os.path.join(path,  destination[-1])
+        print ( project )
+        os.startfile(project)
+        print ("Let's open this scene !!")
+    except:
+        print ( "no file created yet")
+
+def compo_open_in_folder_FN(name, seq, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.COMPO_TYPE ,
+                            seq,
+                            name ,
+                            )
+    print (path)
+
+    os.startfile(path)
