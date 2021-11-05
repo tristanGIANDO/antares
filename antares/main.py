@@ -54,8 +54,8 @@ class MainWindow(QWidget) :
         self.pixmap = QPixmap(env.USER_PIC)
         self.reloadBTN = QPushButton("RELOAD")
         #Set production
-        # self.serverName = QLineEdit(r"\\gandalf/3D4_21_22")
-        self.serverName = QLineEdit(r"D:\\")
+        self.serverName = QLineEdit(r"\\gandalf/3D4_21_22")
+        # self.serverName = QLineEdit(r"D:\\")
         self.tmp_server_Name = QLineEdit(prefs['tmp_server'])
         self.prodName = QLineEdit(prefs['prod'])
         self.prefixName = QLineEdit(prefs['prefix'])
@@ -1152,7 +1152,7 @@ class MainWindow(QWidget) :
         
 
         #Create Button characters 
-        positions = [(i, j) for i in range(50) for j in range(5)]
+        positions = [(i, j) for i in range(3) for j in range(3)]
         for position, name in zip(positions, shot_path):
             if name == '':
                 continue
@@ -1165,7 +1165,8 @@ class MainWindow(QWidget) :
             
 
             button = ImagePushButton(name, path = imageDir)
-            button.setFixedSize(10000, 100)
+            button.setMinimumWidth(2050)
+            button.setMinimumHeight(90)
             
             path = os.path.join(server,
                                 prod)
@@ -1186,8 +1187,6 @@ class MainWindow(QWidget) :
                 nb_frame.remove(env.HOUDINI_TYPE)
                 nb_frame.remove(env.MAYA_TYPE)
                 nb_frame.remove(env.UNREAL_TYPE)
-                
-                print (nb_frame)
 
                 for frame in nb_frame:
                     menu.addAction( "Frames = " + frame )
