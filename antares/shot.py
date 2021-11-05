@@ -231,3 +231,33 @@ def cfx_open_in_folder_FN(name, seq, server, prod):
     print (path)
 
     os.startfile(path)
+
+def vfx_open_last_edit_FN(name, seq, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SHOT_TYPE ,
+                            seq,
+                            name ,
+                            env.CFX_PATH
+                            )
+    destination = os.listdir( path )
+    try:
+        destination.remove("_data")
+    except:
+        print ( "No data")
+    project = os.path.join(path,  destination[-1])
+    print ( project )
+    print ("Let's open this scene !!")
+    os.startfile(project)
+
+def vfx_open_in_folder_FN(name, seq, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SHOT_TYPE ,
+                            seq,
+                            name ,
+                            env.CFX_PATH
+                            )
+    print (path)
+
+    os.startfile(path)
