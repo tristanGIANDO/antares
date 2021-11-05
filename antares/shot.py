@@ -89,7 +89,7 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
                             "maya",
                             maya_folders))
 
-        for category in [env.ANIM_TYPE, env.CFX_TYPE, env.VFX_TYPE, env.RENDER_TYPE]:
+        for category in [env.ANIM_TYPE, env.CFX_TYPE, env.VFX_TYPE, env.RENDER_TYPE, env.LAYOUT_TYPE]:
             path = os.makedirs(os.path.join(seq_path_main,
                             env.MAYA_TYPE,
                             env.SCN_TYPE,

@@ -4,7 +4,7 @@ import env
 #GLOBAL
 
 def create_new_module_FN(server, prod, assetName):
-    
+
     check = os.listdir(os.path.join(server , prod, env.SET_PATH))
     if assetName in check :
         print ("Sorry, can't do this ! " + assetName + " already exists !")
@@ -390,6 +390,7 @@ def delete_item_FN (item_name, name, dep, server, prod ):
     except:
         print ( "No dressing folder")
     
+
     for dpt in departments:
         path = os.path.join(server,
                                     prod,
@@ -398,21 +399,43 @@ def delete_item_FN (item_name, name, dep, server, prod ):
                                     env.E_PATH,
                                     dpt,
                                     item_name)
+
+     
         try :
             shutil.rmtree(path)
         except:
             print ("You already removed " + dpt )
 
+
+
+
+    departments_publish = os.listdir( os.path.join(r"\\gandalf/3D4_21_22",
+                                        prod,
+                                        env.SET_PATH,
+                                        name ,
+                                        env.P_PATH))
+
+    try:
+        departments_publish.remove(env.DRESSING)
+    except:
+        print ( "No dressing folder")
+
+    for dpt in departments_publish:
+        path = os.path.join(server,
+                                    prod,
+                                    env.SET_PATH ,
+                                    name,
+                                    env.P_PATH,
+                                    dpt,
+                                    item_name + env.P_TXT + dpt + env.ASCII)
+
+        try :
+            os.remove(path)
+        except:
+            print ("You already removed " + dpt )
+
         print ( path )
 
-    # try:
-    #     os.remove(os.path.join(server,
-    #                                 prod,
-    #                                 env.IMAGES_PATH,
-    #                                 env.ITEM_TYPE,
-    #                                 name + ".png"))
-    # except:
-    #     print ("You already removed the asset picture.")
     print ( name + " deleted with success.")
 
 def delete_module_FN (name, server, prod ):
