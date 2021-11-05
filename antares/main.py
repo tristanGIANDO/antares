@@ -1196,12 +1196,28 @@ class MainWindow(QWidget) :
             anim_open_in_folder = anim_menu.addAction(QIcon(), self.open_in_folder_LBL)
             render_last_edit = render_menu.addAction(QIcon(), self.last_edit_LBL)
             render_open_in_folder = render_menu.addAction(QIcon(), self.open_in_folder_LBL)
+            # render_send_to_nuke = render_menu.addAction(QIcon(), "Send Images to Nuke")
             cfx_last_edit = cfx_menu.addAction(QIcon(), self.last_edit_LBL)
             cfx_open_in_folder = cfx_menu.addAction(QIcon(), self.open_in_folder_LBL)
             vfx_last_edit = vfx_menu.addAction(QIcon(), self.last_edit_LBL)
             vfx_open_in_folder = vfx_menu.addAction(QIcon(), self.open_in_folder_LBL)
             compo_last_edit = compo_menu.addAction(QIcon(), self.last_edit_LBL)
             compo_open_in_folder = compo_menu.addAction(QIcon(), self.open_in_folder_LBL)
+
+            
+            try:
+                images_render = os.listdir(os.path.join(server,
+                                                    prod,
+                                                    env.SHOT_TYPE,
+                                                    seq,
+                                                    name,
+                                                    env.MAYA_TYPE,
+                                                    "images"))
+                for rendu in images_render:
+                    render_images_menu = render_menu.addMenu(QIcon(), rendu)
+                    print ( rendu )
+            except:
+                print ( "no images")
 
             #CONNECTIONS
             layout_last_edit.triggered.connect(partial(self.layout_open_last_edit_UI, name, seq))
