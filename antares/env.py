@@ -77,6 +77,8 @@ LIBRARY = "_library"
 SHOT_LIB = "shot"
 RMAN_LIB = "RenderManAssetLibrary"
 RMAN_MAT = "Materials"
+INPUT_TYPE = "input"
+OUTPUT_TYPE = "output"
 #DEPARTEMENTS
 P_TXT = "_P_"
 E_TXT = "_E_"
@@ -87,6 +89,10 @@ DRESSING = "dressing"
 #FORMAT
 PNG = ".png"
 ASCII = ".ma"
+SEQ = "seq"
+SEQ_ = "_seq"
+SHOT_ = "_sh"
+
 # Path
 IMAGES_PATH = os.path.join("_library", "Images")
 TMP_ASSET_PATH = os.path.join(ASSET_TYPE,TMP_ASSET)

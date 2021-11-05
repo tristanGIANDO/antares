@@ -47,15 +47,15 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
     seq_path_main = os.path.join(server,
                             prod,
                             env.SHOT_TYPE,
-                            "seq" + nb_seq,
-                            "seq" + nb_seq + "_sh" + nb_shot
+                            env.SEQ + nb_seq,
+                            env.SEQ + nb_seq + "_sh" + nb_shot
                             )
 
     seq_path_compo = os.path.join(server,
                             prod,
                             env.COMPO_TYPE,
-                            "seq" + nb_seq,
-                            "seq" + nb_seq + "_sh" + nb_shot
+                            env.SEQ + nb_seq,
+                            env.SEQ + nb_seq + "_sh" + nb_shot
                             )
 
     # MAIN BRANCH
@@ -66,7 +66,7 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
             os.makedirs(os.path.join(seq_path_main,
                             soft))
 
-        for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", env.SCN_TYPE, "tex", "video"]:
+        for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", env.RENDER_TYPE, "scripts", "sim", env.SCN_TYPE, "tex", "video"]:
             os.makedirs(os.path.join(seq_path_main,
                             "houdini",
                             dep))
@@ -92,14 +92,14 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
                             env.MAYA_TYPE,
                             env.SCN_TYPE,
                             category,
-                            prefix + "_seq" + nb_seq + "_sh" + nb_shot + "_" + category + "_001" + env.ASCII )
+                            prefix + env.SEQ_ + nb_seq + env.SHOT_ + nb_shot + "_" + category + "_001" + env.ASCII )
 
             
             try:
                 shutil.copyfile(scn_temp, dest_scn_tmp)
                 os.rename(dest_scn_tmp, renamed_file)
 
-                print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.SHOT_TYPE + " created with success !!")
+                print ( env.SEQ + nb_seq + env.SHOT_ + nb_shot + " in " + env.SHOT_TYPE + " created with success !!")
             except:
                 print ( "no scenes copied")
 
@@ -111,25 +111,25 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
     try:   
         os.makedirs(seq_path_compo)
 
-        for directory in ["input", "output"]:
+        for directory in [env.INPUT_TYPE, env.OUTPUT_TYPE]:
             os.makedirs(os.path.join(seq_path_compo,
                             directory))
 
         for input in ["abc", "filtered", "nonFiltered"]:
             os.makedirs(os.path.join(seq_path_compo,
-                            "input",
+                            env.INPUT_TYPE,
                             input))
 
         for output in ["DCP", "DPX", "Preview"]:
             os.makedirs(os.path.join(seq_path_compo,
-                            "output",
+                            env.OUTPUT_TYPE,
                             output))
         
         dest_scn_tmp = os.path.join ( seq_path_compo,
                             env.TMP_SCN_TYPE_NUKE)
     
         renamed_file = os.path.join ( seq_path_compo,
-                            prefix + "_seq" + nb_seq + "_sh" + nb_shot + "_compo_001.nk")
+                            prefix + env.SEQ_ + nb_seq + env.SHOT_ + nb_shot + "_compo_001.nk")
 
         try:
             shutil.copyfile(scn_temp_nuke, dest_scn_tmp)
@@ -137,7 +137,7 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
         except:
             print ( "no scene copied")
 
-        print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " created with success !!")
+        print ( env.SEQ + nb_seq + env.SHOT_ + nb_shot + " in " + env.COMPO_TYPE + " created with success !!")
     except:
         print ( "seq" + nb_seq + "_sh" + nb_shot + " in " + env.COMPO_TYPE + " already created")
 
