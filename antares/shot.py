@@ -467,3 +467,32 @@ def render_send_to_nuke_FN(name, seq, rendu, server, prod):
         print ( "It's copied")
     except:
         print ( "I can't see any folder to send")
+
+def anim_send_to_delivery_FN(name, seq, playblast, server, prod):
+    path = os.path.join(server,
+                            prod,
+                            env.SHOT_TYPE ,
+                            seq,
+                            name ,
+                            env.MAYA_TYPE,
+                            "movies",
+                            playblast
+                            )
+
+    delivery_path = os.path.join(server,
+                            prod,
+                            env.EDITING_TYPE,
+                            "IN",
+                            "published",
+                            env.DELIVERY_TYPE,
+                            "20211103",
+                            playblast
+                            )
+    print ( path )
+    print ( delivery_path )
+
+    try:
+        shutil.copyfile(path, delivery_path)
+        print ( "It's copied")
+    except:
+        print ( "I can't see any playblast to send")
