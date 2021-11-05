@@ -1162,20 +1162,7 @@ class MainWindow(QWidget) :
                                     env.SHOT_LIB,
                                     name + env.PNG)
 
-            nb_frame = os.listdir(os.path.join(server,
-                                        prod,
-                                        env.SHOT_TYPE,
-                                        seq,
-                                        name
-                                        ))
-            try:
-                nb_frame.remove("camera")
-                nb_frame.remove(env.HOUDINI_TYPE)
-                nb_frame.remove(env.MAYA_TYPE)
-                nb_frame.remove(env.UNREAL_TYPE)
-                print (nb_frame)
-            except:
-                print ( "nothing")
+            
 
             button = ImagePushButton(name, path = imageDir)
             button.setFixedSize(10000, 100)
@@ -1187,10 +1174,27 @@ class MainWindow(QWidget) :
             #CREER MENU
             menu = QMenu(parent = self)
             menu.addAction( "Name = " + name )
+
             try:
-                menu.addAction( nb_frame )
+                nb_frame = os.listdir(os.path.join(server,
+                                        prod,
+                                        env.SHOT_TYPE,
+                                        seq,
+                                        name
+                                        ))
+                nb_frame.remove("camera")
+                nb_frame.remove(env.HOUDINI_TYPE)
+                nb_frame.remove(env.MAYA_TYPE)
+                nb_frame.remove(env.UNREAL_TYPE)
+                
+                print (nb_frame)
+
+                for frame in nb_frame:
+                    menu.addAction( "Frames = " + frame )
+                    
             except:
-                print ( " no frame file ")
+                print ( "no file frame")
+
             menu.addSeparator()
             #CREATE MENUS
             layout_menu = menu.addMenu("layout")
@@ -1231,6 +1235,8 @@ class MainWindow(QWidget) :
                     render_send_to_nuke.triggered.connect(partial(self.render_send_to_nuke_UI, name, seq, rendu))
             except:
                 print ( "no images")
+
+
 
             #CONNECTIONS
             layout_last_edit.triggered.connect(partial(self.layout_open_last_edit_UI, name, seq))
