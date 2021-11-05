@@ -194,15 +194,24 @@ def openLastEdit_FN(name, dep, server, prod):
                             name ,
                             env.E_PATH ,
                             dep)
-    destination = os.listdir( path )
+
+    try:
+        destination = os.listdir( path )
+    except:
+        print ( "Or there is no folder in " + env.CHAR_PATH + " yet, or the character is on another server")
+    
     try:
         destination.remove("_data")
     except:
         print ( "No data")
-    project = os.path.join(path,  destination[-1])
-    print ( project )
-    print ("Let's open this scene !!")
-    os.startfile(project)
+
+    try:
+        project = os.path.join(path,  destination[-1])
+        print ( project )
+        os.startfile(project)
+        print ("Let's open this scene !!")
+    except:
+        print ( "no file created yet")
 
 def open_in_folder_edits_FN(name, dep, server, prod):
     path = os.path.join(server  ,
@@ -221,10 +230,24 @@ def openLastSculpt_FN(name, soft, server, prod):
                             name ,
                             env.SCULPT_TYPE,
                             soft)
-    destination = os.listdir( path )
-    project = os.path.join(path,  destination[-1])
-    print ( project )
-    os.startfile(project)
+
+    try:
+        destination = os.listdir( path )
+    except:
+        print ( "Or there is no folder in " + env.SCULPT_TYPE + " yet, or the sculpt is on another server")
+    
+    try:
+        destination.remove("_data")
+    except:
+        print ( "No data")
+
+    try:
+        project = os.path.join(path,  destination[-1])
+        print ( project )
+        os.startfile(project)
+        print ("Let's open this scene !!")
+    except:
+        print ( "no file created yet")
 
 def open_in_folder_sculpt_FN(name, soft, server, prod):
     path = os.path.join(server  ,
