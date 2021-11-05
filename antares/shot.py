@@ -150,7 +150,12 @@ def anim_open_last_edit_FN(name, seq, server, prod):
                             name ,
                             env.ANIM_PATH
                             )
-    destination = os.listdir( path )
+
+    try:
+        destination = os.listdir( path )
+    except:
+        print ( "Or there is no folder in " + env.ANIM_PATH + " yet, or the animation is on another server")
+    
     try:
         destination.remove("_data")
     except:
@@ -174,7 +179,11 @@ def anim_open_in_folder_FN(name, seq, server, prod):
                             )
     print (path)
 
-    os.startfile(path)
+    try:
+        os.startfile(path)
+        print ("Let's open this folder !!")
+    except:
+        print ( "I can't see any folder")
 
 def render_open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,
@@ -184,7 +193,12 @@ def render_open_last_edit_FN(name, seq, server, prod):
                             name ,
                             env.RENDER_PATH
                             )
-    destination = os.listdir( path )
+
+    try:
+        destination = os.listdir( path )
+    except:
+        print ( "Or there is no folder in " + env.RENDER_PATH + " yet, or the render is on another server")
+    
     try:
         destination.remove("_data")
     except:
@@ -208,7 +222,11 @@ def render_open_in_folder_FN(name, seq, server, prod):
                             )
     print (path)
 
-    os.startfile(path)
+    try:
+        os.startfile(path)
+        print ("Let's open this folder !!")
+    except:
+        print ( "I can't see any folder")
 
 def cfx_open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,
@@ -218,7 +236,12 @@ def cfx_open_last_edit_FN(name, seq, server, prod):
                             name ,
                             env.CFX_PATH
                             )
-    destination = os.listdir( path )
+
+    try:
+        destination = os.listdir( path )
+    except:
+        print ( "Or there is no folder in " + env.CFX_PATH + " yet, or the cfx are on another server")
+    
     try:
         destination.remove("_data")
     except:
@@ -242,7 +265,11 @@ def cfx_open_in_folder_FN(name, seq, server, prod):
                             )
     print (path)
 
-    os.startfile(path)
+    try:
+        os.startfile(path)
+        print ("Let's open this folder !!")
+    except:
+        print ( "I can't see any folder")
 
 def vfx_open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,
@@ -252,7 +279,12 @@ def vfx_open_last_edit_FN(name, seq, server, prod):
                             name ,
                             env.VFX_PATH
                             )
-    destination = os.listdir( path )
+
+    try:
+        destination = os.listdir( path )
+    except:
+        print ( "Or there is no folder in " + env.VFX_PATH + " yet, or the vfx are on another server")
+    
     try:
         destination.remove("_data")
     except:
@@ -277,7 +309,11 @@ def vfx_open_in_folder_FN(name, seq, server, prod):
                             )
     print (path)
 
-    os.startfile(path)
+    try:
+        os.startfile(path)
+        print ("Let's open this folder !!")
+    except:
+        print ( "I can't see any folder")
 
 def compo_open_last_edit_FN(name, seq, server, prod):
     path = os.path.join(server  ,
@@ -286,7 +322,12 @@ def compo_open_last_edit_FN(name, seq, server, prod):
                             seq,
                             name ,
                             )
-    destination = os.listdir( path )
+    
+    try:
+        destination = os.listdir( path )
+    except:
+        print ( "Or there is no folder in " + env.COMPO_TYPE + " yet, or the compositing is on another server")
+    
     try:
         destination.remove("input")
         destination.remove("output")
@@ -311,4 +352,8 @@ def compo_open_in_folder_FN(name, seq, server, prod):
                             )
     print (path)
 
-    os.startfile(path)
+    try:
+        os.startfile(path)
+        print ("Let's open this folder !!")
+    except:
+        print ( "I can't see any folder")
