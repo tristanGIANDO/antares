@@ -782,9 +782,7 @@ class MainWindow(QWidget) :
             menu = QMenu(parent = self)
             menu.addAction( "Name = " + name )
             menu.addSeparator()
-            department = ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scenes", "scripts", "sim", "tex", "video"]
-            scenes = os.listdir(os.path.join(path,
-                                            "scenes"))
+            department = ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]
 
             for dep in department:
                 #SubMenu

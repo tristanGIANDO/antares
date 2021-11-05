@@ -4,6 +4,7 @@ import env
 #GLOBAL
 
 def create_new_module_FN(server, prod, assetName):
+    
     check = os.listdir(os.path.join(server , prod, env.SET_PATH))
     if assetName in check :
         print ("Sorry, can't do this ! " + assetName + " already exists !")

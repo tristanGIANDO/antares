@@ -79,7 +79,7 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
 
         
 
-        for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", env.RENDER_TYPE, "scripts", "sim", env.SCN_TYPE, "tex", "video"]:
+        for dep in ["abc", "audio", "comp", "desk", "flip", "geo", "hdz", env.RENDER_TYPE, "scripts", "sim", "tex", "video"]:
             os.makedirs(os.path.join(seq_path_main,
                             "houdini",
                             dep))

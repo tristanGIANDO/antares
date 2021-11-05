@@ -43,14 +43,12 @@ def newFX_FN(server, prod, assetName):
                             prod,
                             env.FX_PATH ,
                             assetName,
-                            "scenes",
                             env.TMP_SCN_FX)
 
         newScn = os.path.join(server ,
                             prod,
                             env.FX_PATH ,
                             assetName,
-                            "scenes",
                             assetName + "_001.hipnc")
 
         print ( oldScn )
@@ -107,23 +105,20 @@ def newFX_FN(server, prod, assetName):
         except:
             print ( "Try again")
 
-        path = os.path.join(server  ,
-                                prod,
-                                env.FX_PATH ,
-                                assetName,
-                                "scenes")
-        destination = os.listdir( path )
-        project = os.path.join(path,  destination[-1])
-        print ( project )
-        os.startfile(project)
 
 def open_last_FX_FN(name, server, prod):
     path = os.path.join(server  ,
                             prod,
                             env.FX_PATH ,
-                            name,
-                            "scenes")
+                            name)
+                         
     destination = os.listdir( path )
+    try:
+        for folder in [env.DATA, "abc", "audio", "comp", "desk", "flip", "geo", "hdz", "render", "scripts", "sim", "tex", "video"]:
+            destination.remove(folder)
+    except:
+        print ( "there was only one file")  
+
     project = os.path.join(path,  destination[-1])
     print ( project )
     os.startfile(project)
@@ -160,9 +155,8 @@ def open_all_FX_FN(name, edit, server, prod):
     path = os.path.join(server  ,
                             prod,
                             env.FX_PATH ,
-                            name,
-                            "scenes",
-                            edit)
+                            name
+                            )
 
     print (path)
     os.startfile(path)
@@ -171,7 +165,6 @@ def open_in_folder_edits_FN(name, server, prod):
     path = os.path.join(server  ,
                             prod,
                             env.FX_PATH ,
-                            name,
-                            env.SCN_TYPE)
+                            name)
     print (path)
     os.startfile(path)
