@@ -1196,7 +1196,8 @@ class MainWindow(QWidget) :
             anim_open_in_folder = anim_menu.addAction(QIcon(), self.open_in_folder_LBL)
             render_last_edit = render_menu.addAction(QIcon(), self.last_edit_LBL)
             render_open_in_folder = render_menu.addAction(QIcon(), self.open_in_folder_LBL)
-            # render_send_to_nuke = render_menu.addAction(QIcon(), "Send Images to Nuke")
+            render_menu.addSeparator()
+            
             cfx_last_edit = cfx_menu.addAction(QIcon(), self.last_edit_LBL)
             cfx_open_in_folder = cfx_menu.addAction(QIcon(), self.open_in_folder_LBL)
             vfx_last_edit = vfx_menu.addAction(QIcon(), self.last_edit_LBL)
@@ -1215,7 +1216,8 @@ class MainWindow(QWidget) :
                                                     "images"))
                 for rendu in images_render:
                     render_images_menu = render_menu.addMenu(QIcon(), rendu)
-                    print ( rendu )
+                    render_send_to_nuke = render_images_menu.addAction(QIcon(), "Send Images to Nuke")
+                    render_send_to_nuke.triggered.connect(partial(self.render_send_to_nuke_UI, name, seq, rendu))
             except:
                 print ( "no images")
 
@@ -1702,6 +1704,13 @@ class MainWindow(QWidget) :
         if not server:
             return
         shot.create_new_shot_FN ( nb_seq, nb_shot, prefix, server, prod = prod)   
+
+    def render_send_to_nuke_UI(self, name, seq, rendu):
+        prod = self.prodName.text()
+        server = self.serverName.text()
+        if not server:
+            return
+        shot.render_send_to_nuke_FN (  name, seq, rendu, server, prod = prod)
 
     ## UI CUSTOMIZE ##
 

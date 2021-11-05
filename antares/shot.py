@@ -30,12 +30,19 @@ def create_new_seq_FN(nb_seq, server, prod):
 
 def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
 
+    true_scn_temp = os.path.join(server,
+                            prod,
+                            env.LIBRARY,
+                            env.TMP_SCN_TYPE_SHOT)
+                            
+    
     scn_temp = os.path.join(server,
                             prod,
                             env.TMP_ASSET_PATH,
                             env.E_PATH,
                             env.GEO_LO,
                             env.TMP_SCN_TYPE_E + env.ASCII)
+
 
     scn_temp_nuke = os.path.join(server,
                             prod,
@@ -96,12 +103,14 @@ def create_new_shot_FN(nb_seq, nb_shot, prefix, server, prod):
 
             
             try:
-                shutil.copyfile(scn_temp, dest_scn_tmp)
+                shutil.copyfile(true_scn_temp, dest_scn_tmp)
                 os.rename(dest_scn_tmp, renamed_file)
 
                 print ( env.SEQ + nb_seq + env.SHOT_ + nb_shot + " in " + env.SHOT_TYPE + " created with success !!")
             except:
-                print ( "no scenes copied")
+                shutil.copyfile(scn_temp, dest_scn_tmp)
+                os.rename(dest_scn_tmp, renamed_file)
+                print ( "scenes from geoLo copied")
 
         
     except:
@@ -401,3 +410,28 @@ def compo_open_in_folder_FN(name, seq, server, prod):
     except:
         print ( "I can't see any folder")
 
+def render_send_to_nuke_FN(name, seq, rendu, server, prod):
+    path = os.path.join(server  ,
+                            prod,
+                            env.SHOT_TYPE ,
+                            seq,
+                            name ,
+                            env.MAYA_TYPE,
+                            "images",
+                            rendu
+                            )
+
+    compo_path = os.path.join(server,
+                            prod,
+                            env.COMPO_TYPE,
+                            seq,
+                            name,
+                            env.INPUT_TYPE
+                            )
+    print (path)
+
+    try:
+        shutil.copytree(path, compo_path)
+        print ( "")
+    except:
+        print ( "I can't see any folder to send")
