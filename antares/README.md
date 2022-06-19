@@ -45,7 +45,7 @@ When you left click on an asset, a drop-down menu is displayed.
 A photo of the last person to use a scene is also displayed.
 
 We can :
-  
+* Create the asset  
 * Open the asset in the OS
 * Delete the asset
 * Rename the asset
@@ -54,6 +54,10 @@ We can :
 * Open the location of all "EDIT" scenes in the OS
 * Reference the "PUBLISH" version in Maya
 * Import the "PUBLISH" version in Maya
+
+* Create sequences and shots
+* Delete sequences and shots
+* Access the last edit of each department
 
 Softwares that Antares can use
 
